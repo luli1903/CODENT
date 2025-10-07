@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Checkout CODEN (Sandbox)</title>
+  <style>
+    body{font-family:system-ui,Arial;padding:24px;max-width:720px;margin:auto}
+    label{display:block;margin:.5rem 0 .25rem}
+    input,select,button{padding:.6rem .8rem}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin:12px 0}
+  </style>
+</head>
+<body>
+  <h1>Checkout de prueba</h1>
+
+  <div class="card">
+    <h3>Carrito (demo)</h3>
+    <p>1× Turbina dental — $ 50.000</p>
+    <p>1× Juego de mangueras — $ 12.000</p>
+    <p><strong>Envío:</strong> seleccionar abajo</p>
+  </div>
+
+  <form id="form">
+    <div class="row">
+      <div>
+        <label>Nombre</label>
+        <input name="name" required />
+      </div>
+      <div>
+        <label>Apellido</label>
+        <input name="surname" />
+      </div>
+    </div>
+    <label>Email</label>
+    <input name="email" type="email" required />
+
+    <label>Método de entrega</label>
+    <select name="shippingMethod" id="shippingMethod">
+      <option value="retiro">Retiro en local (sin costo)</option>
+      <option value="mdp">Envío urbano MDP ($3000)</option>
+      <option value="pba">Provincia BA ($5500)</option>
+      <option value="resto">Resto del país ($7500)</option>
+    </select>
+
+    <p style="margin-top:16px">
+      <button type="submit">Pagar con Mercado Pago (Sandbox)</button>
+    </p>
+  </form>
+
+  <script>
+    const CART = [
+      { id: "prod_1", title: "Turbina dental", quantity: 1, unit_price: 50000 },
+      { id: "prod_2", title: "Juego de mangueras", quantity: 1, unit_price: 12000 },
+    ];
+
+    function shippingFromSelect(value){
+      if(value === "mdp") return { label: "Urbano MDP", cost: 3000 };
+      if(value === "pba") return { label: "Provincia BA", cost: 5500 };
+      if(value === "resto") return { label: "Resto del país", cost: 7500 };
+      return { label: "Retiro en local", cost: 0 };
+    }
+
+    document.getElementById("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const f = e.target;
+      const shipping = shippingFromSelect(f.shippingMethod.value);
+      const customer = {
+        name: f.name.value,
+        surname: f.surname.value,
+        email: f.email.value
+      };
+
+      const res = await fetch("/.netlify/functions/createPreference", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart: CART, customer, shipping })
+      });
+      const data = await res.json();
+
+      const redirect = data.init_point || data.sandbox_init_point;
+      if (redirect) window.location.href = redirect;
+      else alert("No se pudo crear la preferencia");
+    });
+  </script>
+</body>
+</html>
