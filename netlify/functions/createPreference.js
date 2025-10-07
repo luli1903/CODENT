@@ -45,9 +45,9 @@ export const handler = async (event) => {
       external_reference: `order_${Date.now()}`,
       statement_descriptor: "CODEN",
       back_urls: {
-        success: `${baseUrl}/pago-exitoso.html`,
-        pending: `${baseUrl}/pago-pendiente.html`,
-        failure: `${baseUrl}/pago-fallido.html`
+        success: `${baseUrl}/demo/pago-exitoso.html`,
+        pending: `${baseUrl}/demo/pago-pendiente.html`,
+        failure: `${baseUrl}/demo/pago-fallido.html`
       },
       auto_return: "approved",
       notification_url: `${baseUrl}/.netlify/functions/mpWebhook`
