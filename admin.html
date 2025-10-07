@@ -1,43 +1,62 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Admin | E-commerce</title><link rel="stylesheet" href="style.css"/>
-</head><body>
-<header class="navbar">
-  <h1>Panel de Administración</h1>
-  <button id="btnLogout" style="display:none">Cerrar sesión</button>
-</header>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin | E-commerce</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <meta name="referrer" content="same-origin" />
+</head>
+<body>
+  <header class="navbar" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px">
+    <h1>Panel de Administración</h1>
+    <button id="btnLogout" style="display:none">Cerrar sesión</button>
+  </header>
 
-<main class="container" style="max-width:980px;margin:0 auto;padding:16px">
-  <section id="loginSection">
-    <h2>Ingresar</h2>
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required/>
-      <input type="password" id="password" placeholder="Contraseña" required/>
-      <button type="submit">Entrar</button>
-    </form>
-    <p id="loginMsg"></p>
-  </section>
+  <main class="container" style="max-width:980px;margin:0 auto;padding:16px">
+    <!-- LOGIN -->
+    <section id="loginSection" aria-labelledby="loginTitle">
+      <h2 id="loginTitle">Ingresar</h2>
+      <form id="loginForm" autocomplete="on" style="display:grid;gap:10px;max-width:420px">
+        <label for="email" class="sr-only">Correo electrónico</label>
+        <input type="email" id="email" placeholder="Email" required autocomplete="username" />
+        <label for="password" class="sr-only">Contraseña</label>
+        <input type="password" id="password" placeholder="Contraseña" required autocomplete="current-password" />
+        <button type="submit">Entrar</button>
+      </form>
+      <p id="loginMsg" role="status" aria-live="polite"></p>
+    </section>
 
-  <section id="crudSection" style="display:none">
-    <h2>Productos</h2>
-    <form id="productForm" style="display:grid;gap:8px">
-      <input type="hidden" id="prodId"/>
-      <input type="text" id="name" placeholder="Nombre" required/>
-      <input type="number" step="0.01" id="price" placeholder="Precio" required/>
-      <input type="number" id="stock" placeholder="Stock" required/>
-      <input type="text" id="category" placeholder="Categoría"/>
-      <textarea id="description" placeholder="Descripción"></textarea>
-      <input type="file" id="imageFile" accept="image/*"/>
-      <div style="display:flex;gap:8px">
-        <button type="submit">Guardar</button>
-        <button type="button" id="btnReset">Nuevo</button>
-      </div>
-    </form>
-    <hr/>
-    <div id="adminList" class="grid" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>
-  </section>
-</main>
+    <!-- CRUD -->
+    <section id="crudSection" style="display:none" aria-labelledby="crudTitle">
+      <h2 id="crudTitle">Productos</h2>
 
-<script type="module" src="supabaseClient.js"></script>
-<script type="module" src="admin.js"></script>
-</body></html>
+     <form id="productForm">
+  <input type="hidden" id="prodId" />
+  <input type="text" id="name" placeholder="Nombre" required />
+  <input type="number" step="0.01" id="price" placeholder="Precio" required inputmode="decimal" />
+  <input type="number" id="stock" placeholder="Stock" required inputmode="numeric" />
+  <input type="text" id="category" placeholder="Categoría" />
+  <textarea id="description" placeholder="Descripción"></textarea>
+  <label for="imageFile">Imagen (opcional)</label>
+  <input type="file" id="imageFile" accept="image/*" />
+  <div class="actions">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="button" id="btnReset" class="btn btn-secondary">Nuevo</button>
+  </div>
+</form>
+
+
+      <hr />
+      <div id="adminList" class="grid" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>
+    </section>
+  </main>
+
+  <script type="module" src="/supabaseClient.js"></script>
+  <script type="module" src="/auth.js"></script>
+  <script type="module" src="/db.js"></script>
+  <script type="module" src="/admin.js"></script>
+
+  <style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}</style>
+</body>
+</html>

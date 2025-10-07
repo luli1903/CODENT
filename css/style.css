@@ -141,3 +141,71 @@ body{
 @media (max-width: 767px){
   .carousel-item img{ height:50vh }
 }
+/* ================================
+   Admin UI
+================================== */
+body.admin{ background:#f8fafc; }
+
+.admin-header{
+  position:sticky; top:0; z-index:10;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; margin-bottom:10px;
+  background:#fff; border-bottom:1px solid var(--line);
+  box-shadow: var(--elev-0);
+}
+.admin-header h1{ font-size:1.25rem; margin:0; }
+
+/* Panel contenedor */
+.admin .container{ max-width:980px; }
+
+/* Formulario de producto */
+#productForm{
+  display:grid; gap:10px; grid-template-columns: 1fr 1fr;
+  background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px;
+  box-shadow: var(--elev-0);
+}
+#productForm textarea{ grid-column:1/-1; min-height:90px; resize:vertical; }
+#productForm label{ font-size:.9rem; color:var(--muted); }
+#productForm input, #productForm textarea{
+  border:1px solid var(--line); border-radius:10px; padding:.55rem .75rem;
+  outline:none; transition: border-color .15s, box-shadow .15s;
+}
+#productForm input:focus, #productForm textarea:focus{
+  border-color: rgba(14,165,233,.5);
+  box-shadow: 0 0 0 3px rgba(14,165,233,.15);
+}
+#productForm .actions{
+  grid-column:1/-1; display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-start;
+}
+
+/* Botones utilitarios */
+.btn{ cursor:pointer; border-radius:10px; padding:.5rem .8rem; font-weight:700; }
+.btn-primary{ background:var(--primary); border:1px solid var(--primary); color:#fff; }
+.btn-primary:hover{ background:var(--primary-700); border-color:var(--primary-700); }
+.btn-secondary{ background:#eef2f7; border:1px solid var(--line); color:var(--ink); }
+.btn-secondary:hover{ background:#e6ecf5; }
+.btn-danger{ background:#ef4444; border:1px solid #dc2626; color:#fff; }
+.btn-danger:hover{ background:#dc2626; }
+
+/* Grid de tarjetas admin */
+#adminList{ display:grid; gap:16px; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); }
+#adminList .product-card{
+  border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff;
+  box-shadow: var(--elev-0); transition: transform .15s, box-shadow .15s;
+}
+#adminList .product-card:hover{ transform: translateY(-3px); box-shadow: var(--elev-1); }
+#adminList .product-card img{ width:100%; height:160px; object-fit:cover; display:block; }
+#adminList .product-card .card-actions{ display:flex; gap:8px; margin-top:8px; }
+#adminList .product-card .edit{ composes: btn btn-secondary; }
+#adminList .product-card .del{ composes: btn btn-danger; }
+
+/* Helper para componer clases sin preprocesador */
+.edit.btn, .del.btn{ /* por si tu HTML les pone class="edit btn ..." */ }
+
+/* Mensajes del login */
+#loginMsg{ color:#ef4444; margin-top:6px; }
+
+/* Responsive */
+@media (max-width: 640px){
+  #productForm{ grid-template-columns: 1fr; }
+}

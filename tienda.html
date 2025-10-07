@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tienda - CODEN</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="bg-light">
 
 <nav class="navbar navbar-light coden-nav sticky-top">
   <a class="navbar-brand font-weight-bold" href="index.html"><span class="brand-dot"></span> CODEN</a>
   <div class="ml-auto">
-    <a href="carrito.html" class="btn btn-outline-primary btn-sm">
-      🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
-    </a>
+    <a href="carrito.html" class="btn btn-outline-primary btn-sm">🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span></a>
   </div>
 </nav>
 
@@ -27,12 +25,13 @@
     <a href="carrito.html" class="btn btn-outline-primary">Ver carrito</a>
   </div>
 
-  <div class="row" id="product-list"><!-- render dinámico --></div>
+  <div class="row" id="product-list"></div>
 </div>
 
-<!-- ⚠️ Quitar js/products.js (era estático) -->
-<script type="module" src="./supabaseClient.js"></script>
-<script type="module" src="./js/cart.js"></script>
-<script type="module" src="./js/shop.js"></script>
+<script type="module" src="/supabaseClient.js"></script>
+<script type="module" src="/js/cart.js"></script>
+<script type="module" src="/js/shop.js"></script>
+<script src="/js/scrollTop.js" defer></script>
+<button id="scrollTopBtn" class="btn btn-primary" style="display:none;position:fixed;bottom:20px;right:20px;">↑</button>
 </body>
 </html>
