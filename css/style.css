@@ -1,0 +1,143 @@
+/* ================================
+   Paleta salud / confianza
+================================== */
+:root{
+  --primary:#0ea5e9;        /* celeste */
+  --primary-700:#0369a1;    /* azul fuerte */
+  --ink:#0f172a;
+  --muted:#475569;
+  --line:#e2e8f0;
+  --bg:#ffffff;
+
+  /* Sombras estándar */
+  --elev-0: 0 2px 6px rgba(0,0,0,.06);
+  --elev-1: 0 10px 25px rgba(0,0,0,.15);
+  --elev-2: 0 12px 32px rgba(0,0,0,.18);
+}
+
+*{ box-sizing:border-box }
+html, body{ height:100% }
+html{ scroll-behavior:smooth } /* fallback de scroll suave */
+body{
+  font-family:'Raleway', system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  margin:0; color:var(--ink); background:var(--bg);
+}
+
+/* ================================
+   Navbar
+================================== */
+.coden-nav{
+  background:rgba(255,255,255,.9);
+  border-bottom:1px solid var(--line);
+}
+.coden-nav .navbar-brand{ letter-spacing:.5px }
+.brand-dot{
+  display:inline-block; width:.8rem; height:.8rem;
+  background:linear-gradient(135deg,var(--primary),#38bdf8);
+  border-radius:999px; margin-right:.4rem; vertical-align:-2px;
+}
+.navbar .btn{ font-weight:700 }
+
+/* ================================
+   Carrusel / Hero
+================================== */
+.coden-caption{
+  background:rgba(2,33,64,.45);
+  padding:18px; border-radius:12px;
+}
+.coden-caption h1{
+  font-family:'Cormorant', serif; font-weight:700;
+}
+.coden-caption h2{ font-size:1.3rem }
+.carousel-item img{ width:100%; height:70vh; object-fit:cover }
+
+/* ================================
+   Servicios (con hover notorio)
+   HTML sugerido: class="p-4 rounded service-card"
+   (si aún usas 'hover-card-lg' o 'shadow-sm', también queda cubierto)
+================================== */
+.service-card,
+.hover-card-lg{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  box-shadow: var(--elev-0);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  will-change: transform;
+}
+.service-card:hover,
+.service-card:focus-within,
+.hover-card-lg:hover,
+.hover-card-lg:focus-within{
+  transform: translateY(-6px);
+  box-shadow: var(--elev-1);
+  border-color: rgba(14,165,233,.35);
+  outline:none;
+}
+/* Si el HTML conserva 'shadow-sm' de Bootstrap, lo piso para el hover */
+.hover-card-lg.shadow-sm,
+.service-card.shadow-sm { box-shadow: var(--elev-0) !important; }
+.hover-card-lg.shadow-sm:hover,
+.service-card.shadow-sm:hover { box-shadow: var(--elev-1) !important; }
+
+/* ================================
+   Productos (tarjeta cuadrada + hover)
+================================== */
+.square-wrap{ position:relative; width:100% }
+.square-wrap::before{ content:""; display:block; padding-top:100% } /* 1:1 */
+
+.square-img{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  background: linear-gradient(135deg,#e0f2fe,#f8fafc);
+  border-top-left-radius:14px; border-top-right-radius:14px;
+}
+
+.product-card{
+  border:none;
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow: var(--elev-0);
+  transition: transform .2s ease, box-shadow .2s ease;
+  will-change: transform;
+}
+.product-card:hover,
+.product-card:focus-within{
+  transform: translateY(-3px);
+  box-shadow: var(--elev-2);
+}
+
+.price{ font-weight:800; color:var(--primary-700) }
+
+/* ================================
+   Utilidades / otros bloques
+================================== */
+.check{ color:var(--primary-700); font-weight:800; margin-right:.3rem }
+
+/* Carrito */
+.cart-item{ border-bottom:1px solid var(--line); padding:12px 0 }
+.cart-item:last-child{ border-bottom:none }
+.cart-summary{ border:1px solid var(--line); border-radius:12px }
+
+/* Botones */
+.btn-primary{ background:var(--primary); border-color:var(--primary) }
+.btn-primary:hover{ background:var(--primary-700); border-color:var(--primary-700) }
+.btn-outline-primary{ color:var(--primary-700); border-color:var(--primary-700) }
+.btn-outline-primary:hover{ background:var(--primary-700); color:#fff }
+
+/* WhatsApp flotante */
+.whatsapp-float{
+  position:fixed; width:60px; height:60px; bottom:20px; right:20px;
+  background-color:#25D366; color:#fff; border-radius:50%;
+  text-align:center; font-size:30px; box-shadow:2px 2px 8px #888; z-index:1000;
+}
+.whatsapp-float i{ margin-top:15px }
+
+/* ================================
+   Responsive
+================================== */
+@media (max-width: 767px){
+  .carousel-item img{ height:50vh }
+}
