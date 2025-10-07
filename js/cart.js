@@ -104,3 +104,135 @@ window.toastCoden = (msg)=>{
 
 // API global (si te sirve en scripts no-módulo)
 window.Cart = { getCart,setCart,updateCartBadge, addToCart,removeFromCart,setQty, cartTotal,renderCartPage };
+
+/* =======================
+   MERCADO PAGO — INTEGRACIÓN
+======================= */
+
+// 1) Calcular totales (subtotal + envío) usando tus precios de Supabase
+async function computeTotals() {
+  const cart = getCart();
+  const ids = cart.map(i => i.id);
+  const prods = await fetchByIds(ids);
+  const map = new Map(prods.map(p => [p.id, p]));
+
+  const subtotal = cart.reduce((sum, i) => {
+    const p = map.get(i.id);
+    return sum + Number(p?.price || 0) * Number(i.qty || 0);
+  }, 0);
+
+  const shipping = getSelectedShipping(); // { label, cost }
+  const total = subtotal + Number(shipping?.cost || 0);
+
+  return { subtotal, shipping, total, prods };
+}
+
+// 2) Obtener envío desde UI (ajustá si usás otro selector)
+function getSelectedShipping() {
+  // Radios: <input type="radio" name="shipping" value="mdp|pba|resto|retiro">
+  const radio = document.querySelector('input[name="shipping"]:checked');
+  const value = (radio?.value || document.querySelector('#shippingMethod')?.value || 'retiro').trim();
+
+  if (value === 'mdp')   return { label: 'Urbano MDP', cost: 3000 };
+  if (value === 'pba')   return { label: 'Provincia BA', cost: 5500 };
+  if (value === 'resto') return { label: 'Resto del país', cost: 7500 };
+  return { label: 'Retiro en local', cost: 0 };
+}
+
+// 3) Refrescar UI de totales en carrito.html
+export async function renderTotalsBox() {
+  const { subtotal, shipping, total } = await computeTotals();
+  const elSubtotal = document.querySelector('#subtotal');
+  const elEnvio    = document.querySelector('#envio');
+  const elTotal    = document.querySelector('#total');
+
+  if (elSubtotal) elSubtotal.textContent = "$ " + subtotal.toLocaleString("es-AR");
+  if (elEnvio)    elEnvio.textContent    = shipping.cost ? "$ " + shipping.cost.toLocaleString("es-AR") : "—";
+  if (elTotal)    elTotal.textContent    = "$ " + total.toLocaleString("es-AR");
+}
+
+// 4) Adaptar tus productos → ítems de MP (usa datos reales desde Supabase)
+async function cartToMPItems() {
+  const cart = getCart();
+  if (!cart.length) return [];
+
+  const ids = cart.map(i => i.id);
+  const prods = await fetchByIds(ids);
+  const map = new Map(prods.map(p => [p.id, p]));
+
+  return cart.map(i => {
+    const p = map.get(i.id) || {};
+    return {
+      id: String(i.id),
+      title: String(p.name || "Producto"),
+      quantity: Number(i.qty || 1),
+      unit_price: Number(p.price || 0),
+      currency_id: "ARS",
+      picture_url: p.image_url || undefined
+    };
+  });
+}
+
+// 5) Tomar datos del cliente desde el formulario (ajustá los IDs a los tuyos)
+function getCustomerFromForm() {
+  return {
+    name: document.querySelector('#nombre')?.value || '',
+    surname: document.querySelector('#apellido')?.value || '',
+    email: document.querySelector('#email')?.value || ''
+    // opcionales:
+    // docType: 'DNI', docNumber: '12345678',
+    // phone: document.querySelector('#telefono')?.value || '',
+    // address: { street:'Av. X', number:'123', zip:'7600' }
+  };
+}
+
+// 6) Handler principal de pago
+export async function payWithMercadoPago() {
+  try {
+    const cart = await cartToMPItems();
+    if (!cart.length) { alert("Tu carrito está vacío."); return; }
+
+    const customer = getCustomerFromForm();
+    if (!customer.email) { alert("Ingresá un email válido."); return; }
+
+    const { shipping } = await computeTotals();
+
+    const res = await fetch('/.netlify/functions/createPreference', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cart, customer, shipping })
+    });
+
+    if (!res.ok) throw new Error('No se pudo crear la preferencia');
+    const data = await res.json();
+    const redirect = data.init_point || data.sandbox_init_point;
+    if (!redirect) throw new Error('Preferencia sin init_point');
+
+    window.location.href = redirect;
+  } catch (e) {
+    console.error('Error iniciando pago:', e);
+    alert('Ocurrió un error iniciando el pago. Intentá nuevamente.');
+  }
+}
+
+// 7) Auto-wire de eventos (envío + botón pagar)
+function wireCartEvents() {
+  // botones/inputs de envío
+  document.querySelectorAll('input[name="shipping"], #shippingMethod')
+    .forEach(el => el.addEventListener('change', renderTotalsBox));
+
+  // botón de pagar
+  document.getElementById('btn-pagar')?.addEventListener('click', payWithMercadoPago);
+}
+
+// 8) Inicialización en carrito.html
+document.addEventListener('DOMContentLoaded', () => {
+  // Si estás parado en la página de carrito, refrescá totales y eventos
+  if (document.getElementById('cartItems')) {
+    renderTotalsBox().catch(console.error);
+    wireCartEvents();
+  }
+});
+
+// También lo dejo en window por si lo querés usar desde HTML inline
+window.Pay = { payWithMercadoPago, renderTotalsBox };

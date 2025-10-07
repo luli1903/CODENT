@@ -15,15 +15,80 @@
 
 <div class="container py-4">
   <h2 class="mb-3"><strong>Tu carrito</strong></h2>
+
+  <!-- Lista de items -->
   <div id="cartItems" class="mb-3"></div>
-  <p>Total: <strong id="cartTotal">$0</strong></p>
+
+  <!-- Este total es el que ya usabas (subtotal) -->
+  <p class="mb-4">Total productos: <strong id="cartTotal">$0</strong></p>
+
+  <!-- 🔹 NUEVO: Método de entrega -->
+  <div class="card p-3 mb-3">
+    <h5 class="mb-2">Método de entrega</h5>
+    <div class="custom-control custom-radio">
+      <input class="custom-control-input" type="radio" name="shipping" id="ship-retiro" value="retiro" checked>
+      <label class="custom-control-label" for="ship-retiro">Retiro en local (sin costo)</label>
+    </div>
+    <div class="custom-control custom-radio">
+      <input class="custom-control-input" type="radio" name="shipping" id="ship-mdp" value="mdp">
+      <label class="custom-control-label" for="ship-mdp">Envío urbano MDP ($3000)</label>
+    </div>
+    <div class="custom-control custom-radio">
+      <input class="custom-control-input" type="radio" name="shipping" id="ship-pba" value="pba">
+      <label class="custom-control-label" for="ship-pba">Provincia BA ($5500)</label>
+    </div>
+    <div class="custom-control custom-radio">
+      <input class="custom-control-input" type="radio" name="shipping" id="ship-resto" value="resto">
+      <label class="custom-control-label" for="ship-resto">Resto del país ($7500)</label>
+    </div>
+  </div>
+
+  <!-- 🔹 NUEVO: Datos de contacto mínimos -->
+  <div class="card p-3 mb-3">
+    <h5 class="mb-2">Datos de contacto</h5>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" class="form-control" required>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="apellido">Apellido</label>
+        <input id="apellido" class="form-control">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" class="form-control" required>
+    </div>
+  </div>
+
+  <!-- 🔹 NUEVO: Resumen final que usa el JS de MP -->
+  <ul class="list-group my-3">
+    <li class="list-group-item d-flex justify-content-between">
+      <span>Subtotal</span> <strong id="subtotal">$ 0</strong>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span>Envío</span> <strong id="envio">—</strong>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span>Total</span> <strong id="total">$ 0</strong>
+    </li>
+  </ul>
+
+  <!-- Botón de pago -->
+  <button id="btn-pagar" class="btn btn-primary btn-lg btn-block">Pagar con Mercado Pago</button>
 </div>
 
+<!-- scripts -->
 <script type="module" src="/supabaseClient.js"></script>
 <script type="module" src="/js/cart.js"></script>
 <script type="module">
-  import { renderCartPage } from "/js/cart.js";
-  renderCartPage();
+  import { renderCartPage, renderTotalsBox } from "/js/cart.js";
+  // Renderiza productos y luego recalcula los totales con envío
+  (async () => {
+    await renderCartPage();
+    await renderTotalsBox();
+  })();
 </script>
 </body>
 </html>
