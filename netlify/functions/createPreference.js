@@ -23,7 +23,7 @@ export const handler = async (event) => {
     console.log("BASE_URL:", baseUrl);
 
     if (!accessToken) return err(500, "MP_ACCESS_TOKEN no definido");
-    if (!accessToken.startsWith("TEST-")) return err(500, "MP_ACCESS_TOKEN no es TEST- (sandbox)");
+    //if (!accessToken.startsWith("TEST-")) return err(500, "MP_ACCESS_TOKEN no es TEST- (sandbox)");
 
     const { cart = [], customer = {}, shipping = null } = JSON.parse(event.body || "{}");
     if (!Array.isArray(cart) || !cart.length) return err(400, "cart[] requerido");

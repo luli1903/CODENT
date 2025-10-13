@@ -199,13 +199,10 @@ body.admin{ background:#f8fafc; }
 #adminList .product-card .edit{ composes: btn btn-secondary; }
 #adminList .product-card .del{ composes: btn btn-danger; }
 
-/* Helper para componer clases sin preprocesador */
-.edit.btn, .del.btn{ /* por si tu HTML les pone class="edit btn ..." */ }
+.edit.btn, .del.btn{ }
 
-/* Mensajes del login */
 #loginMsg{ color:#ef4444; margin-top:6px; }
 
-/* Responsive */
 @media (max-width: 640px){
   #productForm{ grid-template-columns: 1fr; }
 }
