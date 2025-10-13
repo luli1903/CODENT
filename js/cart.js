@@ -197,14 +197,25 @@ export async function payWithMercadoPago() {
 
     const { shipping } = await computeTotals();
 
+    console.log("[MP] creando preferencia con:", { cart, customer, shipping });
+
     const res = await fetch('/.netlify/functions/createPreference', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cart, customer, shipping })
     });
 
-    if (!res.ok) throw new Error('No se pudo crear la preferencia');
+    if (!res.ok) {
+      // 👇 lee el texto que envía tu función (útil para depurar)
+      const txt = await res.text();
+      console.error('createPreference FAIL:', res.status, txt);
+      alert('Hubo un error iniciando el pago.\n' + txt);
+      return;
+    }
+
     const data = await res.json();
+    console.log("Preferencia creada ✅", data);
+
     const redirect = data.init_point || data.sandbox_init_point;
     if (!redirect) throw new Error('Preferencia sin init_point');
 
@@ -214,6 +225,7 @@ export async function payWithMercadoPago() {
     alert('Ocurrió un error iniciando el pago. Intentá nuevamente.');
   }
 }
+
 
 // 7) Auto-wire de eventos (envío + botón pagar)
 function wireCartEvents() {
