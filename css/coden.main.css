@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;800&family=Cormorant:wght@300;700&display=swap');
+
+/* Namespace: solo afecta al contenido principal */
+#coden-main{
+  --primary:#0ea5e9; --primary-700:#0369a1; --accent:#22c55e;
+  --ink:#0f172a; --muted:#475569; --line:#e2e8f0; --bg:#fff; --card:#f8fafc;
+  --r-xl:20px; --r-lg:14px;
+  --shadow-0:0 2px 6px rgba(0,0,0,.06); --shadow-1:0 8px 22px rgba(0,0,0,.08);
+  color:var(--ink);
+  font-family:'Raleway', system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+#coden-main .container{ width:min(1200px,92%); margin-inline:auto }
+#coden-main .grid{ display:grid; gap:22px }
+#coden-main .inline{ display:flex; gap:12px; flex-wrap:wrap }
+
+/* Botones y links */
+#coden-main .btn{ display:inline-flex; align-items:center; gap:.55rem; padding:.9rem 1.15rem; border-radius:999px; background:var(--primary); color:#fff; font-weight:800; text-decoration:none; box-shadow:var(--shadow-0); transition:transform .18s, box-shadow .18s }
+#coden-main .btn:hover{ transform:translateY(-1px); box-shadow:var(--shadow-1) }
+#coden-main .text-link{ color:var(--primary-700); font-weight:700; text-decoration:underline; text-underline-offset:3px }
+#coden-main .chip{ display:inline-flex; align-items:center; gap:.45rem; padding:.35rem .7rem; border-radius:999px; background:#eef6ff; color:var(--primary-700); font-weight:600; font-size:.9rem }
+
+/* HERO */
+#coden-main .hero{ padding:56px 0 30px }
+#coden-main .hero__grid{ grid-template-columns:1.2fr .8fr; align-items:center }
+#coden-main .hero h1{ font-family:'Cormorant',serif; font-size:clamp(32px,4vw,48px); margin:.3rem 0 }
+#coden-main .hero p{ color:var(--muted) }
+#coden-main .hero__card{ background:linear-gradient(180deg,#ffffff 0%, #f5fbff 100%); border:1px solid var(--line); border-radius:var(--r-xl); padding:20px; box-shadow:var(--shadow-1) }
+#coden-main .card{ background:#fff; border:1px solid var(--line); border-radius:var(--r-lg); padding:14px; box-shadow:var(--shadow-0) }
+#coden-main .card__icon{ width:44px; height:44px; border-radius:12px; display:grid; place-items:center; background:#f8fafc; border:1px solid var(--line); margin-bottom:8px }
+
+/* Promo banner */
+#coden-main .promo{ margin:24px 0; background:linear-gradient(90deg,#e6f6ff,#ffffff); border:1px solid var(--line); border-radius:var(--r-xl); box-shadow:var(--shadow-0) }
+#coden-main .promo__wrap{ padding:18px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap }
+
+/* Productos (adaptadores para tu featured actual) */
+#coden-main .products{ padding:28px 0 }
+#coden-main .products__head{ display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:10px }
+#coden-main .products__grid{ display:grid; gap:22px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+#coden-main .square-wrap{ position:relative; width:100% }
+#coden-main .square-wrap::before{ content:""; display:block; padding-top:100% } /* 1:1 */
+#coden-main .square-img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  background: linear-gradient(135deg,#e0f2fe,#f8fafc);
+  border-top-left-radius:14px; border-top-right-radius:14px;
+}
+
+/* Tarjeta visual coherente (cuando uses .product-card de Bootstrap) */
+#coden-main .product-card{
+  border:none; border-radius:14px; overflow:hidden; background:#fff;
+  box-shadow: var(--shadow-0);
+  transition: transform .2s ease, box-shadow .2s ease;
+  will-change: transform;
+}
+#coden-main .product-card:hover,
+#coden-main .product-card:focus-within{
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-1);
+}
+
+/* Nuevo diseño “product” (para cuando migremos la tienda completa) */
+#coden-main .product{ background:#fff; border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--shadow-0); display:flex; flex-direction:column }
+#coden-main .product__img{ aspect-ratio:4/3; background:#f3f5fa; display:grid; place-items:center }
+#coden-main .product__img img{ max-width:90%; max-height:90%; object-fit:contain }
+#coden-main .product__body{ padding:14px }
+#coden-main .product__title{ font-weight:800; margin:.2rem 0 }
+#coden-main .price{ font-weight:800; color:var(--primary-700) }
+#coden-main .badges{ display:flex; gap:8px; flex-wrap:wrap; margin:.2rem 0 .4rem }
+#coden-main .badge{ display:inline-block; padding:.2rem .5rem; border-radius:999px; background:#eefcf2; color:#18794e; font-weight:700; font-size:.78rem; border:1px solid #daf5e4 }
+#coden-main .badge--ok{ background:#e6f6ff; color:#0369a1; border-color:#dbeafe }
+
+/* Testimonios */
+#coden-main .testimonials{ padding:14px 0 34px }
+#coden-main .testi-grid{ display:grid; gap:22px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+#coden-main .testi{ background:#fff; border:1px solid var(--line); border-radius:var(--r-lg); padding:16px; box-shadow:var(--shadow-0) }
+#coden-main .testi__head{ display:flex; align-items:center; gap:10px; margin-bottom:8px }
+#coden-main .avatar{ width:36px; height:36px; border-radius:50%; background:#e2e8f0 }
+
+/* Footer */
+#coden-main footer{ border-top:1px solid var(--line); padding:28px 0 40px; background:#fbfdff }
+#coden-main .foot-grid{ display:grid; gap:22px; grid-template-columns: 1.2fr .8fr .8fr }
+#coden-main .foot h4{ margin:.2rem 0 .6rem }
+#coden-main .foot a{ color:var(--muted); text-decoration:none; display:block; margin:.3rem 0 }
+
+/* Responsive */
+@media (max-width: 900px){
+  #coden-main .hero__grid{ grid-template-columns:1fr }
+}

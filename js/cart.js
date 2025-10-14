@@ -6,8 +6,14 @@ const CART_KEY = "coden_cart";
 /* =======================
    Storage simple
 ======================= */
-export function getCart(){ try{return JSON.parse(localStorage.getItem(CART_KEY))||[];}catch{return[];} }
-export function setCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); updateCartBadge(); }
+export function getCart(){
+  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+  catch { return []; }
+}
+export function setCart(cart){
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateCartBadge();
+}
 export function updateCartBadge(){
   const badge=document.getElementById("cartBadge"); if(!badge) return;
   const count=getCart().reduce((a,i)=>a+Number(i.qty||0),0);
@@ -37,9 +43,14 @@ export async function addToCart(productId, qty=1){
   const i=cart.findIndex(x=>String(x.id)===String(productId));
   if(i>=0) cart[i].qty+=qty; else cart.push({id:productId, qty});
   setCart(cart);
-  try{ const p=await fetchOne(productId); if(p&&window.toastCoden) window.toastCoden(`Agregado: ${p.name}`);}catch{}
+  try{
+    const p=await fetchOne(productId);
+    if(p&&window.toastCoden) window.toastCoden(`Agregado: ${p.name}`);
+  }catch{}
 }
-export function removeFromCart(productId){ setCart(getCart().filter(i=>String(i.id)!==String(productId))); }
+export function removeFromCart(productId){
+  setCart(getCart().filter(i=>String(i.id)!==String(productId)));
+}
 export function setQty(productId, qty){
   if(qty<=0) return removeFromCart(productId);
   const cart=getCart(); const i=cart.findIndex(x=>String(x.id)===String(productId));
@@ -52,7 +63,7 @@ export async function cartTotal(){
 }
 
 /* =======================
-   Render carrito.html (visual clean)
+   Render carrito.html
 ======================= */
 export async function renderCartPage(){
   const list=document.getElementById("cartItems");
@@ -75,9 +86,8 @@ export async function renderCartPage(){
     const p=map.get(String(item.id)); if(!p) return;
     const price=Number(p.price||0), qty=Number(item.qty||1), sub=price*qty; total+=sub;
 
-    // UI sobria y moderna (no depende de Bootstrap)
     const row=document.createElement("div");
-    row.className="coden-product"; // reuse card look
+    row.className="coden-product";
     row.style.display="grid";
     row.style.gridTemplateColumns="auto 1fr auto";
     row.style.alignItems="center";
@@ -110,7 +120,8 @@ export async function renderCartPage(){
       const t=await cartTotal(); totalEl.textContent="$"+t.toLocaleString("es-AR");
     });
     delBtn.addEventListener("click", async ()=>{
-      removeFromCart(p.id); await renderCartPage();
+      removeFromCart(p.id);
+      await renderCartPage();
     });
 
     list.appendChild(row);
@@ -139,7 +150,7 @@ window.toastCoden = (msg)=>{
 /* =======================
    Mercado Pago — integración
 ======================= */
-// 1) Calcular totales (subtotal + envío) usando precios de Supabase
+// 1) Calcular totales (subtotal + envío)
 async function computeTotals() {
   const cart = getCart();
   const ids = cart.map(i => i.id);
@@ -262,6 +273,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// API global opcional
+// API global opcional (si usás handlers inline)
 window.Cart = { getCart,setCart,updateCartBadge, addToCart,removeFromCart,setQty, cartTotal,renderCartPage };
 window.Pay  = { payWithMercadoPago, renderTotalsBox };

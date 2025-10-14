@@ -1,174 +1,262 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CODEN — Electromedicina Odontológica</title>
 
-  
-  <meta name="description" content="CODEN - Electromedicina odontológica. Reparación, mantenimiento y venta de equipos odontológicos.">
-  <title>CODEN - Electromedicina Odontológica</title>
+  <!-- Bootstrap + base -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/css/style.css?v=5"/>
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;800&family=Cormorant:wght@300;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="css/coden.v1.css?v=1"><!-- nuevo -->
+  <!-- SOLO NAVBAR (si tu nav lo usa) -->
+  <link rel="stylesheet" href="css/coden.v1.css?v=1">
+
+  <!-- Estética del contenido (hero, cards, badges, footer) -->
+  <link rel="stylesheet" href="/css/coden.main.css?v=2"/>
 </head>
-
-
-
 <body id="top">
- <div id="coden-v1">
-<nav class="coden-nav" aria-label="Principal">
-  <div class="coden-container coden-nav__wrap">
-    <button class="coden-iconbtn coden-only-mobile" id="menuToggle" aria-label="Abrir menú">☰</button>
 
-    <div class="coden-nav__links" role="navigation">
-      <a href="tienda.html">Productos</a>
-      <a href="#servicios">Servicios</a>
-      <a href="#soporte">Soporte</a>
-    </div>
-
-    <a class="coden-brand" href="index.html" aria-label="Inicio CODEN">
-      <span class="coden-brand__logo" aria-hidden="true"></span> CODEN
-    </a>
-
-    <div class="coden-nav__actions">
-      <a class="coden-iconbtn" href="tienda.html" aria-label="Buscar">🔎</a>
-      <a class="coden-iconbtn" href="carrito.html" aria-label="Carrito">🛒</a>
-      <a class="coden-btn coden-btn--ghost" href="#contacto">Contacto</a>
-    </div>
-  </div>
-  <div class="coden-nav__accent" aria-hidden="true"></div>
-
-
-  <div class="coden-drawer" id="mobileMenu" hidden>
-    <a href="tienda.html">Productos</a>
-    <a href="#servicios">Servicios</a>
-    <a href="#soporte">Soporte</a>
-    <a href="#contacto">Contacto</a>
-  </div>
-</nav>
-
-
-<!-- Carrusel Bootstrap -->
-<section class="coden-hero" aria-labelledby="hero-title">
-  <div class="coden-container coden-grid coden-hero__grid">
-    <div>
-      <div class="coden-hero__badges">
-        <span class="coden-chip">⚡ Reparación express</span>
-        <span class="coden-chip">🛡️ Garantía 6–12 meses</span>
-        <span class="coden-chip">🚚 Envíos a todo el país</span>
+  <!-- NAVBAR (intacta) -->
+  <div id="coden-v1">
+    <nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
+      <a class="navbar-brand font-weight-bold" href="index.html">
+        <span class="brand-dot"></span> CODEN
+      </a>
+      <div class="ml-auto d-flex align-items-center">
+        <a href="carrito.html" class="btn btn-outline-primary btn-sm">
+          🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
+        </a>
       </div>
-      <h1 id="hero-title">Equipos odontológicos confiables, servicio técnico que responde</h1>
-      <p>Venta, mantenimiento y reparación de instrumental y equipos para clínicas, consultorios y universidades.</p>
-      <div class="coden-inline">
-        <a class="coden-btn" href="tienda.html">Ver catálogo</a>
-        <a class="coden-textlink" href="#metodologia">Cómo trabajamos</a>
-      </div>
-    </div>
-    <div class="coden-hero__card" role="img" aria-label="Servicios destacados">
-      <div class="coden-grid coden-hero__features">
-        <div class="coden-card"><div class="coden-card__icon">🔧</div><b>Mantenimiento</b><p>Checklist y trazabilidad.</p></div>
-        <div class="coden-card"><div class="coden-card__icon">🦷</div><b>Instrumental</b><p>Turbinas, micromotores.</p></div>
-        <div class="coden-card"><div class="coden-card__icon">⚙️</div><b>Repuestos</b><p>Originales y compatibles.</p></div>
-        <div class="coden-card"><div class="coden-card__icon">📦</div><b>Logística</b><p>24–72h según zona.</p></div>
-      </div>
-    </div>
+    </nav>
   </div>
-</section>
 
+  <!-- CONTENIDO -->
+  <div id="coden-main">
 
-<section id="empresa" class="py-5 bg-light">
-  <div class="container">
-    <h2 class="text-center mb-4"><strong>Empresa familiar</strong></h2>
-    <div class="row align-items-center">
-      <div class="col-md-6 mb-3">
-        <div class="p-4 border rounded bg-white shadow-sm">
-          <p class="mb-2">En <strong>CODEN</strong> somos una <strong>empresa familiar</strong> dedicada a la electromedicina odontológica.</p>
-          <p class="mb-2">Mantenimiento, reparación y venta de equipos con garantía.</p>
-          <ul class="mb-0 text-muted"><li>Repuestos certificados</li><li>Asesoramiento honesto</li><li>Respuesta ágil</li></ul>
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container grid hero__grid">
+        <div>
+          <div class="inline" style="margin-bottom:8px">
+            <span class="chip">⚡ Reparación express</span>
+            <span class="chip">🛡️ Garantía 6–12 meses</span>
+            <span class="chip">🚚 Envíos a todo el país</span>
+          </div>
+          <h1 id="hero-title" style="font-family:'Cormorant',serif">
+            Equipos odontológicos confiables, servicio técnico que responde
+          </h1>
+          <p class="mb-2" style="color:var(--muted)">
+            Venta, mantenimiento y reparación de instrumental y equipos para clínicas, consultorios y universidades.
+          </p>
+          <div class="inline" style="margin-top:12px">
+            <a class="btn" href="tienda.html">Ver catálogo</a>
+            <a class="text-link" href="#servicios">Nuestros servicios</a>
+          </div>
+        </div>
+
+        <div class="hero__card" role="img" aria-label="Servicios destacados">
+          <div class="grid" style="grid-template-columns:1fr 1fr">
+            <div class="card">
+              <div class="card__icon">🔧</div>
+              <b>Mantenimiento</b>
+              <p style="margin:.2rem 0 0; color:var(--muted)">Checklist y trazabilidad.</p>
+            </div>
+            <div class="card">
+              <div class="card__icon">🦷</div>
+              <b>Instrumental</b>
+              <p style="margin:.2rem 0 0; color:var(--muted)">Turbinas y micromotores.</p>
+            </div>
+            <div class="card">
+              <div class="card__icon">⚙️</div>
+              <b>Repuestos</b>
+              <p style="margin:.2rem 0 0; color:var(--muted)">Originales y compatibles.</p>
+            </div>
+            <div class="card">
+              <div class="card__icon">📦</div>
+              <b>Logística</b>
+              <p style="margin:.2rem 0 0; color:var(--muted)">24–72h según zona.</p>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-md-6 text-center"></div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section id="services" class="py-5">
-  <div class="container text-center">
-    <h2 class="mb-4"><strong>Servicios</strong></h2>
-    <div class="row">
-      <div class="col-md-4 mb-3"><div class="p-4 border rounded shadow-sm hover-card-lg"><h4>🔧 Mantenimiento</h4><p>Planes preventivos.</p></div></div>
-      <div class="col-md-4 mb-3"><div class="p-4 border rounded shadow-sm hover-card-lg"><h4>⚙️ Reparaciones</h4><p>Diagnóstico y garantía.</p></div></div>
-      <div class="col-md-4 mb-3"><div class="p-4 border rounded shadow-sm hover-card-lg"><h4>📊 Evaluaciones</h4><p>Seguridad eléctrica.</p></div></div>
-    </div>
-    <a href="tienda.html" class="btn btn-outline-primary mt-2">Ir a la Tienda</a>
-  </div>
-</section>
+    <!-- PROMO -->
+    <section class="promo" aria-label="Promociones y medios de pago">
+      <div class="container promo__wrap">
+        <div style="font-weight:800">💳 Hasta 6 cuotas con Mercado Pago</div>
+        <a class="text-link" href="carrito.html">Ir al checkout</a>
+      </div>
+    </section>
 
-<section id="destacados" class="py-5 bg-light">
-  <div class="container">
-    <h2 class="mb-4 text-center"><strong>Productos destacados</strong></h2>
-    <div id="home-featured" class="row"></div>
-    <div class="text-center mt-3"><a href="tienda.html" class="btn btn-primary">Ver todos los productos</a></div>
-  </div>
-</section>
-
-<section id="contacto" class="py-5">
-  <div class="container">
-    <h2 class="text-center mb-4"><strong>Contacto</strong></h2>
-    <div class="row">
-      <div class="col-md-6 mb-3"><div class="p-4 border rounded"><p class="mb-2">📧 <strong>hola@coden.com</strong></p><p class="mb-2">📱 WhatsApp: +54 9 11 2345-6789</p><p class="mb-0">📍 Mar del Plata, Argentina</p></div></div>
-      <div class="col-md-6"><div class="p-4 border rounded"><p class="mb-2">¿Dudas sobre equipos o repuestos?</p><a href="tienda.html" class="btn btn-primary">Ver productos</a></div></div>
-    </div>
-  </div>
-</section>
-
-<a href="https://wa.me/5491123456789" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
-<a href="admin.html" class="btn btn-outline">Iniciar sesión (admin)</a>
-
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-<script type="module" src="/supabaseClient.js"></script>
-<script type="module">
-  import { supabase } from '/supabaseClient.js';
-  async function renderFeatured() {
-    const grid = document.getElementById('home-featured');
-    if (!grid) return;
-    grid.innerHTML = `<div class="col-12 text-center text-muted py-3">Cargando destacados…</div>`;
-    const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false }).limit(3);
-    if (error) { console.error(error); grid.innerHTML = `<div class="col-12 text-center text-muted py-3">No se pudieron cargar los destacados.</div>`; return; }
-    grid.innerHTML = '';
-    (data || []).forEach(p => {
-      const col = document.createElement('div');
-      col.className = 'col-sm-6 col-md-4 mb-4';
-      col.innerHTML = `
-        <div class="card h-100 product-card">
-          <div class="square-wrap"><img src="${p.image_url || ''}" alt="${p.name || ''}" loading="lazy" class="card-img-top square-img"></div>
-          <div class="card-body text-center d-flex flex-column">
-            <h5 class="card-title mb-1">${p.name || ''}</h5>
-            <div class="price mb-3">$${Number(p.price || 0).toLocaleString('es-AR')}</div>
-            <a href="tienda.html" class="btn btn-outline-primary">Ver en tienda</a>
+    <!-- EMPRESA -->
+    <section id="empresa" class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-4" style="font-family:'Cormorant',serif"><strong>Empresa familiar</strong></h2>
+        <div class="row align-items-center">
+          <div class="col-md-6 mb-3">
+            <div class="p-4 border rounded bg-white" style="border-color:var(--line)">
+              <p class="mb-2">En <strong>CODEN</strong> somos una <strong>empresa familiar</strong> dedicada a la electromedicina odontológica.</p>
+              <p class="mb-2">Mantenimiento, reparación y venta de equipos con garantía.</p>
+              <ul class="mb-0 text-muted">
+                <li>Repuestos certificados</li>
+                <li>Asesoramiento honesto</li>
+                <li>Respuesta ágil</li>
+              </ul>
+            </div>
           </div>
-        </div>`;
-      grid.appendChild(col);
-    });
-    if (!grid.children.length) grid.innerHTML = `<div class="col-12 text-center text-muted py-3">Aún no hay productos.</div>`;
-  }
-  document.addEventListener('DOMContentLoaded', renderFeatured);
-</script>
+          <div class="col-md-6 text-center">
+            <!-- espacio para una imagen/ilustración -->
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- SERVICIOS -->
+    <section id="servicios" class="py-5">
+      <div class="container text-center">
+        <h2 class="mb-4" style="font-family:'Cormorant',serif"><strong>Servicios</strong></h2>
+        <div class="row">
+          <div class="col-md-4 mb-3"><div class="p-4 border rounded service-card"><h4>🔧 Mantenimiento</h4><p>Planes preventivos.</p></div></div>
+          <div class="col-md-4 mb-3"><div class="p-4 border rounded service-card"><h4>⚙️ Reparaciones</h4><p>Diagnóstico y garantía.</p></div></div>
+          <div class="col-md-4 mb-3"><div class="p-4 border rounded service-card"><h4>📊 Evaluaciones</h4><p>Seguridad eléctrica.</p></div></div>
+        </div>
+        <a href="tienda.html" class="btn btn-outline-primary mt-2">Ir a la Tienda</a>
+      </div>
+    </section>
 
-<script type="module" src="/js/cart.js"></script>
-<script src="/js/formValidation.js" defer></script>
-<script src="/js/scrollTop.js" defer></script>
-<script src="/js/script.js" defer></script>
+    <!-- DESTACADOS -->
+    <section id="destacados" class="py-5" style="background:#f8fafc">
+      <div class="container">
+        <h2 class="mb-4 text-center" style="font-family:'Cormorant',serif"><strong>Productos destacados</strong></h2>
+        <div id="home-featured" class="row"></div>
+        <div class="text-center mt-3"><a href="tienda.html" class="btn btn-primary">Ver todos los productos</a></div>
+      </div>
+    </section>
 
-<button id="scrollTopBtn" class="btn btn-primary" style="display:none;position:fixed;bottom:20px;right:20px;">↑</button>
+    <!-- CONTACTO -->
+    <section id="contacto" class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-4" style="font-family:'Cormorant',serif"><strong>Contacto</strong></h2>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="p-4 border rounded" style="border-color:var(--line)">
+              <p class="mb-2">📧 <strong>hola@coden.com</strong></p>
+              <p class="mb-2">📱 WhatsApp: +54 9 11 2345-6789</p>
+              <p class="mb-0">📍 Mar del Plata, Argentina</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-4 border rounded" style="border-color:var(--line)">
+              <p class="mb-2">¿Dudas sobre equipos o repuestos?</p>
+              <a href="tienda.html" class="btn btn-primary">Ver productos</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container grid foot-grid">
+        <div class="foot">
+          <div style="font-weight:800; font-family:'Cormorant',serif; margin-bottom:8px">CODEN Electromedicina</div>
+          <p style="color:var(--muted); max-width:48ch">
+            Venta y servicio técnico de equipos odontológicos. Atención a clínicas, consultorios y universidades.
+          </p>
+        </div>
+        <div class="foot">
+          <h4>Empresa</h4>
+          <a href="#">Nosotros</a>
+          <a href="#">Términos</a>
+          <a href="#">Privacidad</a>
+        </div>
+        <div class="foot">
+          <h4>Contacto</h4>
+          <a href="#">WhatsApp</a>
+          <a href="#">Instagram</a>
+          <a href="#">Email</a>
+        </div>
+      </div>
+    </footer>
   </div>
+
+  <!-- WhatsApp flotante (opcional) -->
+  <a href="https://wa.me/5491123456789" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
+
+  <!-- Libs -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Data + carrito -->
+  <script type="module" src="/supabaseClient.js"></script>
+  <script type="module" src="/js/cart.js"></script>
+  <script type="module" src="/db.js"></script>
+
+  <!-- Destacados (usa tu db.js) -->
+  <script type="module">
+    import { listProducts } from '/db.js';
+
+    const grid = document.getElementById('home-featured');
+
+    const esc = (s="") => String(s)
+      .replaceAll("&","&amp;").replaceAll("<","&lt;")
+      .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+
+    async function renderFeatured() {
+      if(!grid) return;
+      grid.innerHTML = `<div class="col-12 text-center text-muted py-3">Cargando destacados…</div>`;
+      try {
+        const all = await listProducts();
+        const items = (all || []).slice(0,3); // top 3
+        grid.innerHTML = "";
+
+        if (!items.length) {
+          grid.innerHTML = `<div class="col-12 text-center text-muted py-3">Aún no hay productos.</div>`;
+          return;
+        }
+
+        const frag = document.createDocumentFragment();
+
+        items.forEach(p => {
+          const name = esc(p.name || "");
+          const price = Number(p.price || 0).toLocaleString('es-AR');
+          const col = document.createElement('div');
+          col.className = 'col-sm-6 col-md-4 mb-4';
+          col.innerHTML = `
+            <article class="product">
+              <div class="product__img">
+                <img src="${p.image_url || ''}" alt="${name}" loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/600x450?text=Sin+imagen';this.style.objectFit='contain';">
+              </div>
+              <div class="product__body">
+                <div class="product__title">${name}</div>
+                <div class="badges"><span class="badge">24–72h</span><span class="badge badge--ok">Garantía 12m</span></div>
+                <div class="price">$ ${price}</div>
+                <div class="inline" style="margin-top:10px">
+                  <a class="btn" href="producto.html?id=${encodeURIComponent(p.id)}">Ver</a>
+                  <a class="text-link" href="tienda.html">Más productos</a>
+                </div>
+              </div>
+            </article>`;
+          frag.appendChild(col);
+        });
+
+        grid.appendChild(frag);
+      } catch (e) {
+        console.error(e);
+        grid.innerHTML = `<div class="col-12 text-center text-muted py-3">No se pudieron cargar los destacados.</div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      window.Cart?.updateCartBadge?.();
+      renderFeatured();
+    });
+  </script>
+
 </body>
 </html>

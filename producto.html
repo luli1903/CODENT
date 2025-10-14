@@ -1,79 +1,117 @@
-<!-- producto.html (versión corregida, sin products.js) -->
+<!-- producto.html (CODEN v1 — estética nueva, nav intacta) -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Producto - CODEN</title>
+
+  <!-- Bootstrap + base -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="css/style.css?v=101"/>
+  <link rel="stylesheet" href="css/style.css?v=102"/>
+
+  <!-- Estilos del contenido moderno (sin tocar navbar) -->
+  <link rel="stylesheet" href="css/coden.main.css?v=2"/>
 </head>
 <body class="bg-light">
-<nav class="navbar navbar-light coden-nav">
-  <a class="navbar-brand font-weight-bold" href="index.html"><span class="brand-dot"></span> CODEN</a>
-  <a href="carrito.html" class="btn btn-outline-primary btn-sm">
-    🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
-  </a>
-</nav>
+  <!-- NAVBAR (no se toca) -->
+  <nav class="navbar navbar-light coden-nav">
+    <a class="navbar-brand font-weight-bold" href="index.html"><span class="brand-dot"></span> CODEN</a>
+    <a href="carrito.html" class="btn btn-outline-primary btn-sm">
+      🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
+    </a>
+  </nav>
 
-<div class="container py-4" id="content">
-  <p class="text-muted">Cargando…</p>
-</div>
+  <!-- CONTENIDO -->
+  <div id="coden-main">
+    <div class="coden-container py-4" id="content">
+      <p class="text-muted">Cargando…</p>
+    </div>
+  </div>
 
-<script type="module" src="./supabaseClient.js?v=101"></script>
-<script type="module">
-  import { getProduct } from './db.js';
-  // Si usas carrito local:
-  import './js/cart.js'; // para que exista window.Cart/updateBadge si lo necesitas
+  <!-- Libs -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  const qs = new URLSearchParams(location.search);
-  const id = qs.get('id'); // UUID
+  <!-- Data + carrito -->
+  <script type="module" src="./supabaseClient.js?v=102"></script>
+  <script type="module" src="./js/cart.js?v=102"></script>
+  <script type="module" src="./db.js?v=102"></script>
 
-  const root = document.getElementById('content');
+  <!-- Render del producto -->
+  <script type="module">
+    import { getProduct } from './db.js';
 
-  async function render() {
-    if (!id) { root.innerHTML = '<p class="text-muted">Producto no encontrado.</p>'; return; }
-    try {
-      const p = await getProduct(id);
-      if (!p) { root.innerHTML = '<p class="text-muted">Producto no encontrado.</p>'; return; }
+    const qs   = new URLSearchParams(location.search);
+    const id   = qs.get('id');          // UUID del producto
+    const root = document.getElementById('content');
 
-      root.innerHTML = `
-        <div class="row align-items-start">
-          <div class="col-md-6 text-center mb-3">
-            <img src="${p.image_url || ''}" alt="${p.name || ''}" class="img-fluid rounded" style="max-width:480px">
-          </div>
-          <div class="col-md-6">
-            <h2 class="mb-1">${p.name || ''}</h2>
-            <p class="text-muted">${p.description || ''}</p>
-            <div class="h4 text-primary">$${Number(p.price||0).toLocaleString('es-AR')}</div>
-            <div class="d-flex align-items-center my-3">
-              <label class="mr-2 mb-0">Cantidad:</label>
-              <input id="qty" type="number" min="1" value="1" class="form-control" style="width:100px">
+    const esc = (s="") => String(s)
+      .replaceAll("&","&amp;").replaceAll("<","&lt;")
+      .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+
+    async function render() {
+      if (!id) { root.innerHTML = '<p class="text-muted">Producto no encontrado.</p>'; return; }
+      try {
+        const p = await getProduct(id);
+        if (!p) { root.innerHTML = '<p class="text-muted">Producto no encontrado.</p>'; return; }
+
+        const price = Number(p.price || 0).toLocaleString('es-AR');
+        const name  = esc(p.name || '');
+        const desc  = esc(p.description || '');
+
+        root.innerHTML = `
+          <div class="row align-items-start">
+            <div class="col-md-6 text-center mb-3">
+              <div class="coden-product__img" style="max-width:520px;margin:0 auto;border-radius:14px;overflow:hidden">
+                <img src="${p.image_url || ''}" alt="${name}" style="width:100%;height:auto;object-fit:contain">
+              </div>
             </div>
-            <button id="addBtn" class="btn btn-primary">Agregar al carrito</button>
-            <a href="tienda.html" class="btn btn-outline-primary ml-2">Volver a la tienda</a>
+            <div class="col-md-6">
+              <h2 class="mb-1" style="font-family:'Cormorant',serif">${name}</h2>
+              <div class="coden-badges mb-2">
+                <span class="coden-badge">24–72h</span>
+                <span class="coden-badge coden-badge--ok">Garantía 12m</span>
+              </div>
+              <p class="text-muted">${desc}</p>
+              <div class="h4 coden-price mb-3">$ ${price}</div>
+
+              <div class="d-flex align-items-center my-3">
+                <label class="mr-2 mb-0">Cantidad:</label>
+                <input id="qty" type="number" min="1" value="1" class="form-control" style="width:110px">
+              </div>
+
+              <div class="coden-inline">
+                <button id="addBtn" class="coden-btn">Agregar al carrito</button>
+                <a href="tienda.html" class="coden-textlink">Volver a la tienda</a>
+              </div>
+            </div>
           </div>
-        </div>
-      `;
+        `;
 
-      const addBtn = document.getElementById('addBtn');
-      addBtn.addEventListener('click', () => {
-        const q = parseInt(document.getElementById('qty').value) || 1;
-        // tu lógica de carrito (si usás localStorage)
-        window.Cart?.addItem({ id: p.id, name: p.name, price: p.price, image: p.image_url }, q);
+        document.getElementById('addBtn')?.addEventListener('click', async () => {
+          const q = Math.max(1, parseInt(document.getElementById('qty').value) || 1);
+          try {
+            await window.Cart?.addToCart?.(p.id, q);
+            window.Cart?.updateCartBadge?.();
+            window.toastCoden?.('Agregado: ' + (p.name || 'Producto'));
+          } catch (e) {
+            console.error(e);
+            alert('No se pudo agregar el producto.');
+          }
+        });
+
+        // Actualiza badge al entrar
         window.Cart?.updateCartBadge?.();
-        alert('Producto agregado ✔');
-      });
-
-      window.Cart?.updateCartBadge?.();
-    } catch (e) {
-      console.error(e);
-      root.innerHTML = '<p class="text-muted">No se pudo cargar el producto.</p>';
+      } catch (e) {
+        console.error(e);
+        root.innerHTML = '<p class="text-muted">No se pudo cargar el producto.</p>';
+      }
     }
-  }
 
-  render();
-</script>
+    document.addEventListener('DOMContentLoaded', render);
+  </script>
 </body>
 </html>
 

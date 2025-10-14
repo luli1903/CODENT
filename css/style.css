@@ -24,7 +24,7 @@ body{
 }
 
 /* ================================
-   Navbar
+   Navbar (DEJAR TAL CUAL)
 ================================== */
 .coden-nav{
   background:rgba(255,255,255,.9);
@@ -39,22 +39,7 @@ body{
 .navbar .btn{ font-weight:700 }
 
 /* ================================
-   Carrusel / Hero
-================================== */
-.coden-caption{
-  background:rgba(2,33,64,.45);
-  padding:18px; border-radius:12px;
-}
-.coden-caption h1{
-  font-family:'Cormorant', serif; font-weight:700;
-}
-.coden-caption h2{ font-size:1.3rem }
-.carousel-item img{ width:100%; height:70vh; object-fit:cover }
-
-/* ================================
-   Servicios (con hover notorio)
-   HTML sugerido: class="p-4 rounded service-card"
-   (si aún usas 'hover-card-lg' o 'shadow-sm', también queda cubierto)
+   Servicios (hover)
 ================================== */
 .service-card,
 .hover-card-lg{
@@ -74,58 +59,15 @@ body{
   border-color: rgba(14,165,233,.35);
   outline:none;
 }
-/* Si el HTML conserva 'shadow-sm' de Bootstrap, lo piso para el hover */
 .hover-card-lg.shadow-sm,
 .service-card.shadow-sm { box-shadow: var(--elev-0) !important; }
 .hover-card-lg.shadow-sm:hover,
 .service-card.shadow-sm:hover { box-shadow: var(--elev-1) !important; }
 
 /* ================================
-   Productos (tarjeta cuadrada + hover)
-================================== */
-.square-wrap{ position:relative; width:100% }
-.square-wrap::before{ content:""; display:block; padding-top:100% } /* 1:1 */
-
-.square-img{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit:cover;
-  background: linear-gradient(135deg,#e0f2fe,#f8fafc);
-  border-top-left-radius:14px; border-top-right-radius:14px;
-}
-
-.product-card{
-  border:none;
-  border-radius:14px;
-  overflow:hidden;
-  background:#fff;
-  box-shadow: var(--elev-0);
-  transition: transform .2s ease, box-shadow .2s ease;
-  will-change: transform;
-}
-.product-card:hover,
-.product-card:focus-within{
-  transform: translateY(-3px);
-  box-shadow: var(--elev-2);
-}
-
-.price{ font-weight:800; color:var(--primary-700) }
-
-/* ================================
-   Utilidades / otros bloques
+   Utilidades / otros
 ================================== */
 .check{ color:var(--primary-700); font-weight:800; margin-right:.3rem }
-
-/* Carrito */
-.cart-item{ border-bottom:1px solid var(--line); padding:12px 0 }
-.cart-item:last-child{ border-bottom:none }
-.cart-summary{ border:1px solid var(--line); border-radius:12px }
-
-/* Botones */
-.btn-primary{ background:var(--primary); border-color:var(--primary) }
-.btn-primary:hover{ background:var(--primary-700); border-color:var(--primary-700) }
-.btn-outline-primary{ color:var(--primary-700); border-color:var(--primary-700) }
-.btn-outline-primary:hover{ background:var(--primary-700); color:#fff }
 
 /* WhatsApp flotante */
 .whatsapp-float{
@@ -135,12 +77,6 @@ body{
 }
 .whatsapp-float i{ margin-top:15px }
 
-/* ================================
-   Responsive
-================================== */
-@media (max-width: 767px){
-  .carousel-item img{ height:50vh }
-}
 /* ================================
    Admin UI
 ================================== */
@@ -154,8 +90,6 @@ body.admin{ background:#f8fafc; }
   box-shadow: var(--elev-0);
 }
 .admin-header h1{ font-size:1.25rem; margin:0; }
-
-/* Panel contenedor */
 .admin .container{ max-width:980px; }
 
 /* Formulario de producto */
@@ -178,7 +112,7 @@ body.admin{ background:#f8fafc; }
   grid-column:1/-1; display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-start;
 }
 
-/* Botones utilitarios */
+/* Botones utilitarios admin */
 .btn{ cursor:pointer; border-radius:10px; padding:.5rem .8rem; font-weight:700; }
 .btn-primary{ background:var(--primary); border:1px solid var(--primary); color:#fff; }
 .btn-primary:hover{ background:var(--primary-700); border-color:var(--primary-700); }
@@ -187,7 +121,6 @@ body.admin{ background:#f8fafc; }
 .btn-danger{ background:#ef4444; border:1px solid #dc2626; color:#fff; }
 .btn-danger:hover{ background:#dc2626; }
 
-/* Grid de tarjetas admin */
 #adminList{ display:grid; gap:16px; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); }
 #adminList .product-card{
   border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff;
@@ -196,13 +129,10 @@ body.admin{ background:#f8fafc; }
 #adminList .product-card:hover{ transform: translateY(-3px); box-shadow: var(--elev-1); }
 #adminList .product-card img{ width:100%; height:160px; object-fit:cover; display:block; }
 #adminList .product-card .card-actions{ display:flex; gap:8px; margin-top:8px; }
-#adminList .product-card .edit{ composes: btn btn-secondary; }
-#adminList .product-card .del{ composes: btn btn-danger; }
-
-.edit.btn, .del.btn{ }
 
 #loginMsg{ color:#ef4444; margin-top:6px; }
 
+/* Responsive mínimos */
 @media (max-width: 640px){
   #productForm{ grid-template-columns: 1fr; }
 }
