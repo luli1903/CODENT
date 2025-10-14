@@ -1,16 +1,22 @@
+// CODEN v1 — carrito + Mercado Pago + helpers
 import { supabase } from "../supabaseClient.js";
 
 const CART_KEY = "coden_cart";
 
-/* storage */
+/* =======================
+   Storage simple
+======================= */
 export function getCart(){ try{return JSON.parse(localStorage.getItem(CART_KEY))||[];}catch{return[];} }
 export function setCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); updateCartBadge(); }
 export function updateCartBadge(){
   const badge=document.getElementById("cartBadge"); if(!badge) return;
-  const count=getCart().reduce((a,i)=>a+Number(i.qty||0),0); badge.textContent=count;
+  const count=getCart().reduce((a,i)=>a+Number(i.qty||0),0);
+  badge.textContent = count;
 }
 
-/* supabase helpers */
+/* =======================
+   Supabase helpers
+======================= */
 async function fetchByIds(ids){
   if(!ids?.length) return [];
   const {data,error}=await supabase.from("products").select("*").in("id",ids);
@@ -23,64 +29,90 @@ async function fetchOne(id){
   return data;
 }
 
-/* API carrito */
+/* =======================
+   API carrito
+======================= */
 export async function addToCart(productId, qty=1){
   const cart=getCart();
-  const i=cart.findIndex(x=>x.id===productId);
+  const i=cart.findIndex(x=>String(x.id)===String(productId));
   if(i>=0) cart[i].qty+=qty; else cart.push({id:productId, qty});
   setCart(cart);
   try{ const p=await fetchOne(productId); if(p&&window.toastCoden) window.toastCoden(`Agregado: ${p.name}`);}catch{}
 }
-export function removeFromCart(productId){ setCart(getCart().filter(i=>i.id!==productId)); }
+export function removeFromCart(productId){ setCart(getCart().filter(i=>String(i.id)!==String(productId))); }
 export function setQty(productId, qty){
   if(qty<=0) return removeFromCart(productId);
-  const cart=getCart(); const i=cart.findIndex(x=>x.id===productId);
+  const cart=getCart(); const i=cart.findIndex(x=>String(x.id)===String(productId));
   if(i>=0){ cart[i].qty=qty; setCart(cart); }
 }
 export async function cartTotal(){
   const cart=getCart(); const ids=cart.map(i=>i.id);
-  const prods=await fetchByIds(ids); const map=new Map(prods.map(p=>[p.id,p]));
-  return cart.reduce((s,i)=> s + Number(map.get(i.id)?.price||0)*Number(i.qty||0), 0);
+  const prods=await fetchByIds(ids); const map=new Map(prods.map(p=>[String(p.id),p]));
+  return cart.reduce((s,i)=> s + Number(map.get(String(i.id))?.price||0)*Number(i.qty||0), 0);
 }
 
-/* Render carrito.html */
+/* =======================
+   Render carrito.html (visual clean)
+======================= */
 export async function renderCartPage(){
   const list=document.getElementById("cartItems");
   const totalEl=document.getElementById("cartTotal");
   if(!list||!totalEl) return;
 
   const cart=getCart(); list.innerHTML="";
-  if(!cart.length){ list.innerHTML='<p class="text-muted mb-0">Tu carrito está vacío.</p>'; totalEl.textContent="$0"; updateCartBadge(); return; }
+  if(!cart.length){
+    list.innerHTML='<p class="text-muted mb-0">Tu carrito está vacío.</p>';
+    totalEl.textContent="$0";
+    updateCartBadge();
+    return;
+  }
 
   const ids=cart.map(i=>i.id);
-  const prods=await fetchByIds(ids); const map=new Map(prods.map(p=>[p.id,p]));
+  const prods=await fetchByIds(ids); const map=new Map(prods.map(p=>[String(p.id),p]));
   let total=0;
 
   cart.forEach(item=>{
-    const p=map.get(item.id); if(!p) return;
+    const p=map.get(String(item.id)); if(!p) return;
     const price=Number(p.price||0), qty=Number(item.qty||1), sub=price*qty; total+=sub;
 
+    // UI sobria y moderna (no depende de Bootstrap)
     const row=document.createElement("div");
-    row.className="card d-flex align-items-center justify-content-between p-2 mb-2";
+    row.className="coden-product"; // reuse card look
+    row.style.display="grid";
+    row.style.gridTemplateColumns="auto 1fr auto";
+    row.style.alignItems="center";
+    row.style.gap="12px";
+    row.style.padding="10px";
+    row.style.marginBottom="10px";
+
     row.innerHTML=`
-      <div class="d-flex align-items-center">
-        <img src="${p.image_url||""}" alt="${p.name||""}" style="width:64px;height:64px;object-fit:cover;border-radius:10px" class="mr-2">
-        <div>
-          <div class="font-weight-bold">${p.name||""}</div>
-          <div class="text-muted small">$${price.toLocaleString("es-AR")}</div>
+      <div class="coden-product__img" style="width:72px; height:54px; border-radius:12px; overflow:hidden">
+        <img src="${p.image_url||""}" alt="${p.name||""}">
+      </div>
+      <div>
+        <div class="coden-product__title">${p.name||""}</div>
+        <div class="coden-badges" style="margin-top:4px">
+          <span class="coden-badge">Unidad</span>
+          <span class="coden-badge coden-badge--ok">$ ${price.toLocaleString("es-AR")}</span>
         </div>
       </div>
-      <div class="d-flex align-items-center">
-        <input type="number" min="1" value="${qty}" class="form-control form-control-sm mr-2" style="width:80px">
-        <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+      <div style="display:flex; align-items:center; gap:8px">
+        <input type="number" min="1" value="${qty}" class="form-control form-control-sm" style="width:82px">
+        <button class="coden-btn coden-btn--ghost" style="padding:.45rem .8rem">Eliminar</button>
       </div>
     `;
-    const qtyInput=row.querySelector("input"); const delBtn=row.querySelector("button");
+
+    const qtyInput=row.querySelector("input");
+    const delBtn=row.querySelector("button");
+
     qtyInput.addEventListener("change", async ()=>{
       const q=Math.max(1, parseInt(qtyInput.value)||1); setQty(p.id,q);
       const t=await cartTotal(); totalEl.textContent="$"+t.toLocaleString("es-AR");
     });
-    delBtn.addEventListener("click", async ()=>{ removeFromCart(p.id); await renderCartPage(); });
+    delBtn.addEventListener("click", async ()=>{
+      removeFromCart(p.id); await renderCartPage();
+    });
+
     list.appendChild(row);
   });
 
@@ -88,7 +120,9 @@ export async function renderCartPage(){
   updateCartBadge();
 }
 
-/* Toast global opcional */
+/* =======================
+   Toast global (opcional)
+======================= */
 window.toastCoden = (msg)=>{
   let t = document.getElementById("toast");
   if(!t){
@@ -102,22 +136,18 @@ window.toastCoden = (msg)=>{
   setTimeout(()=>t.style.opacity="0", 1400);
 };
 
-// API global (si te sirve en scripts no-módulo)
-window.Cart = { getCart,setCart,updateCartBadge, addToCart,removeFromCart,setQty, cartTotal,renderCartPage };
-
 /* =======================
-   MERCADO PAGO — INTEGRACIÓN
+   Mercado Pago — integración
 ======================= */
-
-// 1) Calcular totales (subtotal + envío) usando tus precios de Supabase
+// 1) Calcular totales (subtotal + envío) usando precios de Supabase
 async function computeTotals() {
   const cart = getCart();
   const ids = cart.map(i => i.id);
   const prods = await fetchByIds(ids);
-  const map = new Map(prods.map(p => [p.id, p]));
+  const map = new Map(prods.map(p => [String(p.id), p]));
 
   const subtotal = cart.reduce((sum, i) => {
-    const p = map.get(i.id);
+    const p = map.get(String(i.id));
     return sum + Number(p?.price || 0) * Number(i.qty || 0);
   }, 0);
 
@@ -127,9 +157,8 @@ async function computeTotals() {
   return { subtotal, shipping, total, prods };
 }
 
-// 2) Obtener envío desde UI (ajustá si usás otro selector)
+// 2) Obtener envío desde UI
 function getSelectedShipping() {
-  // Radios: <input type="radio" name="shipping" value="mdp|pba|resto|retiro">
   const radio = document.querySelector('input[name="shipping"]:checked');
   const value = (radio?.value || document.querySelector('#shippingMethod')?.value || 'retiro').trim();
 
@@ -139,7 +168,7 @@ function getSelectedShipping() {
   return { label: 'Retiro en local', cost: 0 };
 }
 
-// 3) Refrescar UI de totales en carrito.html
+// 3) Refrescar UI de totales
 export async function renderTotalsBox() {
   const { subtotal, shipping, total } = await computeTotals();
   const elSubtotal = document.querySelector('#subtotal');
@@ -151,17 +180,17 @@ export async function renderTotalsBox() {
   if (elTotal)    elTotal.textContent    = "$ " + total.toLocaleString("es-AR");
 }
 
-// 4) Adaptar tus productos → ítems de MP (usa datos reales desde Supabase)
+// 4) Adaptar carrito → ítems MP
 async function cartToMPItems() {
   const cart = getCart();
   if (!cart.length) return [];
 
   const ids = cart.map(i => i.id);
   const prods = await fetchByIds(ids);
-  const map = new Map(prods.map(p => [p.id, p]));
+  const map = new Map(prods.map(p => [String(p.id), p]));
 
   return cart.map(i => {
-    const p = map.get(i.id) || {};
+    const p = map.get(String(i.id)) || {};
     return {
       id: String(i.id),
       title: String(p.name || "Producto"),
@@ -173,16 +202,12 @@ async function cartToMPItems() {
   });
 }
 
-// 5) Tomar datos del cliente desde el formulario (ajustá los IDs a los tuyos)
+// 5) Cliente desde formulario
 function getCustomerFromForm() {
   return {
     name: document.querySelector('#nombre')?.value || '',
     surname: document.querySelector('#apellido')?.value || '',
     email: document.querySelector('#email')?.value || ''
-    // opcionales:
-    // docType: 'DNI', docNumber: '12345678',
-    // phone: document.querySelector('#telefono')?.value || '',
-    // address: { street:'Av. X', number:'123', zip:'7600' }
   };
 }
 
@@ -197,8 +222,6 @@ export async function payWithMercadoPago() {
 
     const { shipping } = await computeTotals();
 
-    console.log("[MP] creando preferencia con:", { cart, customer, shipping });
-
     const res = await fetch('/.netlify/functions/createPreference', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -206,7 +229,6 @@ export async function payWithMercadoPago() {
     });
 
     if (!res.ok) {
-      // 👇 lee el texto que envía tu función (útil para depurar)
       const txt = await res.text();
       console.error('createPreference FAIL:', res.status, txt);
       alert('Hubo un error iniciando el pago.\n' + txt);
@@ -214,8 +236,6 @@ export async function payWithMercadoPago() {
     }
 
     const data = await res.json();
-    console.log("Preferencia creada ✅", data);
-
     const redirect = data.init_point || data.sandbox_init_point;
     if (!redirect) throw new Error('Preferencia sin init_point');
 
@@ -226,25 +246,22 @@ export async function payWithMercadoPago() {
   }
 }
 
-
-// 7) Auto-wire de eventos (envío + botón pagar)
+// 7) Auto-wire en carrito.html
 function wireCartEvents() {
-  // botones/inputs de envío
   document.querySelectorAll('input[name="shipping"], #shippingMethod')
     .forEach(el => el.addEventListener('change', renderTotalsBox));
-
-  // botón de pagar
   document.getElementById('btn-pagar')?.addEventListener('click', payWithMercadoPago);
 }
 
-// 8) Inicialización en carrito.html
+// 8) Init específico de carrito
 document.addEventListener('DOMContentLoaded', () => {
-  // Si estás parado en la página de carrito, refrescá totales y eventos
   if (document.getElementById('cartItems')) {
+    renderCartPage().catch(console.error);
     renderTotalsBox().catch(console.error);
     wireCartEvents();
   }
 });
 
-// También lo dejo en window por si lo querés usar desde HTML inline
-window.Pay = { payWithMercadoPago, renderTotalsBox };
+// API global opcional
+window.Cart = { getCart,setCart,updateCartBadge, addToCart,removeFromCart,setQty, cartTotal,renderCartPage };
+window.Pay  = { payWithMercadoPago, renderTotalsBox };
