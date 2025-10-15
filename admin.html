@@ -3,6 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script>
+  // opcional si NO usás Vite local: podés borrar si ya estás en Netlify con env vars
+  window.VITE_SUPABASE_URL = window.VITE_SUPABASE_URL || "TU_URL_SUPABASE";
+  window.VITE_SUPABASE_ANON_KEY = window.VITE_SUPABASE_ANON_KEY || "TU_ANON_KEY";
+</script>
+
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+  const SUPABASE_URL = import.meta?.env?.VITE_SUPABASE_URL || window.VITE_SUPABASE_URL;
+  const SUPABASE_ANON_KEY = import.meta?.env?.VITE_SUPABASE_ANON_KEY || window.VITE_SUPABASE_ANON_KEY;
+  window.supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+
   <title>Admin | E-commerce</title>
   <link rel="stylesheet" href="/css/style.css" />
   <meta name="referrer" content="same-origin" />

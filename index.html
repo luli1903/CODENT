@@ -4,6 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CODEN — Electromedicina Odontológica</title>
+<script>
+  // opcional si NO usás Vite local: podés borrar si ya estás en Netlify con env vars
+  window.VITE_SUPABASE_URL = window.VITE_SUPABASE_URL || "TU_URL_SUPABASE";
+  window.VITE_SUPABASE_ANON_KEY = window.VITE_SUPABASE_ANON_KEY || "TU_ANON_KEY";
+</script>
+
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+  const SUPABASE_URL = import.meta?.env?.VITE_SUPABASE_URL || window.VITE_SUPABASE_URL;
+  const SUPABASE_ANON_KEY = import.meta?.env?.VITE_SUPABASE_ANON_KEY || window.VITE_SUPABASE_ANON_KEY;
+  window.supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
 
   <!-- Bootstrap + base -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
@@ -20,6 +32,7 @@
   <!-- NAVBAR (intacta) -->
   <div id="coden-v1">
     <nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
+      <button id="btnLogin" class="btn btn-outline-primary btn-sm ml-2">Iniciar sesión</button>
       <a class="navbar-brand font-weight-bold" href="index.html">
         <span class="brand-dot"></span> CODEN
       </a>
