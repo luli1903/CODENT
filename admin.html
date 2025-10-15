@@ -3,11 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <script>
-  // opcional si NO usás Vite local: podés borrar si ya estás en Netlify con env vars
-  window.VITE_SUPABASE_URL = window.VITE_SUPABASE_URL || "TU_URL_SUPABASE";
-  window.VITE_SUPABASE_ANON_KEY = window.VITE_SUPABASE_ANON_KEY || "TU_ANON_KEY";
-</script>
+  
 
 <script type="module">
   import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -19,6 +15,16 @@
   <title>Admin | E-commerce</title>
   <link rel="stylesheet" href="/css/style.css" />
   <meta name="referrer" content="same-origin" />
+  <script type="module">
+  async function guardAdmin(){
+    const { data:{ user } } = await supabase.auth.getUser();
+    if (!user){ location.href = '/index.html'; return; }
+    const { data } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
+    if (!data) location.href = '/index.html';
+  }
+  guardAdmin();
+</script>
+
 </head>
 <body>
   <header class="navbar" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px">
