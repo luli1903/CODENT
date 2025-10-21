@@ -19,19 +19,20 @@
   <!-- NAVBAR (aislada en #coden-v1) -->
   <div id="coden-v1">
     <nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
-      <a class="navbar-brand font-weight-bold" href="index.html">
-        <span class="brand-dot"></span> CODEN
-      </a>
+  <a class="navbar-brand font-weight-bold" href="index.html">
+    <span class="brand-dot"></span> CODEN
+  </a>
 
-      <div class="ml-auto d-flex align-items-center">
-        <button id="btnLogin" class="btn btn-outline-primary btn-sm mr-2">Iniciar sesión</button>
-        <button id="btnLogout" class="btn btn-outline-secondary btn-sm mr-2 d-none">Salir</button>
+  <div class="ml-auto d-flex align-items-center">
+    <button id="btnLogin" class="btn btn-outline-primary btn-sm mr-2">Iniciar sesión</button>
+    <button id="btnLogout" class="btn btn-outline-secondary btn-sm mr-2 d-none">Salir</button>
 
-        <a href="carrito.html" class="btn btn-outline-primary btn-sm">
-          🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
-        </a>
-      </div>
-    </nav>
+    <a href="carrito.html" class="btn btn-outline-primary btn-sm">
+      🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
+    </a>
+  </div>
+</nav>
+
   </div>
 
   <!-- CONTENIDO (sitio público) -->
@@ -141,40 +142,54 @@
         </div>
 
         <!-- CTA -->
-        <div class="text-center mt-4">
-          <p class="mb-3 text-muted">También podés explorar nuestros productos y repuestos en línea.</p>
-          <a href="tienda.html" class="btn btn-primary btn-pill shadow-sm px-4 py-2">Ir a la Tienda</a>
-        </div>
+      
       </div>
     </section>
 
     <!-- SERVICIOS (único bloque con id="servicios") -->
     <section id="servicios" class="py-5" aria-labelledby="services-title">
-      <div class="container text-center">
-        <h2 id="services-title" class="mb-4" style="font-family:'Cormorant',serif"><strong>Servicios</strong></h2>
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <div class="p-4 border rounded service-card">
-              <h4>🔧 Mantenimiento</h4>
-              <p>Planes preventivos con checklist, limpieza, lubricación, calibración y reporte técnico.</p>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="p-4 border rounded service-card">
-              <h4>⚙️ Reparaciones</h4>
-              <p>Diagnóstico, reemplazo de piezas, calibración y prueba funcional. Garantía 6–12 meses.</p>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="p-4 border rounded service-card">
-              <h4>📊 Evaluaciones</h4>
-              <p>Seguridad eléctrica y verificación normativa para habilitaciones e inspecciones.</p>
-            </div>
-          </div>
-        </div>
-        <a href="tienda.html" class="btn btn-outline-primary mt-2">Ir a la Tienda</a>
+  <div class="container">
+    <h2 id="services-title" class="mb-4 text-center" style="font-family:'Cormorant',serif"><strong>Servicios</strong></h2>
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <article class="p-4 border rounded service-card h-100">
+          <h4>🔧 Mantenimiento</h4>
+          <p class="mb-2">Planes preventivos para consultorios y clínicas. Incluye:</p>
+          <ul class="service-list">
+            <li>Checklist de inspección</li>
+            <li>Limpieza y lubricación</li>
+            <li>Calibración y reporte técnico</li>
+          </ul>
+        </article>
       </div>
-    </section>
+
+      <div class="col-md-4 mb-3">
+        <article class="p-4 border rounded service-card h-100">
+          <h4>⚙️ Reparaciones</h4>
+          <p class="mb-2">Atendemos fallas, desgaste y roturas. Incluye:</p>
+          <ul class="service-list">
+            <li>Diagnóstico y presupuesto</li>
+            <li>Reemplazo de piezas</li>
+            <li>Prueba funcional + garantía 6–12m</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <article class="p-4 border rounded service-card h-100">
+          <h4>📊 Evaluaciones</h4>
+          <p class="mb-2">Para habilitaciones e inspecciones. Incluye:</p>
+          <ul class="service-list">
+            <li>Seguridad eléctrica</li>
+            <li>Verificación normativa</li>
+            <li>Informe para auditoría</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
 
     <!-- DESTACADOS -->
     <section id="destacados" class="py-5" style="background:#f8fafc" aria-labelledby="featured-title">
@@ -187,25 +202,42 @@
 
     <!-- CONTACTO -->
     <section id="contacto" class="py-5" aria-labelledby="contact-title">
-      <div class="container">
-        <h2 id="contact-title" class="text-center mb-4" style="font-family:'Cormorant',serif"><strong>Contacto</strong></h2>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <div class="p-4 border rounded" style="border-color:var(--line)">
-              <p class="mb-2">📧 <strong>hola@coden.com</strong></p>
-              <p class="mb-2">📱 WhatsApp: +54 9 11 2345-6789</p>
-              <p class="mb-0">📍 Mar del Plata, Argentina</p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="p-4 border rounded" style="border-color:var(--line)">
-              <p class="mb-2">¿Dudas sobre equipos o repuestos?</p>
-              <a href="tienda.html" class="btn btn-primary">Ver productos</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      <div class="col-md-6">
+  <form action="https://formsubmit.co/luciasolcodega@gmail.com" method="POST"
+        class="p-4 border rounded contact-card" style="border-color:var(--line)">
+    <p class="mb-3">¿Dudas sobre equipos o repuestos? Escribinos y te respondemos.</p>
+
+    <div class="form-group">
+      <label for="cName">Nombre y apellido</label>
+      <input type="text" id="cName" name="name" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="cEmail">Email</label>
+      <input type="email" id="cEmail" name="email" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="cPhone">Teléfono (opcional)</label>
+      <input type="tel" id="cPhone" name="phone" class="form-control" placeholder="+54 9 …">
+    </div>
+
+    <div class="form-group">
+      <label for="cMsg">Consulta</label>
+      <textarea id="cMsg" name="message" class="form-control" rows="4" required></textarea>
+    </div>
+
+    <!-- Helpers de FormSubmit -->
+    <input type="hidden" name="_subject"  value="Nueva consulta desde CODEN">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha"  value="false">
+    <input type="text"   name="_honey"    style="display:none">
+    <input type="hidden" name="_next"     value="/gracias.html">
+
+    <button class="btn btn-primary btn-pill" type="submit">Enviar consulta</button>
+  </form>
+</div>
+
 
     <!-- FOOTER -->
     <footer aria-label="Pie de página">
@@ -344,49 +376,43 @@
   </div>
 
   <!-- Auth UI -->
-  <script type="module">
-    const btnLogin  = document.getElementById('btnLogin');
-    const btnLogout = document.getElementById('btnLogout');
-    const loginForm = document.getElementById('loginForm');
-    const loginMsg  = document.getElementById('loginMsg');
-    const linkReset = document.getElementById('linkReset');
+  <!-- Auth UI (reemplaza el bloque actual) -->
+<script type="module">
+  // Helper
+  const $id = (id) => document.getElementById(id);
 
-    // abrir modal
-    btnLogin?.addEventListener('click', () => $('#loginModal').modal('show'));
+  document.addEventListener('DOMContentLoaded', () => {
+    // Siempre que cambie la sesión, refrescar la UI
+    supabase.auth.onAuthStateChange(() => refreshAuthUI());
 
-    // pintar UI según sesión
-    async function refreshAuthUI(){
-      const { data:{ user } } = await supabase.auth.getUser();
-      if (user){ btnLogin?.classList.add('d-none'); btnLogout?.classList.remove('d-none'); }
-      else     { btnLogin?.classList.remove('d-none'); btnLogout?.classList.add('d-none'); }
-    }
+    // Abrir modal login
+    $id('btnLogin')?.addEventListener('click', () => $('#loginModal').modal('show'));
 
-    // login
+    // Login
+    const loginForm = $id('loginForm');
+    const loginMsg  = $id('loginMsg');
+    const linkReset = $id('linkReset');
+
     loginForm?.addEventListener('submit', async (e)=>{
       e.preventDefault();
-      loginMsg.style.display = 'none';
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
+      if (loginMsg) loginMsg.style.display = 'none';
+      const email = $id('loginEmail').value.trim();
+      const password = $id('loginPassword').value;
 
       const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error){ loginMsg.textContent = error.message; loginMsg.style.display='block'; return; }
-
+      if (error){
+        if (loginMsg){ loginMsg.textContent = error.message; loginMsg.style.display='block'; }
+        return;
+      }
       $('#loginModal').modal('hide');
       await refreshAuthUI();
       ensureAdminAndRedirect();
     });
 
-    // logout
-    btnLogout?.addEventListener('click', async ()=>{
-      await supabase.auth.signOut();
-      await refreshAuthUI();
-      if (location.pathname.includes('admin')) location.href = '/index.html';
-    });
-
-    // reset password
+    // Reset password
     linkReset?.addEventListener('click', async (e)=>{
       e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
+      const email = $id('loginEmail').value.trim();
       if (!email) return alert('Ingresá tu email arriba.');
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: location.origin + '/reset.html'
@@ -394,21 +420,71 @@
       if (error) alert(error.message); else alert('Te enviamos un correo para restablecer la contraseña.');
     });
 
-    // check admin en tabla public.admins
-    async function isAdmin(){
-      const { data:{ user } } = await supabase.auth.getUser();
-      if (!user) return false;
-      const { data, error } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
-      if (error){ console.error(error); return false; }
-      return !!data;
-    }
+    // Logout (lo enganchamos después de asegurar que existe el botón)
+    ensureLogoutHandler();
 
-    // si es admin, entrar al panel
-    async function ensureAdminAndRedirect(){
-      if (await isAdmin() && !location.pathname.includes('admin')) location.href = '/admin.html';
-    }
-
+    // Primera pintura
     refreshAuthUI();
-  </script>
+  });
+
+  // Refresca visibilidad de los botones según la sesión
+  async function refreshAuthUI(){
+    try{
+      const { data:{ user } } = await supabase.auth.getUser();
+
+      // (re)tomar referencias por si el DOM cambió
+      let btnLogin  = $id('btnLogin');
+      let btnLogout = $id('btnLogout');
+
+      // Si el botón "Salir" no existe, crearlo al lado de "Iniciar sesión"
+      if (!btnLogout && btnLogin?.parentElement) {
+        const rightBox = btnLogin.parentElement; // div .ml-auto...
+        btnLogout = document.createElement('button');
+        btnLogout.id = 'btnLogout';
+        btnLogout.className = 'btn btn-outline-secondary btn-sm mr-2 d-none';
+        btnLogout.textContent = 'Salir';
+        const cartBtn = rightBox.querySelector('a[href="carrito.html"]');
+        rightBox.insertBefore(btnLogout, cartBtn || null);
+        ensureLogoutHandler(); // enganchar listener
+      }
+
+      if (user){
+        btnLogin && btnLogin.classList.add('d-none');
+        btnLogout && btnLogout.classList.remove('d-none');
+      } else {
+        btnLogin && btnLogin.classList.remove('d-none');
+        btnLogout && btnLogout.classList.add('d-none');
+      }
+    }catch(e){ console.error('refreshAuthUI error', e); }
+  }
+
+  // Listener de logout (asegura que solo se registre una vez)
+  function ensureLogoutHandler(){
+    const btnLogout = $id('btnLogout');
+    if (!btnLogout) return;
+    if (btnLogout.dataset.bound === '1') return; // ya estaba
+    btnLogout.addEventListener('click', async ()=>{
+      try{
+        await supabase.auth.signOut();
+        await refreshAuthUI();
+        if (location.pathname.includes('admin')) location.href = '/index.html';
+      }catch(e){ console.error('logout error', e); }
+    });
+    btnLogout.dataset.bound = '1';
+  }
+
+  // Admin check
+  async function isAdmin(){
+    const { data:{ user } } = await supabase.auth.getUser();
+    if (!user) return false;
+    const { data, error } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
+    if (error){ console.error(error); return false; }
+    return !!data;
+  }
+  async function ensureAdminAndRedirect(){
+    if (await isAdmin() && !location.pathname.includes('admin')) location.href = '/admin.html';
+  }
+</script>
+
 </body>
 </html>

@@ -201,3 +201,57 @@
     grid-template-columns: 1fr;
   }
 }
+/* ===== HÉROE y EMPRESA: fondos suaves médicos ===== */
+#coden-main .hero{
+  background: linear-gradient(180deg,#f9fbfe 0%, #ffffff 100%);
+  padding-top: 42px;
+  padding-bottom: 24px;
+}
+#coden-main .hero__card{
+  background: #ffffff; border:1px solid var(--line); border-radius:20px;
+  box-shadow: var(--shadow-1);
+}
+
+#coden-main .section-about{
+  background: linear-gradient(180deg,#f7fbff 0%, #ffffff 100%);
+}
+#coden-main .about-card{
+  background:#fff; border:1px solid var(--line); border-radius:18px;
+  box-shadow: var(--shadow-0);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+#coden-main .about-card:hover{ box-shadow: var(--shadow-1); transform: translateY(-2px); }
+
+/* ===== Pilares + Métricas (ya definidos antes; refuerzo leve) ===== */
+#coden-main .pillar{ background: rgba(14,165,233,.08); border-radius: 10px; padding:.4rem .75rem; }
+#coden-main .about-metrics{ display:grid; grid-template-columns: repeat(4,1fr); gap:12px; margin-top:1.25rem; }
+#coden-main .metric{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; text-align:center; box-shadow: var(--shadow-0); }
+#coden-main .metric__num{ font-weight:800; font-size:1.6rem; color: var(--primary-700); }
+#coden-main .metric__label{ color: var(--muted); font-size:.92rem; }
+
+/* ===== Servicios: tarjetas con más contenido ===== */
+#coden-main .service-card{
+  background:#fff; border:1px solid var(--line); border-radius:16px;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+#coden-main .service-card:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-1);
+  border-color: rgba(14,165,233,.35);
+}
+#coden-main .service-list{
+  margin: 0; padding-left: 1.2rem; color: var(--muted);
+}
+#coden-main .service-list li{ margin-bottom: .35rem; }
+
+/* ===== Contacto: form bonito ===== */
+#coden-main .contact-card .form-group label{ font-weight:600; }
+#coden-main .contact-card .btn{ border-radius:999px; padding:.6rem 1.2rem; }
+
+/* ===== Responsive ===== */
+@media (max-width: 991.98px){
+  #coden-main .about-metrics{ grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 575.98px){
+  #coden-main .about-metrics{ grid-template-columns: 1fr; }
+}
