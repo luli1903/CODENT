@@ -255,3 +255,25 @@
 @media (max-width: 575.98px){
   #coden-main .about-metrics{ grid-template-columns: 1fr; }
 }
+/* Fondos suaves con #bfd5d9 y cards blancas flotando */
+#coden-main .hero{
+  background: linear-gradient(180deg, #bfd5d9 0%, #ffffff 100%);
+  padding-top: 42px; padding-bottom: 24px;
+}
+#coden-main .hero__card{
+  background:#fff; border:1px solid var(--line); border-radius:20px; box-shadow: var(--elev-1, 0 10px 25px rgba(0,0,0,.15));
+}
+
+#coden-main .section-about{
+  background: linear-gradient(180deg, #bfd5d9 0%, #ffffff 100%);
+}
+#coden-main .about-card{
+  background:#fff; border:1px solid var(--line); border-radius:18px; box-shadow: var(--elev-0, 0 2px 6px rgba(0,0,0,.06));
+  transition: box-shadow .2s, transform .2s;
+}
+#coden-main .about-card:hover{ box-shadow: var(--elev-1, 0 10px 25px rgba(0,0,0,.15)); transform: translateY(-2px); }
+
+/* Contacto centrado + estilizado */
+#coden-main #contacto{ background: linear-gradient(180deg, #ffffff 0%, #f6fbfc 100%); }
+#coden-main .contact-card .form-group label{ font-weight:600; }
+#coden-main .contact-card .btn{ border-radius:999px; padding:.6rem 1.2rem; }

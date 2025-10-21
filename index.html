@@ -202,40 +202,51 @@
 
     <!-- CONTACTO -->
     <section id="contacto" class="py-5" aria-labelledby="contact-title">
-      <div class="col-md-6">
-  <form action="https://formsubmit.co/luciasolcodega@gmail.com" method="POST"
-        class="p-4 border rounded contact-card" style="border-color:var(--line)">
-    <p class="mb-3">¿Dudas sobre equipos o repuestos? Escribinos y te respondemos.</p>
+  <div class="container">
+    <h2 id="contact-title" class="text-center mb-4" style="font-family:'Cormorant',serif"><strong>Contacto</strong></h2>
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+        <form action="https://formsubmit.co/luciasolcodega@gmail.com" method="POST"
+              class="p-4 border rounded contact-card shadow-sm" style="border-color:var(--line); background:#fff">
+          <p class="mb-3 text-center">¿Dudas sobre equipos o repuestos? Escribinos y te respondemos.</p>
 
-    <div class="form-group">
-      <label for="cName">Nombre y apellido</label>
-      <input type="text" id="cName" name="name" class="form-control" required>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="cName">Nombre y apellido</label>
+              <input type="text" id="cName" name="name" class="form-control" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="cEmail">Email</label>
+              <input type="email" id="cEmail" name="email" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cPhone">Teléfono (opcional)</label>
+            <input type="tel" id="cPhone" name="phone" class="form-control" placeholder="+54 9 …">
+          </div>
+
+          <div class="form-group">
+            <label for="cMsg">Consulta</label>
+            <textarea id="cMsg" name="message" class="form-control" rows="4" required></textarea>
+          </div>
+
+          <!-- FormSubmit -->
+          <input type="hidden" name="_subject"  value="Nueva consulta desde CODEN">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha"  value="false">
+          <input type="text"   name="_honey"    style="display:none">
+          <input type="hidden" name="_next"     value="/gracias.html">
+
+          <div class="text-center">
+            <button class="btn btn-primary btn-pill px-4" type="submit">Enviar consulta</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div class="form-group">
-      <label for="cEmail">Email</label>
-      <input type="email" id="cEmail" name="email" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-      <label for="cPhone">Teléfono (opcional)</label>
-      <input type="tel" id="cPhone" name="phone" class="form-control" placeholder="+54 9 …">
-    </div>
-
-    <div class="form-group">
-      <label for="cMsg">Consulta</label>
-      <textarea id="cMsg" name="message" class="form-control" rows="4" required></textarea>
-    </div>
-
-    <!-- Helpers de FormSubmit -->
-    <input type="hidden" name="_subject"  value="Nueva consulta desde CODEN">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_captcha"  value="false">
-    <input type="text"   name="_honey"    style="display:none">
-    <input type="hidden" name="_next"     value="/gracias.html">
-
-    <button class="btn btn-primary btn-pill" type="submit">Enviar consulta</button>
-  </form>
 </div>
 
 
@@ -375,17 +386,59 @@
     </div>
   </div>
 
-  <!-- Auth UI -->
-  <!-- Auth UI (reemplaza el bloque actual) -->
+ <!-- Auth UI (reemplaza el bloque actual) -->
 <script type="module">
-  // Helper
   const $id = (id) => document.getElementById(id);
 
+  async function refreshAuthUI(){
+    const { data:{ user } } = await supabase.auth.getUser();
+
+    let btnLogin  = $id('btnLogin');
+    let btnLogout = $id('btnLogout');
+
+    // Si el botón "Salir" no existe, crearlo en la navbar al lado de "Iniciar sesión"
+    if (!btnLogout && btnLogin?.parentElement) {
+      const rightBox = btnLogin.parentElement; // div .ml-auto...
+      btnLogout = document.createElement('button');
+      btnLogout.id = 'btnLogout';
+      btnLogout.className = 'btn btn-outline-secondary btn-sm mr-2 d-none';
+      btnLogout.textContent = 'Salir';
+      const cartBtn = rightBox.querySelector('a[href="carrito.html"]');
+      rightBox.insertBefore(btnLogout, cartBtn || null);
+      wireLogout(btnLogout);
+      // console.log('[auth] btnLogout CREATED');
+    }
+
+    if (user){
+      btnLogin?.classList.add('d-none');
+      if (btnLogout){
+        btnLogout.classList.remove('d-none');
+        // Failsafe CSS
+        btnLogout.style.display = 'inline-block';
+        btnLogout.style.visibility = 'visible';
+        btnLogout.removeAttribute('hidden');
+      }
+    } else {
+      btnLogin?.classList.remove('d-none');
+      btnLogout?.classList.add('d-none');
+    }
+  }
+
+  function wireLogout(btn){
+    if (!btn || btn.dataset.bound === '1') return;
+    btn.addEventListener('click', async ()=>{
+      await supabase.auth.signOut();
+      await refreshAuthUI();
+      if (location.pathname.includes('admin')) location.href = '/index.html';
+    });
+    btn.dataset.bound = '1';
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
-    // Siempre que cambie la sesión, refrescar la UI
+    // Escucha cambios de sesión (login, logout, expiración de token, etc.)
     supabase.auth.onAuthStateChange(() => refreshAuthUI());
 
-    // Abrir modal login
+    // Abrir modal de login
     $id('btnLogin')?.addEventListener('click', () => $('#loginModal').modal('show'));
 
     // Login
@@ -398,7 +451,6 @@
       if (loginMsg) loginMsg.style.display = 'none';
       const email = $id('loginEmail').value.trim();
       const password = $id('loginPassword').value;
-
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error){
         if (loginMsg){ loginMsg.textContent = error.message; loginMsg.style.display='block'; }
@@ -420,58 +472,12 @@
       if (error) alert(error.message); else alert('Te enviamos un correo para restablecer la contraseña.');
     });
 
-    // Logout (lo enganchamos después de asegurar que existe el botón)
-    ensureLogoutHandler();
+    // Enlazar logout si ya existe
+    wireLogout($id('btnLogout'));
 
     // Primera pintura
     refreshAuthUI();
   });
-
-  // Refresca visibilidad de los botones según la sesión
-  async function refreshAuthUI(){
-    try{
-      const { data:{ user } } = await supabase.auth.getUser();
-
-      // (re)tomar referencias por si el DOM cambió
-      let btnLogin  = $id('btnLogin');
-      let btnLogout = $id('btnLogout');
-
-      // Si el botón "Salir" no existe, crearlo al lado de "Iniciar sesión"
-      if (!btnLogout && btnLogin?.parentElement) {
-        const rightBox = btnLogin.parentElement; // div .ml-auto...
-        btnLogout = document.createElement('button');
-        btnLogout.id = 'btnLogout';
-        btnLogout.className = 'btn btn-outline-secondary btn-sm mr-2 d-none';
-        btnLogout.textContent = 'Salir';
-        const cartBtn = rightBox.querySelector('a[href="carrito.html"]');
-        rightBox.insertBefore(btnLogout, cartBtn || null);
-        ensureLogoutHandler(); // enganchar listener
-      }
-
-      if (user){
-        btnLogin && btnLogin.classList.add('d-none');
-        btnLogout && btnLogout.classList.remove('d-none');
-      } else {
-        btnLogin && btnLogin.classList.remove('d-none');
-        btnLogout && btnLogout.classList.add('d-none');
-      }
-    }catch(e){ console.error('refreshAuthUI error', e); }
-  }
-
-  // Listener de logout (asegura que solo se registre una vez)
-  function ensureLogoutHandler(){
-    const btnLogout = $id('btnLogout');
-    if (!btnLogout) return;
-    if (btnLogout.dataset.bound === '1') return; // ya estaba
-    btnLogout.addEventListener('click', async ()=>{
-      try{
-        await supabase.auth.signOut();
-        await refreshAuthUI();
-        if (location.pathname.includes('admin')) location.href = '/index.html';
-      }catch(e){ console.error('logout error', e); }
-    });
-    btnLogout.dataset.bound = '1';
-  }
 
   // Admin check
   async function isAdmin(){
@@ -485,6 +491,7 @@
     if (await isAdmin() && !location.pathname.includes('admin')) location.href = '/admin.html';
   }
 </script>
+
 
 </body>
 </html>

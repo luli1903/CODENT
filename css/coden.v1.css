@@ -60,3 +60,5 @@
   #coden-v1 .coden-only-mobile{ display:inline-grid }
   #coden-v1 .coden-nav__links{ display:none } /* en mobile usamos drawer */
 }
+/* Failsafe: si hay sesión, forzamos visibilidad del botón en navbar */
+#coden-v1 #btnLogout:not(.d-none){ display:inline-block !important; visibility:visible !important; }
