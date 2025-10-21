@@ -87,3 +87,117 @@
 @media (max-width: 900px){
   #coden-main .hero__grid{ grid-template-columns:1fr }
 }
+/* =========================================
+   SECCIÓN "EMPRESA FAMILIAR" / ABOUT
+========================================= */
+#coden-main .section-about {
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+#coden-main .section-title {
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+#coden-main .about-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow-0);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+#coden-main .about-card:hover {
+  box-shadow: var(--shadow-1);
+  transform: translateY(-2px);
+}
+
+/* Pilares */
+#coden-main .about-pillars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 0.5rem;
+}
+
+#coden-main .pillar {
+  background: rgba(14, 165, 233, 0.08);
+  border-radius: 10px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+}
+
+#coden-main .pillar:hover {
+  background: rgba(14, 165, 233, 0.15);
+}
+
+/* Métricas */
+#coden-main .about-metrics {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+#coden-main .metric {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-0);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#coden-main .metric:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-1);
+}
+
+#coden-main .metric__num {
+  font-weight: 800;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--primary-700);
+}
+
+#coden-main .metric__label {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-top: 0.25rem;
+}
+
+/* =========================================
+   SECCIÓN "SERVICIOS"
+========================================= */
+#coden-main .service-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+#coden-main .service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-1);
+  border-color: rgba(14, 165, 233, 0.35);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 991.98px) {
+  #coden-main .about-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  #coden-main .about-metrics {
+    grid-template-columns: 1fr;
+  }
+}

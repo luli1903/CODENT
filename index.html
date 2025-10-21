@@ -3,36 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CODEN — Electromedicina Odontológica</title>
+  <meta name="description" content="CODEN - Electromedicina odontológica. Reparación, mantenimiento y venta de equipos odontológicos."/>
+  <title>CODEN - Electromedicina Odontológica</title>
 
-
-<script type="module">
-  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-  const SUPABASE_URL = import.meta?.env?.VITE_SUPABASE_URL || window.VITE_SUPABASE_URL;
-  const SUPABASE_ANON_KEY = import.meta?.env?.VITE_SUPABASE_ANON_KEY || window.VITE_SUPABASE_ANON_KEY;
-  window.supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-</script>
-
-  <!-- Bootstrap + base -->
+  <!-- Bootstrap -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="/css/style.css?v=5"/>
 
-  <!-- SOLO NAVBAR (si tu nav lo usa) -->
-  <link rel="stylesheet" href="css/coden.v1.css?v=1">
-
-  <!-- Estética del contenido (hero, cards, badges, footer) -->
-  <link rel="stylesheet" href="/css/coden.main.css?v=2"/>
+  <!-- Tus estilos (orden recomendado: base ➜ v1 ➜ main) -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/coden.v1.css"/>
+  <link rel="stylesheet" href="css/coden.main.css"/>
 </head>
 <body id="top">
 
-  <!-- NAVBAR (intacta) -->
+  <!-- NAVBAR (aislada en #coden-v1) -->
   <div id="coden-v1">
     <nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
-      <button id="btnLogin" class="btn btn-outline-primary btn-sm ml-2">Iniciar sesión</button>
       <a class="navbar-brand font-weight-bold" href="index.html">
         <span class="brand-dot"></span> CODEN
       </a>
+
       <div class="ml-auto d-flex align-items-center">
+        <button id="btnLogin" class="btn btn-outline-primary btn-sm mr-2">Iniciar sesión</button>
+        <button id="btnLogout" class="btn btn-outline-secondary btn-sm mr-2 d-none">Salir</button>
+
         <a href="carrito.html" class="btn btn-outline-primary btn-sm">
           🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
         </a>
@@ -40,8 +34,8 @@
     </nav>
   </div>
 
-  <!-- CONTENIDO -->
-  <div id="coden-main">
+  <!-- CONTENIDO (sitio público) -->
+  <main id="coden-main">
 
     <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
@@ -93,61 +87,108 @@
 
     <!-- PROMO -->
     <section class="promo" aria-label="Promociones y medios de pago">
-      <div class="container promo__wrap">
+      <div class="container promo__wrap d-flex justify-content-between align-items-center py-3">
         <div style="font-weight:800">💳 Hasta 6 cuotas con Mercado Pago</div>
         <a class="text-link" href="carrito.html">Ir al checkout</a>
       </div>
     </section>
 
     <!-- EMPRESA -->
-    <section id="empresa" class="py-5">
+    <section class="section-about py-5" aria-labelledby="about-title">
       <div class="container">
-        <h2 class="text-center mb-4" style="font-family:'Cormorant',serif"><strong>Empresa familiar</strong></h2>
+        <h2 id="about-title" class="section-title text-center mb-4">Empresa familiar</h2>
+
         <div class="row align-items-center">
-          <div class="col-md-6 mb-3">
-            <div class="p-4 border rounded bg-white" style="border-color:var(--line)">
-              <p class="mb-2">En <strong>CODEN</strong> somos una <strong>empresa familiar</strong> dedicada a la electromedicina odontológica.</p>
-              <p class="mb-2">Mantenimiento, reparación y venta de equipos con garantía.</p>
-              <ul class="mb-0 text-muted">
-                <li>Repuestos certificados</li>
-                <li>Asesoramiento honesto</li>
-                <li>Respuesta ágil</li>
-              </ul>
+          <div class="col-lg-10 mx-auto">
+            <div class="about-card p-4 p-md-5">
+              <p class="lead mb-3">
+                En <strong>CODEN</strong> somos una <strong>empresa familiar con más de 15 años de experiencia</strong> dedicada a la electromedicina odontológica.
+              </p>
+              <p class="mb-4">
+                Brindamos <strong>mantenimiento, reparación y venta de equipos odontológicos</strong> con repuestos certificados y garantía oficial.
+                Nuestro objetivo es acompañar a cada profesional de la salud dental con un servicio técnico confiable, honesto y ágil.
+              </p>
+
+              <h5 class="fw-bold mt-4 mb-3">Nuestros pilares</h5>
+              <div class="about-pillars d-flex flex-wrap gap-3">
+                <div class="pillar"><span>🧰</span> Servicio técnico especializado</div>
+                <div class="pillar"><span>💬</span> Asesoramiento personalizado</div>
+                <div class="pillar"><span>🕒</span> Respuesta rápida y eficaz</div>
+                <div class="pillar"><span>🔒</span> Compromiso y confianza</div>
+              </div>
+
+              <!-- MÉTRICAS / CONFIANZA -->
+              <div class="about-metrics mt-4">
+                <div class="metric">
+                  <div class="metric__num">+15</div>
+                  <div class="metric__label">Años de experiencia</div>
+                </div>
+                <div class="metric">
+                  <div class="metric__num">+500</div>
+                  <div class="metric__label">Reparaciones realizadas</div>
+                </div>
+                <div class="metric">
+                  <div class="metric__num">48h</div>
+                  <div class="metric__label">Tiempo promedio de respuesta</div>
+                </div>
+                <div class="metric">
+                  <div class="metric__num">12m</div>
+                  <div class="metric__label">Garantía en intervenciones</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="col-md-6 text-center">
-            <!-- espacio para una imagen/ilustración -->
-          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center mt-4">
+          <p class="mb-3 text-muted">También podés explorar nuestros productos y repuestos en línea.</p>
+          <a href="tienda.html" class="btn btn-primary btn-pill shadow-sm px-4 py-2">Ir a la Tienda</a>
         </div>
       </div>
     </section>
 
-    <!-- SERVICIOS -->
-    <section id="servicios" class="py-5">
+    <!-- SERVICIOS (único bloque con id="servicios") -->
+    <section id="servicios" class="py-5" aria-labelledby="services-title">
       <div class="container text-center">
-        <h2 class="mb-4" style="font-family:'Cormorant',serif"><strong>Servicios</strong></h2>
+        <h2 id="services-title" class="mb-4" style="font-family:'Cormorant',serif"><strong>Servicios</strong></h2>
         <div class="row">
-          <div class="col-md-4 mb-3"><div class="p-4 border rounded service-card"><h4>🔧 Mantenimiento</h4><p>Planes preventivos.</p></div></div>
-          <div class="col-md-4 mb-3"><div class="p-4 border rounded service-card"><h4>⚙️ Reparaciones</h4><p>Diagnóstico y garantía.</p></div></div>
-          <div class="col-md-4 mb-3"><div class="p-4 border rounded service-card"><h4>📊 Evaluaciones</h4><p>Seguridad eléctrica.</p></div></div>
+          <div class="col-md-4 mb-3">
+            <div class="p-4 border rounded service-card">
+              <h4>🔧 Mantenimiento</h4>
+              <p>Planes preventivos con checklist, limpieza, lubricación, calibración y reporte técnico.</p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="p-4 border rounded service-card">
+              <h4>⚙️ Reparaciones</h4>
+              <p>Diagnóstico, reemplazo de piezas, calibración y prueba funcional. Garantía 6–12 meses.</p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="p-4 border rounded service-card">
+              <h4>📊 Evaluaciones</h4>
+              <p>Seguridad eléctrica y verificación normativa para habilitaciones e inspecciones.</p>
+            </div>
+          </div>
         </div>
         <a href="tienda.html" class="btn btn-outline-primary mt-2">Ir a la Tienda</a>
       </div>
     </section>
 
     <!-- DESTACADOS -->
-    <section id="destacados" class="py-5" style="background:#f8fafc">
+    <section id="destacados" class="py-5" style="background:#f8fafc" aria-labelledby="featured-title">
       <div class="container">
-        <h2 class="mb-4 text-center" style="font-family:'Cormorant',serif"><strong>Productos destacados</strong></h2>
+        <h2 id="featured-title" class="mb-4 text-center" style="font-family:'Cormorant',serif"><strong>Productos destacados</strong></h2>
         <div id="home-featured" class="row"></div>
         <div class="text-center mt-3"><a href="tienda.html" class="btn btn-primary">Ver todos los productos</a></div>
       </div>
     </section>
 
     <!-- CONTACTO -->
-    <section id="contacto" class="py-5">
+    <section id="contacto" class="py-5" aria-labelledby="contact-title">
       <div class="container">
-        <h2 class="text-center mb-4" style="font-family:'Cormorant',serif"><strong>Contacto</strong></h2>
+        <h2 id="contact-title" class="text-center mb-4" style="font-family:'Cormorant',serif"><strong>Contacto</strong></h2>
         <div class="row">
           <div class="col-md-6 mb-3">
             <div class="p-4 border rounded" style="border-color:var(--line)">
@@ -167,7 +208,7 @@
     </section>
 
     <!-- FOOTER -->
-    <footer>
+    <footer aria-label="Pie de página">
       <div class="container grid foot-grid">
         <div class="foot">
           <div style="font-weight:800; font-family:'Cormorant',serif; margin-bottom:8px">CODEN Electromedicina</div>
@@ -189,10 +230,12 @@
         </div>
       </div>
     </footer>
-  </div>
+  </main>
 
   <!-- WhatsApp flotante (opcional) -->
-  <a href="https://wa.me/5491123456789" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
+  <a href="https://wa.me/5491123456789" target="_blank" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
 
   <!-- Libs -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -266,100 +309,106 @@
       renderFeatured();
     });
   </script>
-<!-- Modal Login -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <form id="loginForm" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Acceso CODENT</h5>
-        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Email</label>
-          <input id="loginEmail" type="email" class="form-control" required>
+
+  <!-- Modal Login -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="loginForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Acceso CODENT</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div class="form-group">
-          <label>Contraseña</label>
-          <input id="loginPassword" type="password" class="form-control" required>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input id="loginEmail" type="email" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Contraseña</label>
+            <input id="loginPassword" type="password" class="form-control" required>
+          </div>
+          <small class="text-muted d-block mt-2">
+            ¿Olvidaste tu contraseña? <a href="#" id="linkReset">Recuperar</a>
+          </small>
+          <div id="loginMsg" class="mt-2 small text-danger" style="display:none;"></div>
         </div>
-        <small class="text-muted d-block mt-2">
-          ¿Olvidaste tu contraseña? <a href="#" id="linkReset">Recuperar</a>
-        </small>
-        <div id="loginMsg" class="mt-2 small text-danger" style="display:none;"></div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" type="submit">Ingresar</button>
-      </div>
-    </form>
+
+        <div class="modal-footer">
+          <button class="btn btn-primary" type="submit">Ingresar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
-<script type="module">
-  const btnLogin  = document.getElementById('btnLogin');
-  const btnLogout = document.getElementById('btnLogout');
-  const loginForm = document.getElementById('loginForm');
-  const loginMsg  = document.getElementById('loginMsg');
-  const linkReset = document.getElementById('linkReset');
 
-  // abrir modal
-  btnLogin?.addEventListener('click', () => $('#loginModal').modal('show'));
+  <!-- Auth UI -->
+  <script type="module">
+    const btnLogin  = document.getElementById('btnLogin');
+    const btnLogout = document.getElementById('btnLogout');
+    const loginForm = document.getElementById('loginForm');
+    const loginMsg  = document.getElementById('loginMsg');
+    const linkReset = document.getElementById('linkReset');
 
-  // pintar UI según sesión
-  async function refreshAuthUI(){
-    const { data:{ user } } = await supabase.auth.getUser();
-    if (user){ btnLogin?.classList.add('d-none'); btnLogout?.classList.remove('d-none'); }
-    else     { btnLogin?.classList.remove('d-none'); btnLogout?.classList.add('d-none'); }
-  }
+    // abrir modal
+    btnLogin?.addEventListener('click', () => $('#loginModal').modal('show'));
 
-  // login
-  loginForm?.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    loginMsg.style.display = 'none';
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
+    // pintar UI según sesión
+    async function refreshAuthUI(){
+      const { data:{ user } } = await supabase.auth.getUser();
+      if (user){ btnLogin?.classList.add('d-none'); btnLogout?.classList.remove('d-none'); }
+      else     { btnLogin?.classList.remove('d-none'); btnLogout?.classList.add('d-none'); }
+    }
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error){ loginMsg.textContent = error.message; loginMsg.style.display='block'; return; }
+    // login
+    loginForm?.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      loginMsg.style.display = 'none';
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
 
-    $('#loginModal').modal('hide');
-    await refreshAuthUI();
-    ensureAdminAndRedirect();
-  });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error){ loginMsg.textContent = error.message; loginMsg.style.display='block'; return; }
 
-  // logout
-  btnLogout?.addEventListener('click', async ()=>{
-    await supabase.auth.signOut();
-    await refreshAuthUI();
-    if (location.pathname.includes('admin')) location.href = '/index.html';
-  });
-
-  // reset password
-  linkReset?.addEventListener('click', async (e)=>{
-    e.preventDefault();
-    const email = document.getElementById('loginEmail').value.trim();
-    if (!email) return alert('Ingresá tu email arriba.');
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: location.origin + '/reset.html'
+      $('#loginModal').modal('hide');
+      await refreshAuthUI();
+      ensureAdminAndRedirect();
     });
-    if (error) alert(error.message); else alert('Te enviamos un correo para restablecer la contraseña.');
-  });
 
-  // check admin en tabla public.admins
-  async function isAdmin(){
-    const { data:{ user } } = await supabase.auth.getUser();
-    if (!user) return false;
-    const { data, error } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
-    if (error){ console.error(error); return false; }
-    return !!data;
-  }
+    // logout
+    btnLogout?.addEventListener('click', async ()=>{
+      await supabase.auth.signOut();
+      await refreshAuthUI();
+      if (location.pathname.includes('admin')) location.href = '/index.html';
+    });
 
-  // si es admin, entrar al panel
-  async function ensureAdminAndRedirect(){
-    if (await isAdmin() && !location.pathname.includes('admin')) location.href = '/admin.html';
-  }
+    // reset password
+    linkReset?.addEventListener('click', async (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      if (!email) return alert('Ingresá tu email arriba.');
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: location.origin + '/reset.html'
+      });
+      if (error) alert(error.message); else alert('Te enviamos un correo para restablecer la contraseña.');
+    });
 
-  refreshAuthUI();
-</script>
+    // check admin en tabla public.admins
+    async function isAdmin(){
+      const { data:{ user } } = await supabase.auth.getUser();
+      if (!user) return false;
+      const { data, error } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
+      if (error){ console.error(error); return false; }
+      return !!data;
+    }
 
+    // si es admin, entrar al panel
+    async function ensureAdminAndRedirect(){
+      if (await isAdmin() && !location.pathname.includes('admin')) location.href = '/admin.html';
+    }
+
+    refreshAuthUI();
+  </script>
 </body>
 </html>
