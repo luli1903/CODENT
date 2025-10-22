@@ -1,4 +1,4 @@
-// CODEN v1 — carrito + Mercado Pago + helpers
+﻿// CODEN v1 â€” carrito + Mercado Pago + helpers
 import { supabase } from "../supabaseClient.js";
 
 const CART_KEY = "coden_cart";
@@ -18,6 +18,8 @@ export function updateCartBadge(){
   const badge=document.getElementById("cartBadge"); if(!badge) return;
   const count=getCart().reduce((a,i)=>a+Number(i.qty||0),0);
   badge.textContent = count;
+  badge.setAttribute('aria-live','polite');
+  badge.setAttribute('aria-label', `Carrito: ${count} producto${count===1?'':'s'}`);
 }
 
 /* =======================
@@ -72,7 +74,7 @@ export async function renderCartPage(){
 
   const cart=getCart(); list.innerHTML="";
   if(!cart.length){
-    list.innerHTML='<p class="text-muted mb-0">Tu carrito está vacío.</p>';
+    list.innerHTML='<p class="text-muted mb-0">Tu carrito estÃ¡ vacÃ­o.</p>';
     totalEl.textContent="$0";
     updateCartBadge();
     return;
@@ -148,9 +150,9 @@ window.toastCoden = (msg)=>{
 };
 
 /* =======================
-   Mercado Pago — integración
+   Mercado Pago â€” integraciÃ³n
 ======================= */
-// 1) Calcular totales (subtotal + envío)
+// 1) Calcular totales (subtotal + envÃ­o)
 async function computeTotals() {
   const cart = getCart();
   const ids = cart.map(i => i.id);
@@ -168,14 +170,14 @@ async function computeTotals() {
   return { subtotal, shipping, total, prods };
 }
 
-// 2) Obtener envío desde UI
+// 2) Obtener envÃ­o desde UI
 function getSelectedShipping() {
   const radio = document.querySelector('input[name="shipping"]:checked');
   const value = (radio?.value || document.querySelector('#shippingMethod')?.value || 'retiro').trim();
 
   if (value === 'mdp')   return { label: 'Urbano MDP', cost: 3000 };
   if (value === 'pba')   return { label: 'Provincia BA', cost: 5500 };
-  if (value === 'resto') return { label: 'Resto del país', cost: 7500 };
+  if (value === 'resto') return { label: 'Resto del paÃ­s', cost: 7500 };
   return { label: 'Retiro en local', cost: 0 };
 }
 
@@ -187,11 +189,11 @@ export async function renderTotalsBox() {
   const elTotal    = document.querySelector('#total');
 
   if (elSubtotal) elSubtotal.textContent = "$ " + subtotal.toLocaleString("es-AR");
-  if (elEnvio)    elEnvio.textContent    = shipping.cost ? "$ " + shipping.cost.toLocaleString("es-AR") : "—";
+  if (elEnvio)    elEnvio.textContent    = shipping.cost ? "$ " + shipping.cost.toLocaleString("es-AR") : "â€”";
   if (elTotal)    elTotal.textContent    = "$ " + total.toLocaleString("es-AR");
 }
 
-// 4) Adaptar carrito → ítems MP
+// 4) Adaptar carrito â†’ Ã­tems MP
 async function cartToMPItems() {
   const cart = getCart();
   if (!cart.length) return [];
@@ -226,10 +228,10 @@ function getCustomerFromForm() {
 export async function payWithMercadoPago() {
   try {
     const cart = await cartToMPItems();
-    if (!cart.length) { alert("Tu carrito está vacío."); return; }
+    if (!cart.length) { alert("Tu carrito estÃ¡ vacÃ­o."); return; }
 
     const customer = getCustomerFromForm();
-    if (!customer.email) { alert("Ingresá un email válido."); return; }
+    if (!customer.email) { alert("IngresÃ¡ un email vÃ¡lido."); return; }
 
     const { shipping } = await computeTotals();
 
@@ -253,7 +255,7 @@ export async function payWithMercadoPago() {
     window.location.href = redirect;
   } catch (e) {
     console.error('Error iniciando pago:', e);
-    alert('Ocurrió un error iniciando el pago. Intentá nuevamente.');
+    alert('OcurriÃ³ un error iniciando el pago. IntentÃ¡ nuevamente.');
   }
 }
 
@@ -264,7 +266,7 @@ function wireCartEvents() {
   document.getElementById('btn-pagar')?.addEventListener('click', payWithMercadoPago);
 }
 
-// 8) Init específico de carrito
+// 8) Init especÃ­fico de carrito
 document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('cartItems')) {
     renderCartPage().catch(console.error);
@@ -273,6 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// API global opcional (si usás handlers inline)
+// API global opcional (si usÃ¡s handlers inline)
 window.Cart = { getCart,setCart,updateCartBadge, addToCart,removeFromCart,setQty, cartTotal,renderCartPage };
 window.Pay  = { payWithMercadoPago, renderTotalsBox };

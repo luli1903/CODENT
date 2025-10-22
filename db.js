@@ -1,4 +1,4 @@
-import { supabase } from "/supabaseClient.js";
+import { supabase } from "./supabaseClient.js";
 
 export async function listProducts() {
   const { data, error } = await supabase.from("products").select("*").order("created_at", { ascending: false });

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -7,57 +7,58 @@
 
   <!-- Bootstrap + base -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="img/favicon.ico">
+  <link rel="stylesheet" href="css/style.css">
 
   <!-- SOLO NAVBAR (no toca el contenido) -->
   <link rel="stylesheet" href="css/coden.v1.css?v=1">
 
   <!-- LOOK MODERNO DEL CONTENIDO (cards, badges, botones) -->
-  <link rel="stylesheet" href="/css/coden.main.css?v=2">
+  <link rel="stylesheet" href="css/coden.main.css?v=2">
 </head>
 <body class="bg-light">
 
-  <!-- ⚠️ #coden-v1 SOLO envuelve la NAV -->
+  <!-- âš ï¸ #coden-v1 SOLO envuelve la NAV -->
   <div id="coden-v1">
     <nav class="navbar navbar-light coden-nav sticky-top">
       <a class="navbar-brand font-weight-bold" href="index.html"><span class="brand-dot"></span> CODEN</a>
       <div class="ml-auto">
-        <a href="carrito.html" class="btn btn-outline-primary btn-sm">
-          🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
+        <a href="carrito.html" class="btn btn-outline-primary btn-sm" aria-label="Carrito">
+          ðŸ›’ <span id="cartBadge" class="badge badge-primary ml-1">0</span>
         </a>
       </div>
     </nav>
   </div>
 
-  <!-- ✅ El contenido va bajo #coden-main para aplicar la estética nueva -->
+  <!-- âœ… El contenido va bajo #coden-main para aplicar la estÃ©tica nueva -->
   <div id="coden-main">
     <div class="container py-4">
       <div class="d-flex align-items-end justify-content-between mb-3">
         <div>
           <h2 class="mb-0" style="font-family:'Cormorant',serif"><strong>Tienda</strong></h2>
-          <small class="text-muted">Agregá productos al carrito y finalizá cuando quieras.</small>
+          <small class="text-muted">AgregÃ¡ productos al carrito y finalizÃ¡ cuando quieras.</small>
         </div>
         <a href="carrito.html" class="btn btn-outline-primary">Ver carrito</a>
       </div>
 
-      <!-- Grilla (Bootstrap .row). shop.js pintará las columnas -->
+      <!-- Grilla (Bootstrap .row). shop.js pintarÃ¡ las columnas -->
       <div class="row" id="product-list"></div>
     </div>
   </div>
 
-  <!-- Data + lógica -->
-  <script type="module" src="/supabaseClient.js"></script>
-  <script type="module" src="/js/cart.js"></script>
-  <script type="module" src="/js/shop.js"></script>
+  <!-- Data + lÃ³gica -->
+  <script type="module" src="supabaseClient.js"></script>
+  <script type="module" src="js/cart.js"></script>
+  <script type="module" src="js/shop.js"></script>
 
-  <!-- Refrescar badge al entrar (por si no hubo acciones todavía) -->
+  <!-- Refrescar badge al entrar (por si no hubo acciones todavÃ­a) -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       window.Cart?.updateCartBadge?.();
     });
   </script>
 
-  <script src="/js/scrollTop.js" defer></script>
-  <button id="scrollTopBtn" class="btn btn-primary" style="display:none;position:fixed;bottom:20px;right:20px;">↑</button>
+  <script src="js/scrollTop.js" defer></script>
+  <button id="scrollTopBtn" class="btn btn-primary" style="display:none;position:fixed;bottom:20px;right:20px;">â†‘</button>
 </body>
 </html>
