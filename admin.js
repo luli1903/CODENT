@@ -1,4 +1,4 @@
-﻿import { onAuthStateChange, signIn, signOut, isAdmin } from "/auth.js";
+import { onAuthStateChange, signIn, signOut, isAdmin } from "/auth.js";
 import { listProducts, getProduct, createProduct, updateProduct, removeProduct, uploadProductImage } from "/db.js";
 
 const $ = (id) => document.getElementById(id);
@@ -10,7 +10,7 @@ const btnLogout    = $("btnLogout");
 const productForm  = $("productForm");
 const adminList    = $("adminList");
 
-// SesiÃ³n + guardia de admin
+// Sesión + guardia de admin
 onAuthStateChange(async (user) => {
   if (!user) {
     loginSection.style.display = "";
@@ -83,7 +83,7 @@ async function renderList() {
 
     adminList.querySelectorAll(".del").forEach((b) =>
       b.addEventListener("click", async () => {
-        if (confirm("Â¿Eliminar este producto?")) {
+        if (confirm("¿Eliminar este producto?")) {
           await removeProduct(b.dataset.id);
           await renderList();
         }
