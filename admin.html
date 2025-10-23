@@ -1,39 +1,34 @@
-?<!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  
-  
-  
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  
 
   <link rel="icon" href="img/favicon.ico" />
-
   <title>Admin | E-commerce</title>
+
   <link rel="stylesheet" href="css/style.css" />
   <meta name="referrer" content="same-origin" />
-    <script type="module">
+
+  <script type="module">
     import { supabase } from './supabaseClient.js';
     async function guardAdmin(){
       const { data:{ user } } = await supabase.auth.getUser();
       if (!user){ location.href = '/index.html'; return; }
-      const { data } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
+      const { data } = await supabase
+        .from('admins')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .maybeSingle();
       if (!data) location.href = '/index.html';
     }
     guardAdmin();
   </script>
-
 </head>
 <body>
   <header class="navbar" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px">
-  
-  
     <h1>Panel de Administración</h1>
-    
     <button id="btnLogout" class="btn btn-outline-secondary btn-sm ml-2 d-none">Salir</button>
-
-  
   </header>
 
   <main class="container" style="max-width:980px;margin:0 auto;padding:16px">
@@ -54,21 +49,20 @@
     <section id="crudSection" style="display:none" aria-labelledby="crudTitle">
       <h2 id="crudTitle">Productos</h2>
 
-     <form id="productForm">
-  <input type="hidden" id="prodId" />
-  <input type="text" id="name" placeholder="Nombre" required />
-  <input type="number" step="0.01" id="price" placeholder="Precio" required inputmode="decimal" />
-  <input type="number" id="stock" placeholder="Stock" required inputmode="numeric" />
-  <input type="text" id="category" placeholder="Categoría" />
-  <textarea id="description" placeholder="Descripción"></textarea>
-  <label for="imageFile">Imagen (opcional)</label>
-  <input type="file" id="imageFile" accept="image/*" />
-  <div class="actions">
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <button type="button" id="btnReset" class="btn btn-secondary">Nuevo</button>
-  </div>
-</form>
-
+      <form id="productForm">
+        <input type="hidden" id="prodId" />
+        <input type="text" id="name" placeholder="Nombre" required />
+        <input type="number" step="0.01" id="price" placeholder="Precio" required inputmode="decimal" />
+        <input type="number" id="stock" placeholder="Stock" required inputmode="numeric" />
+        <input type="text" id="category" placeholder="Categoría" />
+        <textarea id="description" placeholder="Descripción"></textarea>
+        <label for="imageFile">Imagen (opcional)</label>
+        <input type="file" id="imageFile" accept="image/*" />
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="button" id="btnReset" class="btn btn-secondary">Nuevo</button>
+        </div>
+      </form>
 
       <hr />
       <div id="adminList" class="grid" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>
@@ -80,11 +74,11 @@
   <script type="module" src="/db.js"></script>
   <script type="module" src="/admin.js"></script>
 
-  <style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}</style>
+  <style>
+    .sr-only{
+      position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+      overflow:hidden;clip:rect(0,0,0,0);border:0
+    }
+  </style>
 </body>
 </html>
-
-
-
-
-

@@ -1,4 +1,4 @@
-?// CODEN v1 — carrito + Mercado Pago + helpers
+// CODEN v1 — carrito + Mercado Pago + helpers
 import { supabase } from "../supabaseClient.js";
 
 const CART_KEY = "coden_cart";
@@ -97,9 +97,11 @@ export async function renderCartPage(){
     row.style.padding="10px";
     row.style.marginBottom="10px";
 
+    const safeName = String(p.name||"").replace(/"/g,"&quot;");
+
     row.innerHTML=`
       <div class="coden-product__img" style="width:72px; height:54px; border-radius:12px; overflow:hidden">
-        <img src="${p.image_url||""}" alt="${p.name||""}">
+        <img src="${p.image_url||""}" alt="${safeName}">
       </div>
       <div>
         <div class="coden-product__title">${p.name||""}</div>

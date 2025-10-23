@@ -1,25 +1,46 @@
+// db.js (versión pulida)
 import { supabase } from "./supabaseClient.js";
 
+const PRODUCT_COLS = "id,name,description,category,price,stock,image_url,created_at";
+
 export async function listProducts() {
-  const { data, error } = await supabase.from("products").select("*").order("created_at", { ascending: false });
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_COLS)
+    .order("created_at", { ascending: false });
   if (error) throw error;
   return data || [];
 }
 
 export async function getProduct(id) {
-  const { data, error } = await supabase.from("products").select("*").eq("id", id).single();
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_COLS)
+    .eq("id", id)
+    .maybeSingle(); // no rompe si no existe
   if (error) throw error;
-  return data;
+  return data ?? null;
 }
 
 export async function createProduct(values) {
-  const { data, error } = await supabase.from("products").insert(normalize(values)).select().single();
+  const payload = normalize(values);
+  const { data, error } = await supabase
+    .from("products")
+    .insert(payload)
+    .select(PRODUCT_COLS)
+    .single();
   if (error) throw error;
   return data;
 }
 
 export async function updateProduct(id, values) {
-  const { data, error } = await supabase.from("products").update(normalize(values, true)).eq("id", id).select().single();
+  const payload = normalize(values, true);
+  const { data, error } = await supabase
+    .from("products")
+    .update(payload)
+    .eq("id", id)
+    .select(PRODUCT_COLS)
+    .single();
   if (error) throw error;
   return data;
 }
@@ -29,25 +50,46 @@ export async function removeProduct(id) {
   if (error) throw error;
 }
 
+/** Sube imagen, retorna publicUrl */
 export async function uploadProductImage(file) {
   if (!file) return null;
-  const path = `products/${Date.now()}_${file.name}`;
-  const { error } = await supabase.storage.from("products").upload(path, file, { cacheControl: "3600", upsert: false });
-  if (error) throw error;
+
+  // nombre seguro
+  const safeName = String(file.name || "img")
+    .normalize("NFKD").replace(/[^\w.\-]+/g, "_")
+    .replace(/_+/g, "_").slice(0, 80);
+
+  const path = `products/${Date.now()}_${safeName}`;
+
+  const { error: upErr } = await supabase
+    .storage
+    .from("products")
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type || "image/*",
+    });
+
+  if (upErr) throw upErr;
+
   const { data } = supabase.storage.from("products").getPublicUrl(path);
   return data?.publicUrl || null;
 }
 
+/** Normaliza payload; si partial=true, quita undefined */
 function normalize(v, partial = false) {
+  const num = (x) => (x === undefined || x === null || x === "" ? undefined : Number(x));
   const obj = {
     name: v.name?.trim(),
-    description: v.description ?? null,
+    description: v.description?.trim() ?? null,
     category: v.category?.trim() || null,
-    price: v.price !== undefined ? Number(v.price) : undefined,
-    stock: v.stock !== undefined ? Number(v.stock) : undefined,
+    price: num(v.price),
+    stock: Number.isFinite(num(v.stock)) ? num(v.stock) : 0,
     image_url: v.image_url ?? undefined,
   };
-  if (partial) return Object.fromEntries(Object.entries(obj).filter(([, val]) => val !== undefined));
+  if (partial) {
+    return Object.fromEntries(Object.entries(obj).filter(([, val]) => val !== undefined));
+  }
   if (obj.price === undefined) obj.price = 0;
   if (obj.stock === undefined) obj.stock = 0;
   return obj;

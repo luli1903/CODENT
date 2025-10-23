@@ -1,10 +1,7 @@
-?<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  
-  
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tienda - CODEN</title>
 
@@ -21,10 +18,12 @@
 </head>
 <body class="bg-light">
 
-  <!-- ⚠︝ #coden-v1 SOLO envuelve la NAV -->
+  <!-- #coden-v1 SOLO envuelve la NAV -->
   <div id="coden-v1">
     <nav class="navbar navbar-light coden-nav sticky-top">
-      <a class="navbar-brand font-weight-bold" href="index.html"><span class="brand-dot"></span> CODEN</a>
+      <a class="navbar-brand font-weight-bold" href="index.html">
+        <span class="brand-dot"></span> CODEN
+      </a>
       <div class="ml-auto">
         <a href="carrito.html" class="btn btn-outline-primary btn-sm" aria-label="Carrito">
           🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
@@ -33,7 +32,7 @@
     </nav>
   </div>
 
-  <!-- ✅ El contenido va bajo #coden-main para aplicar la estética nueva -->
+  <!-- Contenido principal -->
   <div id="coden-main">
     <div class="container py-4">
       <div class="d-flex align-items-end justify-content-between mb-3">
@@ -54,7 +53,7 @@
   <script type="module" src="js/cart.js"></script>
   <script type="module" src="js/shop.js"></script>
 
-  <!-- Refrescar badge al entrar (por si no hubo acciones todavía) -->
+  <!-- Refrescar badge al entrar -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       window.Cart?.updateCartBadge?.();

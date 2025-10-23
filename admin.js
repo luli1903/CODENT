@@ -45,7 +45,7 @@ btnLogout.addEventListener("click", () => signOut());
 
 // Render listado
 async function renderList() {
-  adminList.innerHTML = "Cargando...";
+  adminList.innerHTML = "Cargando…";
   try {
     const rows = await listProducts();
     adminList.innerHTML = "";
@@ -54,14 +54,14 @@ async function renderList() {
       card.className = "card product-card";
       card.style = "border:1px solid #ddd;border-radius:12px;overflow:hidden";
       card.innerHTML = `
-        <img src="${p.image_url || ""}" alt="${p.name || ""}" style="width:100%;height:180px;object-fit:cover">
+        <img src="${p.image_url || ""}" alt="${(p.name || "").replace(/"/g, "&quot;")}" style="width:100%;height:180px;object-fit:cover">
         <div style="padding:12px">
-          <h4 style="margin:0 0 6px">${p.name}</h4>
+          <h4 style="margin:0 0 6px">${p.name || ""}</h4>
           <p style="margin:0 0 6px">$${Number(p.price || 0).toLocaleString("es-AR")}</p>
           <small>Stock: ${p.stock ?? 0} | Cat: ${p.category || "-"}</small>
           <div style="margin-top:8px;display:flex;gap:8px">
-            <button class="edit" data-id="${p.id}">Editar</button>
-            <button class="del"  data-id="${p.id}">Eliminar</button>
+            <button class="edit btn btn-secondary btn-sm" data-id="${p.id}">Editar</button>
+            <button class="del btn btn-danger btn-sm"  data-id="${p.id}">Eliminar</button>
           </div>
         </div>`;
       adminList.appendChild(card);
@@ -71,12 +71,12 @@ async function renderList() {
       b.addEventListener("click", async () => {
         const p = await getProduct(b.dataset.id);
         if (!p) return;
-        $("prodId").value     = p.id;
-        $("name").value       = p.name || "";
-        $("price").value      = p.price || 0;
-        $("stock").value      = p.stock || 0;
-        $("category").value   = p.category || "";
-        $("description").value= p.description || "";
+        $("prodId").value      = p.id;
+        $("name").value        = p.name || "";
+        $("price").value       = p.price ?? 0;
+        $("stock").value       = p.stock ?? 0;
+        $("category").value    = p.category || "";
+        $("description").value = p.description || "";
         window.scrollTo({ top: 0, behavior: "smooth" });
       })
     );
@@ -89,7 +89,8 @@ async function renderList() {
         }
       })
     );
-  } catch {
+  } catch (e) {
+    console.error(e);
     adminList.textContent = "Error cargando productos";
   }
 }
@@ -100,24 +101,28 @@ productForm.addEventListener("submit", async (e) => {
   const id = $("prodId").value.trim();
   const data = {
     name: $("name").value.trim(),
-    price: $("price").value,
-    stock: $("stock").value,
+    price: parseFloat($("price").value) || 0,
+    stock: parseInt($("stock").value, 10) || 0,
     category: $("category").value.trim(),
     description: $("description").value.trim(),
   };
-  const f = $("imageFile").files[0];
-  if (f) data.image_url = await uploadProductImage(f);
 
-  if (id) await updateProduct(id, data);
-  else    await createProduct(data);
+  try {
+    const f = $("imageFile").files[0];
+    if (f) data.image_url = await uploadProductImage(f);
 
-  productForm.reset();
-  $("prodId").value = "";
-  await renderList();
+    if (id) await updateProduct(id, data);
+    else    await createProduct(data);
+
+    productForm.reset();
+    $("prodId").value = "";
+    await renderList();
+  } catch (err) {
+    alert("No se pudo guardar el producto: " + (err?.message || err));
+  }
 });
 
 $("btnReset").addEventListener("click", () => {
   productForm.reset();
   $("prodId").value = "";
 });
-
