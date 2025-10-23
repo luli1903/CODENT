@@ -9,7 +9,7 @@
   --line:#e2e8f0;
   --bg:#ffffff;
 
-  /* Sombras est√°ndar */
+  /* Sombras est·ndar */
   --elev-0: 0 2px 6px rgba(0,0,0,.06);
   --elev-1: 0 10px 25px rgba(0,0,0,.15);
   --elev-2: 0 12px 32px rgba(0,0,0,.18);
@@ -132,7 +132,7 @@ body.admin{ background:#f8fafc; }
 
 #loginMsg{ color:#ef4444; margin-top:6px; }
 
-/* Responsive m√≠nimos */
+/* Responsive mÌnimos */
 @media (max-width: 640px){
   #productForm{ grid-template-columns: 1fr; }
 }

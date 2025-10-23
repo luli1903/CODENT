@@ -1,0 +1,8 @@
+{
+  "name": "coden-mp",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "mercadopago": "^2.0.10"
+  }
+}
