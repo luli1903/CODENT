@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <script>
+  (function(){
+    // Verifica si el enlace del mail tiene tokens o códigos de recuperación
+    const hasHash = location.hash.includes('access_token') || location.hash.includes('refresh_token');
+    const hasQuery = location.search.includes('code=') || location.search.includes('type=recovery');
+    
+    // Si los tiene, redirige automáticamente a recovery.html conservando los datos
+    if (hasHash || hasQuery) {
+      const q = location.search || '';
+      const h = location.hash || '';
+      location.replace('/recovery.html' + q + h);
+    }
+  })();
+</script>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CODEN - Electromedicina odontológica. Reparación, mantenimiento y venta de equipos odontológicos."/>
