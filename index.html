@@ -384,80 +384,25 @@
 
   <script type="module">
   import { supabase } from "/js/supabaseClient.js";
-
-  const form = document.getElementById("loginForm");
+  const a = document.getElementById("linkReset");
   const emailEl = document.getElementById("loginEmail");
-  const passEl  = document.getElementById("loginPassword");
-  const msgEl   = document.getElementById("loginMsg");
-  const linkReset = document.getElementById("linkReset");
+  const msg = document.getElementById("loginMsg");
 
-  function showMsg(text, ok=false){
-    if(!msgEl) return;
-    msgEl.style.display = "block";
-    msgEl.classList.toggle("text-danger", !ok);
-    msgEl.classList.toggle("text-success", ok);
-    msgEl.textContent = text || "";
-  }
-  function setBusy(btnOrForm, busy){
-    const btn = btnOrForm?.querySelector?.('button[type="submit"]');
-    if(!btn) return;
-    btn.disabled = !!busy;
-    btn.dataset.t ??= btn.textContent;
-    btn.textContent = busy ? "Procesando..." : btn.dataset.t;
-  }
-
-  // === 1) Recuperar contraseña (envía el email con el enlace) ===
-  linkReset?.addEventListener("click", async (e)=>{
+  a?.addEventListener("click", async (e)=>{
     e.preventDefault();
-    showMsg("");
     const email = emailEl?.value?.trim();
-    if(!email){ showMsg("Ingresá tu email para enviarte el enlace."); return; }
+    if(!email){ msg.style.display="block"; msg.textContent="Ingresá tu email."; return; }
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${location.origin}/recovery.html`
+      redirectTo: `https://resonant-faun-ef8805.netlify.app/recovery.html`
     });
-    if(error){ showMsg(error.message); return; }
+    if(error){ msg.style.display="block"; msg.textContent = error.message; return; }
 
-    showMsg("Listo. Te enviamos el enlace a tu email. Abrilo y seguí los pasos.", true);
-  });
-
-  // === 2) Login (con verificación opcional de admin) ===
-  form?.addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    showMsg(""); setBusy(form, true);
-
-    try{
-      const email = emailEl.value.trim();
-      const password = passEl.value;
-
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if(error) throw error;
-
-      // (OPCIONAL) Comprobar que el usuario esté en la tabla admins
-      try{
-        const { data: rows, error: e2 } = await supabase
-          .from("admins")
-          .select("user_id")
-          .eq("user_id", data.user.id)
-          .limit(1);
-        if(e2) throw e2;
-        if(!rows || rows.length === 0){
-          await supabase.auth.signOut();
-          throw new Error("Tu cuenta no tiene permisos de administrador.");
-        }
-      }catch(adminErr){
-        throw adminErr;
-      }
-
-      // Si todo ok → al panel
-      window.location.href = "/admin/";
-    }catch(err){
-      showMsg(err?.message || "No pudimos iniciar sesión.");
-    }finally{
-      setBusy(form, false);
-    }
+    msg.style.display="block"; msg.style.color="green";
+    msg.textContent = "Listo. Revisá tu email y abrí el enlace.";
   });
 </script>
+
 
 
   <!-- Auth UI -->
