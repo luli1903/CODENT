@@ -10,7 +10,7 @@
   <link rel="icon" href="img/favicon.ico">
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Est�tica del contenido (cards, badges, botones) -->
+  <!-- Estética del contenido (cards, badges, botones) -->
   <link rel="stylesheet" href="css/coden.main.css?v=2">
 </head>
 <body class="bg-light">
@@ -21,47 +21,46 @@
       <span class="brand-dot"></span> CODEN
     </a>
     <div class="ml-auto d-flex align-items-center">
-      <!-- Opcional: badge de carrito (se actualizar� si lo dejas) -->
       <a href="carrito.html" class="btn btn-outline-primary btn-sm mr-2" aria-label="Carrito">
-        ?? <span id="cartBadge" class="badge badge-primary ml-1">0</span>
+        🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
       </a>
       <a href="tienda.html" class="btn btn-primary btn-sm">Seguir comprando</a>
     </div>
   </nav>
 
-  <!-- CONTENIDO con est�tica moderna -->
+  <!-- CONTENIDO -->
   <div id="coden-main">
     <div class="container py-4">
       <h2 class="mb-3" style="font-family:'Cormorant',serif"><strong>Tu carrito</strong></h2>
 
-      <!-- Lista de �tems (se renderiza con JS) -->
+      <!-- Lista de ítems (se renderiza con JS) -->
       <div id="cartItems" class="mb-3"></div>
 
-      <!-- Subtotal r�pido (compat con tu l�gica previa) -->
+      <!-- Subtotal rápido (compat con tu lógica previa) -->
       <p class="mb-4">Total productos: <strong id="cartTotal">$0</strong></p>
 
-      <!-- M�todo de entrega -->
+      <!-- Método de entrega -->
       <div class="card p-3 mb-3">
-        <h5 class="mb-2">M�todo de entrega</h5>
+        <h5 class="mb-2">Método de entrega</h5>
         <div class="custom-control custom-radio">
           <input class="custom-control-input" type="radio" name="shipping" id="ship-retiro" value="retiro" checked>
           <label class="custom-control-label" for="ship-retiro">Retiro en local (sin costo)</label>
         </div>
         <div class="custom-control custom-radio">
           <input class="custom-control-input" type="radio" name="shipping" id="ship-mdp" value="mdp">
-          <label class="custom-control-label" for="ship-mdp">Env�o urbano MDP ($3000)</label>
+          <label class="custom-control-label" for="ship-mdp">Envío urbano MDP ($3000)</label>
         </div>
         <div class="custom-control custom-radio">
           <input class="custom-control-input" type="radio" name="shipping" id="ship-pba" value="pba">
-          <label class="custom-control-label" for="ship-pba">Provincia BA ($5500)</label>
+          <label class="custom-control-label" for="ship-pba">Provincia de Buenos Aires ($5500)</label>
         </div>
         <div class="custom-control custom-radio">
           <input class="custom-control-input" type="radio" name="shipping" id="ship-resto" value="resto">
-          <label class="custom-control-label" for="ship-resto">Resto del pa�s ($7500)</label>
+          <label class="custom-control-label" for="ship-resto">Resto del país ($7500)</label>
         </div>
       </div>
 
-      <!-- Datos de contacto m�nimos -->
+      <!-- Datos de contacto mínimos -->
       <div class="card p-3 mb-3">
         <h5 class="mb-2">Datos de contacto</h5>
         <div class="form-row">
@@ -86,7 +85,7 @@
           <span>Subtotal</span> <strong id="subtotal">$ 0</strong>
         </li>
         <li class="list-group-item d-flex justify-content-between">
-          <span>Env�o</span> <strong id="envio">�</strong>
+          <span>Envío</span> <strong id="envio">—</strong>
         </li>
         <li class="list-group-item d-flex justify-content-between">
           <span>Total</span> <strong id="total">$ 0</strong>
@@ -101,10 +100,8 @@
   <!-- Scripts -->
   <script type="module" src="supabaseClient.js"></script>
   <script type="module" src="js/cart.js"></script>
-  <!-- No hace falta script inline: cart.js ya auto-renderiza y wirea eventos en DOMContentLoaded -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Si dejaste el badge en esta p�gina, lo actualizamos al entrar
       window.Cart?.updateCartBadge?.();
     });
   </script>
