@@ -271,11 +271,11 @@
     </div>
   </footer>
 
-  <!-- WhatsApp flotante (opcional) -->
+  <!-- WhatsApp flotante (opcional) 
   <a href="https://wa.me/5491123456789" target="_blank" class="whatsapp-float" aria-label="WhatsApp">
     <i class="fab fa-whatsapp"></i>
   </a>
-
+-->
   <!-- Libs -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
@@ -381,6 +381,84 @@
       </form>
     </div>
   </div>
+
+  <script type="module">
+  import { supabase } from "/js/supabaseClient.js";
+
+  const form = document.getElementById("loginForm");
+  const emailEl = document.getElementById("loginEmail");
+  const passEl  = document.getElementById("loginPassword");
+  const msgEl   = document.getElementById("loginMsg");
+  const linkReset = document.getElementById("linkReset");
+
+  function showMsg(text, ok=false){
+    if(!msgEl) return;
+    msgEl.style.display = "block";
+    msgEl.classList.toggle("text-danger", !ok);
+    msgEl.classList.toggle("text-success", ok);
+    msgEl.textContent = text || "";
+  }
+  function setBusy(btnOrForm, busy){
+    const btn = btnOrForm?.querySelector?.('button[type="submit"]');
+    if(!btn) return;
+    btn.disabled = !!busy;
+    btn.dataset.t ??= btn.textContent;
+    btn.textContent = busy ? "Procesando..." : btn.dataset.t;
+  }
+
+  // === 1) Recuperar contraseña (envía el email con el enlace) ===
+  linkReset?.addEventListener("click", async (e)=>{
+    e.preventDefault();
+    showMsg("");
+    const email = emailEl?.value?.trim();
+    if(!email){ showMsg("Ingresá tu email para enviarte el enlace."); return; }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${location.origin}/recovery.html`
+    });
+    if(error){ showMsg(error.message); return; }
+
+    showMsg("Listo. Te enviamos el enlace a tu email. Abrilo y seguí los pasos.", true);
+  });
+
+  // === 2) Login (con verificación opcional de admin) ===
+  form?.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    showMsg(""); setBusy(form, true);
+
+    try{
+      const email = emailEl.value.trim();
+      const password = passEl.value;
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if(error) throw error;
+
+      // (OPCIONAL) Comprobar que el usuario esté en la tabla admins
+      try{
+        const { data: rows, error: e2 } = await supabase
+          .from("admins")
+          .select("user_id")
+          .eq("user_id", data.user.id)
+          .limit(1);
+        if(e2) throw e2;
+        if(!rows || rows.length === 0){
+          await supabase.auth.signOut();
+          throw new Error("Tu cuenta no tiene permisos de administrador.");
+        }
+      }catch(adminErr){
+        throw adminErr;
+      }
+
+      // Si todo ok → al panel
+      window.location.href = "/admin/";
+    }catch(err){
+      showMsg(err?.message || "No pudimos iniciar sesión.");
+    }finally{
+      setBusy(form, false);
+    }
+  });
+</script>
+
 
   <!-- Auth UI -->
   <script type="module">
