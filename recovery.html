@@ -1,76 +1,93 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Restablecer contraseña</title>
-</head>
-<body style="max-width:560px;margin:40px auto;padding:16px;font-family:system-ui">
-  <h2>Restablecer contraseña</h2>
-  <p>Ingresá tu nueva contraseña para tu cuenta.</p>
+<script type="module">
+  import { supabase } from "/js/supabaseClient.js";
 
-  <label>Nueva contraseña</label>
-  <input id="newPass" type="password" style="width:100%;padding:10px">
+  const msg = document.getElementById("recMsg");
+  const btn = document.getElementById("setNew");
+  const busy = (b)=>{ btn.disabled=!!b; btn.dataset.t ||= btn.textContent; btn.textContent=b?"Procesando...":btn.dataset.t; };
 
-  <label style="display:block;margin-top:8px">Repetir contraseña</label>
-  <input id="newPass2" type="password" style="width:100%;padding:10px">
+  let recoveryReady = false;
 
-  <div id="recMsg" style="min-height:22px;margin-top:8px;color:#b00020"></div>
-  <button id="setNew" style="margin-top:12px;padding:10px 16px">Guardar nueva contraseña</button>
+  // 1) Esperar/asegurar sesión de recuperación (cubre ?code= y #access_token)
+  async function ensureRecoverySession(){
+    try{
+      const url = new URL(location.href);
+      const code = url.searchParams.get("code");
 
-  <script type="module">
-    import { supabase } from "/js/supabaseClient.js";
-
-    const msg = document.getElementById("recMsg");
-    const btn = document.getElementById("setNew");
-    const busy = (b)=>{ btn.disabled=!!b; btn.dataset.t ||= btn.textContent; btn.textContent=b?"Procesando...":btn.dataset.t; };
-
-    async function asegurarSesion(){
-      try{
-        const url = new URL(location.href);
-        const code = url.searchParams.get("code");
-        if (code){
-          const { error } = await supabase.auth.exchangeCodeForSession(code);
-          if (error) throw error;
-        } else {
-          for (let i=0;i<10;i++){
-            const { data:{session} } = await supabase.auth.getSession();
-            if(session) break;
-            await new Promise(r=>setTimeout(r,150));
-          }
-        }
-      } catch(e){
-        msg.textContent = e?.message || "No pudimos validar el enlace. Volvé a solicitarlo.";
-      }
-    }
-
-    async function guardar(){
-      const p1 = document.getElementById("newPass").value;
-      const p2 = document.getElementById("newPass2").value;
-      msg.style.color="#b00020"; msg.textContent=""; busy(true);
-
-      try{
-        if (!p1 || p1.length<8) throw new Error("Usá al menos 8 caracteres.");
-        if (p1 !== p2) throw new Error("Las contraseñas no coinciden.");
-
-        const { data:{session} } = await supabase.auth.getSession();
-        if (!session) throw new Error("El enlace expiró o no se abrió correctamente. Reintentá desde el mail.");
-
-        const { error } = await supabase.auth.updateUser({ password: p1 });
+      // a) Flujo PKCE (?code=...)
+      if (code){
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
         if (error) throw error;
-
-        msg.style.color="green";
-        msg.textContent="¡Listo! Contraseña actualizada.";
-        setTimeout(()=> location.href="/admin/", 1200);
-      }catch(err){
-        msg.textContent = err?.message || "No pudimos actualizar la contraseña.";
-      }finally{
-        busy(false);
+        recoveryReady = true;
+        return;
       }
-    }
 
-    await asegurarSesion();
-    btn.addEventListener("click", guardar);
-  </script>
-</body>
-</html>
+      // b) Flujo hash (#access_token=...) → el SDK crea la sesión automáticamente
+      //    Esperamos hasta ~2s a que aparezca la sesión
+      for (let i=0;i<14;i++){
+        const { data:{ session } } = await supabase.auth.getSession();
+        if (session){ recoveryReady = true; break; }
+        await new Promise(r=>setTimeout(r,150));
+      }
+    } catch(e){
+      console.error("ensureRecoverySession:", e);
+      msg.textContent = e?.message || "No pudimos validar el enlace. Volvé a solicitarlo.";
+    }
+  }
+
+  // Por si el SDK notifica el evento explícito
+  supabase.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY"){ recoveryReady = true; }
+  });
+
+  // (Opcional) Mostrar al usuario si la sesión quedó lista
+  async function paintStatus(){
+    const { data:{ session } } = await supabase.auth.getSession();
+    if(session){
+      msg.style.color = "green";
+      msg.textContent = `Enlace válido para: ${session.user?.email || "tu cuenta"} ✅`;
+    }else{
+      msg.style.color = "#b00020";
+      msg.textContent = "Enlace inválido o expirado ❌ — solicitá uno nuevo desde “Recuperar”.";
+    }
+  }
+
+  // 2) Guardar nueva contraseña
+  async function saveNewPassword(){
+    const p1 = document.getElementById("newPass").value;
+    const p2 = document.getElementById("newPass2").value;
+    msg.style.color="#b00020"; msg.textContent=""; busy(true);
+
+    try{
+      if (!p1 || p1.length < 8) throw new Error("Usá al menos 8 caracteres.");
+      if (p1 !== p2) throw new Error("Las contraseñas no coinciden.");
+      if (!recoveryReady){
+        // doble chequeo por las dudas
+        const { data:{ session } } = await supabase.auth.getSession();
+        if(!session) throw new Error("El enlace expiró o no creó sesión. Volvé a solicitarlo desde el botón Recuperar.");
+      }
+
+      const { error } = await supabase.auth.updateUser({ password: p1 });
+      if (error) throw error;
+
+      msg.style.color = "green";
+      msg.textContent = "¡Listo! Contraseña actualizada.";
+      // Recomendado: cerrar la sesión temporal y llevar al login del admin
+      setTimeout(async ()=>{
+        try{ await supabase.auth.signOut(); }catch{}
+        location.href = "/admin/"; // o "/" si preferís volver a la home
+      }, 1000);
+    }catch(err){
+      // Mensajes comunes de Supabase:
+      // - "New password should be different from the old password"
+      // - "Invalid or expired recovery token"
+      msg.textContent = err?.message || "No pudimos actualizar la contraseña.";
+    }finally{
+      busy(false);
+    }
+  }
+
+  await ensureRecoverySession();
+  await paintStatus();
+  btn.addEventListener("click", saveNewPassword);
+</script>
+
