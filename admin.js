@@ -1,7 +1,9 @@
 import { onAuthStateChange, signIn, signOut, isAdmin } from "/auth.js";
 import { listProducts, getProduct, createProduct, updateProduct, removeProduct, uploadProductImage } from "/db.js";
 
-const $ = (id) => document.getElementById(id);
+const $  = (id) => document.getElementById(id);
+const qs = (sel, ctx=document) => ctx.querySelector(sel);
+
 const loginSection = $("loginSection");
 const crudSection  = $("crudSection");
 const loginForm    = $("loginForm");
@@ -10,12 +12,72 @@ const btnLogout    = $("btnLogout");
 const productForm  = $("productForm");
 const adminList    = $("adminList");
 
-// Sesión + guardia de admin
+// ---------- UI helpers ----------
+function toast(msg, type="success"){
+  const el = document.createElement("div");
+  el.className = `toast ${type}`;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+function setLoading(isLoading){
+  const submitBtn = productForm.querySelector('[type="submit"]');
+  const resetBtn  = $("btnReset");
+  submitBtn.disabled = isLoading;
+  resetBtn.disabled  = isLoading;
+  if (isLoading) {
+    submitBtn.dataset._txt = submitBtn.textContent;
+    submitBtn.textContent = "Guardando…";
+  } else {
+    submitBtn.textContent = submitBtn.dataset._txt || "Guardar";
+  }
+}
+
+// entrada inválida: agrega borde y hint
+function markInvalid(input, hint){
+  input.classList.add("is-invalid");
+  input.setAttribute("aria-invalid","true");
+  if (hint){
+    let small = input.nextElementSibling && input.nextElementSibling.classList?.contains("help-text")
+      ? input.nextElementSibling
+      : document.createElement("small");
+    small.className = "help-text";
+    small.style.color = "#ef4444";
+    small.textContent = hint;
+    if (small !== input.nextElementSibling) input.insertAdjacentElement("afterend", small);
+  }
+}
+function clearInvalid(input){
+  input.classList.remove("is-invalid");
+  input.removeAttribute("aria-invalid");
+  const small = input.nextElementSibling;
+  if (small && small.classList?.contains("help-text")) small.remove();
+}
+
+// preview de imagen
+const imageInput = $("imageFile");
+if (imageInput){
+  imageInput.addEventListener("change", () => {
+    let prev = $("imagePreview");
+    if (!prev){
+      prev = document.createElement("img");
+      prev.id = "imagePreview";
+      prev.alt = "Vista previa";
+      prev.style.cssText = "max-width:180px;border:1px solid var(--line);border-radius:10px;margin-top:6px;display:block;object-fit:cover;aspect-ratio:1/1";
+      imageInput.insertAdjacentElement("afterend", prev);
+    }
+    const f = imageInput.files?.[0];
+    if (f) prev.src = URL.createObjectURL(f); else prev.remove();
+  });
+}
+
+// ---------- Sesión + guardia de admin ----------
 onAuthStateChange(async (user) => {
   if (!user) {
     loginSection.style.display = "";
     crudSection.style.display  = "none";
-    btnLogout.style.display    = "none";
+    btnLogout.classList.add("d-none");
     return;
   }
   if (!(await isAdmin(user.id))) {
@@ -25,11 +87,11 @@ onAuthStateChange(async (user) => {
   }
   loginSection.style.display = "none";
   crudSection.style.display  = "";
-  btnLogout.style.display    = "";
+  btnLogout.classList.remove("d-none");
   await renderList();
 });
 
-// Login
+// ---------- Login ----------
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   loginMsg.textContent = "";
@@ -40,30 +102,39 @@ loginForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Logout
+// ---------- Logout ----------
 btnLogout.addEventListener("click", () => signOut());
 
-// Render listado
+// ---------- Listado ----------
 async function renderList() {
   adminList.innerHTML = "Cargando…";
   try {
     const rows = await listProducts();
     adminList.innerHTML = "";
+    adminList.classList.add("product-grid");
+
     rows.forEach((p) => {
       const card = document.createElement("div");
-      card.className = "card product-card";
-      card.style = "border:1px solid #ddd;border-radius:12px;overflow:hidden";
+      card.className = "product-card";
+
+      const safeName = (p.name || "").replace(/"/g, "&quot;");
+      const img = p.image_url || "";
+
       card.innerHTML = `
-        <img src="${p.image_url || ""}" alt="${(p.name || "").replace(/"/g, "&quot;")}" style="width:100%;height:180px;object-fit:cover">
-        <div style="padding:12px">
-          <h4 style="margin:0 0 6px">${p.name || ""}</h4>
-          <p style="margin:0 0 6px">$${Number(p.price || 0).toLocaleString("es-AR")}</p>
-          <small>Stock: ${p.stock ?? 0} | Cat: ${p.category || "-"}</small>
-          <div style="margin-top:8px;display:flex;gap:8px">
-            <button class="edit btn btn-secondary btn-sm" data-id="${p.id}">Editar</button>
+        <img src="${img}" alt="${safeName}">
+        <div class="product-body">
+          <h4 class="product-title">${p.name || ""}</h4>
+          <div class="product-price">$${Number(p.price || 0).toLocaleString("es-AR")}</div>
+          <div class="product-meta">
+            <span class="chip chip--stock">Stock: ${p.stock ?? 0}</span>
+            <span class="chip chip--cat">Cat: ${p.category || "-"}</span>
+          </div>
+          <div class="card-actions">
+            <button class="edit btn btn-ghost btn-sm" data-id="${p.id}">Editar</button>
             <button class="del btn btn-danger btn-sm"  data-id="${p.id}">Eliminar</button>
           </div>
-        </div>`;
+        </div>
+      `;
       adminList.appendChild(card);
     });
 
@@ -86,43 +157,70 @@ async function renderList() {
         if (confirm("¿Eliminar este producto?")) {
           await removeProduct(b.dataset.id);
           await renderList();
+          toast("Producto eliminado", "success");
         }
       })
     );
   } catch (e) {
     console.error(e);
     adminList.textContent = "Error cargando productos";
+    toast("Error cargando productos", "error");
   }
 }
 
-// Guardar (create/update)
+// ---------- Guardar (create/update) ----------
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  // limpiar estados inválidos previos
+  ["name","price","stock"].forEach(id => clearInvalid($(id)));
+
   const id = $("prodId").value.trim();
   const data = {
     name: $("name").value.trim(),
-    price: parseFloat($("price").value) || 0,
-    stock: parseInt($("stock").value, 10) || 0,
+    price: parseFloat($("price").value),
+    stock: parseInt($("stock").value, 10),
     category: $("category").value.trim(),
     description: $("description").value.trim(),
   };
 
+  // Validaciones mínimas
+  let hasError = false;
+  if (!data.name) { markInvalid($("name"), "El nombre es obligatorio"); hasError = true; }
+  if (!(data.price >= 0)) { markInvalid($("price"), "Precio inválido"); hasError = true; }
+  if (!(data.stock >= 0)) { markInvalid($("stock"), "Stock inválido"); hasError = true; }
+  if (hasError) { toast("Revisá los campos marcados", "error"); return; }
+
   try {
+    setLoading(true);
     const f = $("imageFile").files[0];
     if (f) data.image_url = await uploadProductImage(f);
 
-    if (id) await updateProduct(id, data);
-    else    await createProduct(data);
+    if (id) {
+      await updateProduct(id, data);
+      toast("Producto actualizado", "success");
+    } else {
+      await createProduct(data);
+      toast("Producto creado", "success");
+    }
 
     productForm.reset();
     $("prodId").value = "";
+    const prev = $("imagePreview"); if (prev) prev.remove();
+
     await renderList();
   } catch (err) {
+    console.error(err);
+    toast("No se pudo guardar el producto", "error");
     alert("No se pudo guardar el producto: " + (err?.message || err));
+  } finally {
+    setLoading(false);
   }
 });
 
+// ---------- Reset ----------
 $("btnReset").addEventListener("click", () => {
   productForm.reset();
   $("prodId").value = "";
+  const prev = $("imagePreview"); if (prev) prev.remove();
 });

@@ -1,0 +1,205 @@
+/* ================================
+   Admin Panel - Modern UI (CODENT)
+================================ */
+
+#admin-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem 0 4rem;
+  font-family: 'Raleway', system-ui;
+}
+
+/* Header */
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  box-shadow: var(--elev-0);
+  padding: 1rem 1.5rem;
+  border-radius: var(--r-lg, 14px);
+}
+
+.admin-header h1 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 0.3px;
+}
+
+/* Formulario */
+.admin-form {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--elev-0);
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.admin-form:hover {
+  box-shadow: var(--elev-1);
+}
+
+.admin-form label {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.admin-form input:focus,
+.admin-form textarea:focus,
+.admin-form select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(14,165,233,.15);
+  outline: none;
+}
+
+/* Botones */
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+}
+
+.btn {
+  border-radius: 10px;
+  padding: .55rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: scale(.97); }
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border: 1px solid var(--primary);
+}
+.btn-primary:hover {
+  background: var(--primary-700);
+}
+
+.btn-ghost {
+  background: #f1f5f9;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.btn-ghost:hover { background: #e2e8f0; }
+
+.btn-danger {
+  background: #ef4444;
+  border: 1px solid #dc2626;
+  color: #fff;
+}
+.btn-danger:hover { background: #dc2626; }
+
+/* Grid de productos */
+.product-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--elev-0);
+  overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--elev-1);
+}
+
+.product-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.product-body {
+  padding: 0.8rem 1rem 1rem;
+}
+.product-title {
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 0.25rem;
+}
+.product-price {
+  font-weight: 600;
+  color: var(--primary);
+}
+.product-meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* Chips */
+.chip {
+  display: inline-block;
+  background: #e0f2fe;
+  color: var(--primary-700);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-right: 6px;
+}
+
+/* Toasts (éxito/error) */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--primary);
+  box-shadow: var(--elev-1);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  color: var(--ink);
+  animation: fadeIn .3s ease;
+  z-index: 9999;
+}
+.toast.error { border-left-color: #ef4444; }
+.toast.success { border-left-color: #22c55e; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pequeños ajustes */
+@media (max-width: 640px) {
+  .admin-form {
+    grid-template-columns: 1fr;
+  }
+  .admin-header h1 {
+    font-size: 1.1rem;
+  }
+}
