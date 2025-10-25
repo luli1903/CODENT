@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Redirigiendo…</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    // Redirige manteniendo query (?code=...) y hash (#access_token=...)
+    (function () {
+      var q = location.search || '';
+      var h = location.hash || '';
+      location.replace('/recovery.html' + q + h);
+    })();
+  </script>
+  <noscript>
+    Si no sos redirigida automáticamente, abrí
+    <a href="/recovery.html">/recovery.html</a>
+  </noscript>
+</head>
+<body></body>
+</html>
