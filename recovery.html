@@ -1,93 +1,143 @@
-<script type="module">
-  import { supabase } from "/js/supabaseClient.js";
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Restablecer contraseña</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:40px auto;max-width:560px;padding:16px}
+    label{display:block;margin:10px 0 4px}
+    input{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px}
+    button{margin-top:12px;padding:10px 16px;border:0;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    #recMsg{min-height:22px;margin-top:8px;color:#b00020;white-space:pre-wrap}
+    .ok{color:green}
+    .muted{color:#64748b}
+  </style>
+</head>
+<body>
+  <h2>Restablecer contraseña</h2>
+  <p class="muted">Ingresá tu nueva contraseña para tu cuenta.</p>
 
-  const msg = document.getElementById("recMsg");
-  const btn = document.getElementById("setNew");
-  const busy = (b)=>{ btn.disabled=!!b; btn.dataset.t ||= btn.textContent; btn.textContent=b?"Procesando...":btn.dataset.t; };
+  <label>Nueva contraseña</label>
+  <input id="newPass" type="password" placeholder="Mínimo 8 caracteres">
 
-  let recoveryReady = false;
+  <label>Repetir contraseña</label>
+  <input id="newPass2" type="password" placeholder="Repetir contraseña">
 
-  // 1) Esperar/asegurar sesión de recuperación (cubre ?code= y #access_token)
-  async function ensureRecoverySession(){
+  <div id="recMsg"></div>
+  <button id="setNew">Guardar nueva contraseña</button>
+
+  <script type="module">
+    const msg = document.getElementById("recMsg");
+    const btn = document.getElementById("setNew");
+    const busy = (b)=>{ btn.disabled=!!b; btn.dataset.t ||= btn.textContent; btn.textContent=b?"Procesando...":btn.dataset.t; };
+
+    // ---- Cargar/crear cliente Supabase de forma robusta ----
+    let supabase;
     try{
-      const url = new URL(location.href);
-      const code = url.searchParams.get("code");
-
-      // a) Flujo PKCE (?code=...)
-      if (code){
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
-        if (error) throw error;
-        recoveryReady = true;
-        return;
+      // Intenta usar tu cliente del proyecto
+      const m = await import("/js/supabaseClient.js");
+      supabase = m.supabase;
+      if(!supabase) throw new Error("No exportó supabase");
+    }catch{
+      // Fallback: crear cliente directo (requiere que tengas definidas las vars globales)
+      const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
+      const url = window.VITE_SUPABASE_URL;
+      const key = window.VITE_SUPABASE_ANON_KEY;
+      if(!url || !key){
+        msg.textContent =
+          "No pudimos cargar el cliente de Supabase.\n" +
+          "Solución rápida: definí window.VITE_SUPABASE_URL y window.VITE_SUPABASE_ANON_KEY en un <script> antes de este.\n" +
+          "O asegurate de que /js/supabaseClient.js existe y exporta 'supabase'.";
+        throw new Error("Falta configuración de Supabase");
       }
+      supabase = createClient(url, key);
+    }
 
-      // b) Flujo hash (#access_token=...) → el SDK crea la sesión automáticamente
-      //    Esperamos hasta ~2s a que aparezca la sesión
-      for (let i=0;i<14;i++){
+    let recoveryReady = false;
+
+    async function ensureRecoverySession(){
+      try{
+        const url = new URL(location.href);
+        const code = url.searchParams.get("code");
+
+        if (code){
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) throw error;
+          recoveryReady = true;
+          return;
+        }
+
+        // hash flow (#access_token=…)
+        for (let i=0;i<20;i++){ // ~3s
+          const { data:{ session } } = await supabase.auth.getSession();
+          if (session){ recoveryReady = true; break; }
+          await new Promise(r=>setTimeout(r,150));
+        }
+      }catch(e){
+        msg.textContent = (e && e.message) || "No pudimos validar el enlace. Solicitá uno nuevo desde “Recuperar”.";
+      }
+    }
+
+    // Por si el SDK notifica explícitamente
+    supabase?.auth.onAuthStateChange((event)=>{ if(event==="PASSWORD_RECOVERY") recoveryReady = true; });
+
+    async function paintStatus(){
+      try{
         const { data:{ session } } = await supabase.auth.getSession();
-        if (session){ recoveryReady = true; break; }
-        await new Promise(r=>setTimeout(r,150));
+        if(session){
+          msg.classList.add("ok");
+          msg.textContent = `Enlace válido para: ${session.user?.email || "tu cuenta"} ✅`;
+        }else{
+          msg.classList.remove("ok");
+          msg.textContent = "Enlace inválido o expirado ❌ — solicitá uno nuevo desde “Recuperar”.";
+        }
+      }catch(e){
+        msg.textContent = e?.message || "No pudimos verificar el estado del enlace.";
       }
-    } catch(e){
-      console.error("ensureRecoverySession:", e);
-      msg.textContent = e?.message || "No pudimos validar el enlace. Volvé a solicitarlo.";
     }
-  }
 
-  // Por si el SDK notifica el evento explícito
-  supabase.auth.onAuthStateChange((event) => {
-    if (event === "PASSWORD_RECOVERY"){ recoveryReady = true; }
-  });
+    async function saveNewPassword(){
+      const p1 = document.getElementById("newPass").value;
+      const p2 = document.getElementById("newPass2").value;
+      msg.classList.remove("ok");
+      msg.textContent = "";
+      busy(true);
 
-  // (Opcional) Mostrar al usuario si la sesión quedó lista
-  async function paintStatus(){
-    const { data:{ session } } = await supabase.auth.getSession();
-    if(session){
-      msg.style.color = "green";
-      msg.textContent = `Enlace válido para: ${session.user?.email || "tu cuenta"} ✅`;
-    }else{
-      msg.style.color = "#b00020";
-      msg.textContent = "Enlace inválido o expirado ❌ — solicitá uno nuevo desde “Recuperar”.";
-    }
-  }
+      try{
+        if(!p1 || p1.length<8) throw new Error("Usá al menos 8 caracteres.");
+        if(p1!==p2) throw new Error("Las contraseñas no coinciden.");
 
-  // 2) Guardar nueva contraseña
-  async function saveNewPassword(){
-    const p1 = document.getElementById("newPass").value;
-    const p2 = document.getElementById("newPass2").value;
-    msg.style.color="#b00020"; msg.textContent=""; busy(true);
+        if(!recoveryReady){
+          const { data:{ session } } = await supabase.auth.getSession();
+          if(!session) throw new Error("El enlace expiró o no creó sesión. Volvé a solicitarlo desde el botón Recuperar.");
+        }
 
-    try{
-      if (!p1 || p1.length < 8) throw new Error("Usá al menos 8 caracteres.");
-      if (p1 !== p2) throw new Error("Las contraseñas no coinciden.");
-      if (!recoveryReady){
-        // doble chequeo por las dudas
-        const { data:{ session } } = await supabase.auth.getSession();
-        if(!session) throw new Error("El enlace expiró o no creó sesión. Volvé a solicitarlo desde el botón Recuperar.");
+        const { error } = await supabase.auth.updateUser({ password: p1 });
+        if(error) throw error;
+
+        msg.classList.add("ok");
+        msg.textContent = "¡Listo! Contraseña actualizada.";
+        setTimeout(async ()=>{
+          try{ await supabase.auth.signOut(); }catch{}
+          location.href = "/admin/"; // o "/" si preferís volver a la home
+        }, 900);
+      }catch(err){
+        msg.textContent = err?.message || "No pudimos actualizar la contraseña.";
+      }finally{
+        busy(false);
       }
-
-      const { error } = await supabase.auth.updateUser({ password: p1 });
-      if (error) throw error;
-
-      msg.style.color = "green";
-      msg.textContent = "¡Listo! Contraseña actualizada.";
-      // Recomendado: cerrar la sesión temporal y llevar al login del admin
-      setTimeout(async ()=>{
-        try{ await supabase.auth.signOut(); }catch{}
-        location.href = "/admin/"; // o "/" si preferís volver a la home
-      }, 1000);
-    }catch(err){
-      // Mensajes comunes de Supabase:
-      // - "New password should be different from the old password"
-      // - "Invalid or expired recovery token"
-      msg.textContent = err?.message || "No pudimos actualizar la contraseña.";
-    }finally{
-      busy(false);
     }
-  }
 
-  await ensureRecoverySession();
-  await paintStatus();
-  btn.addEventListener("click", saveNewPassword);
-</script>
+    // Debug visible si algo rompe antes
+    window.onerror = (m, src, ln, col, err)=>{
+      msg.textContent = "Error: " + (m || (err && err.message) || "desconocido");
+    };
+
+    await ensureRecoverySession();
+    await paintStatus();
+    btn.addEventListener("click", saveNewPassword);
+  </script>
+</body>
+</html>
 
