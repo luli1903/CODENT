@@ -224,3 +224,42 @@ $("btnReset").addEventListener("click", () => {
   $("prodId").value = "";
   const prev = $("imagePreview"); if (prev) prev.remove();
 });
+
+// ---- Navbar: mostrar/ocultar botones según sesión ----
+import { onAuthStateChange, isAdmin } from "/auth.js";
+
+(function setupNavbarAuth(){
+  const btnLogin = document.getElementById("btnLogin");
+  const btnAdmin = document.getElementById("btnAdmin");
+
+  // Si esta página no tiene navbar, salir sin romper
+  if (!btnLogin && !btnAdmin) return;
+
+  onAuthStateChange(async (user) => {
+    // No logueado => solo "Iniciar sesión"
+    if (!user) {
+      if (btnLogin) btnLogin.style.display = "inline-block";
+      if (btnAdmin) btnAdmin.style.display = "none";
+      return;
+    }
+
+    // Logueado: mostrar Panel solo si es admin
+    let esAdmin = false;
+    try { esAdmin = await isAdmin(user.id); } catch {}
+    if (esAdmin) {
+      if (btnLogin) btnLogin.style.display = "none";
+      if (btnAdmin) btnAdmin.style.display = "inline-block";
+    } else {
+      if (btnLogin) btnLogin.style.display = "inline-block";
+      if (btnAdmin) btnAdmin.style.display = "none";
+    }
+  });
+
+  // (Opcional) acción del botón login
+  if (btnLogin) {
+    btnLogin.addEventListener("click", () => {
+      // redirigí a tu pantalla/modal de login
+      window.location.href = "login.html";
+    });
+  }
+})();
