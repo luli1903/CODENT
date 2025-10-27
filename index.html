@@ -1,59 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Redirección para flujos de recuperación / magic link de Supabase -->
   <script>
-  (function(){
-    const hasHash = location.hash.includes('access_token') || location.hash.includes('refresh_token');
-    const hasQuery = location.search.includes('code=') || location.search.includes('type=recovery');
-    
-    if (hasHash || hasQuery) {
-      const q = location.search || '';
-      const h = location.hash || '';
-      location.replace('/recovery.html' + q + h);
-    }
-  })();
-</script>
+    (function(){
+      const hasHash  = location.hash.includes('access_token') || location.hash.includes('refresh_token');
+      const hasQuery = location.search.includes('code=') || location.search.includes('type=recovery');
+      if (hasHash || hasQuery) {
+        const q = location.search || '';
+        const h = location.hash   || '';
+        location.replace('/recovery.html' + q + h);
+      }
+    })();
+  </script>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CODEN - Electromedicina odontológica. Reparación, mantenimiento y venta de equipos odontológicos."/>
   <title>CODEN - Electromedicina Odontológica</title>
 
+  <!-- Estilos -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-  <link rel="icon" href="img/favicon.ico"/>
-
-  <link rel="stylesheet" href="css/style.css"/>
-  <link rel="stylesheet" href="css/coden.v1.css"/>
-  <link rel="stylesheet" href="css/coden.main.css"/>
+  <link rel="icon" href="/img/favicon.ico"/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="stylesheet" href="/css/coden.v1.css"/>
+  <link rel="stylesheet" href="/css/coden.main.css"/>
 </head>
 <body id="top">
 
+  <!-- ===================== NAVBAR ===================== -->
   <div id="coden-v1">
-  <nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
-    <a class="navbar-brand font-weight-bold" href="index.html">
-      <span class="brand-dot"></span> CODEN
-    </a>
-
-    <div class="ml-auto d-flex align-items-center">
-      <button id="btnLogin" class="btn btn-outline-primary btn-sm mr-2" style="display:none;">Iniciar sesión</button>
-      <a href="admin.html" id="btnAdmin" class="btn btn-primary" style="display:none;">Panel Admin</a>
-
-      <a href="carrito.html" class="btn btn-outline-primary btn-sm" aria-label="Carrito">
-        🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
+    <nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
+      <a class="navbar-brand font-weight-bold" href="index.html">
+        <span class="brand-dot"></span> CODEN
       </a>
-    </div>
-  </nav>
-</div>
 
+      <div class="ml-auto d-flex align-items-center">
+        <!-- Los muestra/oculta navbar-auth.js -->
+        <button id="btnLogin" class="btn btn-outline-primary btn-sm mr-2" style="display:none;">Iniciar sesión</button>
+        <a href="admin.html" id="btnAdmin" class="btn btn-primary" style="display:none;">Panel Admin</a>
 
+        <a href="carrito.html" class="btn btn-outline-primary btn-sm" aria-label="Carrito">
+          🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ===================== CONTENIDO ===================== -->
   <main id="coden-main">
-
     <section class="hero" aria-labelledby="hero-title">
       <div class="container grid hero__grid">
         <div>
           <div class="inline" style="margin-bottom:8px">
             <span class="chip">Reparación express</span>
-            <span class="chip">Garantía 6?12 meses</span>
+            <span class="chip">Garantía 6–12 meses</span>
             <span class="chip">Envíos a todo el país</span>
           </div>
           <h1 id="hero-title" style="font-family:'Cormorant',serif">
@@ -71,24 +72,31 @@
         <div class="hero__card" role="img" aria-label="Servicios destacados">
           <div class="grid" style="grid-template-columns:1fr 1fr">
             <div class="card">
-              <div class="card__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 2l-2 2-3-3-2 2 3 3-9 9-3-3-2 2 5 5 11-11 3 3 2-2-3-3z" fill="#0369a1"/></svg></div>
+              <div class="card__icon" aria-hidden="true">
+                <!-- ícono -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 2l-2 2-3-3-2 2 3 3-9 9-3-3-2 2 5 5 11-11 3 3 2-2-3-3z" fill="#0369a1"/></svg>
+              </div>
               <b>Mantenimiento</b>
               <p style="margin:.2rem 0 0; color:var(--muted)">Checklist y trazabilidad.</p>
             </div>
             <div class="card">
-              <div class="card__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 21l3-3h12l3 3H3zm2-5V4h14v12H5z" fill="#0369a1"/></svg></div>
+              <div class="card__icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 21l3-3h12l3 3H3zm2-5V4h14v12H5z" fill="#0369a1"/></svg>
+              </div>
               <b>Instrumental</b>
               <p style="margin:.2rem 0 0; color:var(--muted)">Turbinas y micromotores.</p>
             </div>
             <div class="card">
-              <div class="card__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" fill="#0369a1"/><path d="M4 12a8 8 0 1116 0 8 8 0 01-16 0zm8-6v2m0 8v2m6-6h-2M8 12H6" stroke="#0369a1" stroke-width="2"/></svg></div>
+              <div class="card__icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="#0369a1"/><path d="M4 12a8 8 0 1116 0 8 8 0 01-16 0zm8-6v2m0 8v2m6-6h-2M8 12H6" stroke="#0369a1" stroke-width="2"/></svg>
+              </div>
               <b>Repuestos</b>
               <p style="margin:.2rem 0 0; color:var(--muted)">Originales y compatibles.</p>
             </div>
             <div class="card">
-              <div class="card__icon" aria-hidden="true">??</div>
+              <div class="card__icon" aria-hidden="true">🚚</div>
               <b>Logística</b>
-              <p style="margin:.2rem 0 0; color:var(--muted)">24?72h según zona.</p>
+              <p style="margin:.2rem 0 0; color:var(--muted)">24–72h según zona.</p>
             </div>
           </div>
         </div>
@@ -97,7 +105,7 @@
 
     <section class="promo" aria-label="Promociones y medios de pago">
       <div class="container promo__wrap d-flex justify-content-between align-items-center py-3">
-        <div style="font-weight:800">?? Hasta 6 cuotas con Mercado Pago</div>
+        <div style="font-weight:800">💳 Hasta 6 cuotas con Mercado Pago</div>
         <a class="text-link" href="carrito.html">Ir al checkout</a>
       </div>
     </section>
@@ -119,10 +127,10 @@
 
               <h5 class="fw-bold mt-4 mb-3">Nuestros pilares</h5>
               <div class="about-pillars d-flex flex-wrap gap-3">
-                <div class="pillar"><span>???</span> Servicio técnico especializado</div>
-                <div class="pillar"><span>??</span> Asesoramiento personalizado</div>
-                <div class="pillar"><span>?</span> Respuesta rápida y eficaz</div>
-                <div class="pillar"><span>??</span> Compromiso y confianza</div>
+                <div class="pillar"><span>🛠️</span> Servicio técnico especializado</div>
+                <div class="pillar"><span>👩‍⚕️</span> Asesoramiento personalizado</div>
+                <div class="pillar"><span>⚡</span> Respuesta rápida y eficaz</div>
+                <div class="pillar"><span>🤝</span> Compromiso y confianza</div>
               </div>
 
               <div class="about-metrics mt-4">
@@ -156,7 +164,7 @@
         <div class="row">
           <div class="col-md-4 mb-3">
             <article class="p-4 border rounded service-card h-100">
-              <h4>??? Mantenimiento</h4>
+              <h4>🧰 Mantenimiento</h4>
               <p class="mb-2">Planes preventivos para consultorios y clínicas. Incluye:</p>
               <ul class="service-list">
                 <li>Checklist de inspección</li>
@@ -168,19 +176,19 @@
 
           <div class="col-md-4 mb-3">
             <article class="p-4 border rounded service-card h-100">
-              <h4>?? Reparaciones</h4>
+              <h4>🔧 Reparaciones</h4>
               <p class="mb-2">Atendemos fallas, desgaste y roturas. Incluye:</p>
               <ul class="service-list">
                 <li>Diagnóstico y presupuesto</li>
                 <li>Reemplazo de piezas</li>
-                <li>Prueba funcional + garantía 6?12m</li>
+                <li>Prueba funcional + garantía 6–12m</li>
               </ul>
             </article>
           </div>
 
           <div class="col-md-4 mb-3">
             <article class="p-4 border rounded service-card h-100">
-              <h4>?? Evaluaciones</h4>
+              <h4>📋 Evaluaciones</h4>
               <p class="mb-2">Para habilitaciones e inspecciones. Incluye:</p>
               <ul class="service-list">
                 <li>Seguridad eléctrica</li>
@@ -223,7 +231,7 @@
 
               <div class="form-group">
                 <label for="cPhone">Teléfono (opcional)</label>
-                <input type="tel" id="cPhone" name="phone" class="form-control" placeholder="+54 9 ?">
+                <input type="tel" id="cPhone" name="phone" class="form-control" placeholder="+54 9 …">
               </div>
 
               <div class="form-group">
@@ -272,95 +280,135 @@
     </div>
   </footer>
 
+  <!-- ===================== SCRIPTS ===================== -->
+  <!-- Dependencias Bootstrap 4 -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  <script type="module" src="supabaseClient.js"></script>
-  <script type="module" src="js/cart.js"></script>
-  <script type="module" src="db.js"></script>
+  <!-- Tu lógica (ajustá rutas absolutas para consistencia) -->
+  <script type="module" src="/js/cart.js"></script>
+  <!-- Si usás destacados desde JS, podés cargar /db.js aquí -->
+  <!-- <script type="module" src="/db.js"></script> -->
 
+  <!-- =============== MODAL LOGIN =============== -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="loginForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Acceso CODEN</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input id="loginEmail" type="email" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Contraseña</label>
+            <input id="loginPassword" type="password" class="form-control" required />
+          </div>
+
+          <small class="text-muted d-block mt-2">
+            ¿Olvidaste tu contraseña? <a href="#" id="linkReset">Recuperar</a>
+          </small>
+
+          <div id="loginMsg" class="mt-2 small text-danger" style="display:none;"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-primary" type="submit">Ingresar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =============== SCRIPT LOGIN (estable) =============== -->
   <script type="module">
-  import { supabase } from "/js/supabaseClient.js";
+    import { supabase } from "/js/supabaseClient.js";
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const $ = (id) => document.getElementById(id);
+    document.addEventListener("DOMContentLoaded", () => {
+      const $ = (id) => document.getElementById(id);
 
-    const form  = $('loginForm');
-    const msg   = $('loginMsg');
-    const email = $('loginEmail');
-    const pass  = $('loginPassword');
-    const linkReset = $('linkReset');
+      const form  = $('loginForm');
+      const msg   = $('loginMsg');
+      const email = $('loginEmail');
+      const pass  = $('loginPassword');
+      const linkReset = $('linkReset');
 
-    function showMsg(text, color='red'){
-      if (!msg) return;
-      msg.textContent = text || '';
-      msg.style.display = text ? 'block' : 'none';
-      msg.style.color = color;
-    }
-
-    async function checkAdmin(userId){
-      try{
-        const { data, error } = await supabase
-          .from('admins')
-          .select('user_id')
-          .eq('user_id', userId)
-          .maybeSingle();
-        if (error){ console.error('[admins RLS]', error); return { admin:false, error }; }
-        return { admin: !!data };
-      }catch(err){
-        console.error('[checkAdmin]', err);
-        return { admin:false, error: err };
+      function showMsg(text, color='red'){
+        if (!msg) return;
+        msg.textContent = text || '';
+        msg.style.display = text ? 'block' : 'none';
+        msg.style.color = color;
       }
-    }
 
-    form?.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      showMsg('');
-
-      try{
-        // 1) login
-        const { error } = await supabase.auth.signInWithPassword({
-          email: (email?.value || '').trim(),
-          password: pass?.value || ''
-        });
-        if (error) throw error;
-
-        // 2) cerrar modal
-        if (window.$ && window.$('#loginModal')?.modal) {
-          $('#loginModal').modal('hide');
+      async function checkAdmin(userId){
+        try{
+          const { data, error } = await supabase
+            .from('admins')
+            .select('user_id')
+            .eq('user_id', userId)
+            .maybeSingle();
+          if (error){ console.error('[admins RLS]', error); return { admin:false, error }; }
+          return { admin: !!data };
+        }catch(err){
+          console.error('[checkAdmin]', err);
+          return { admin:false, error: err };
         }
-
-        // 3) obtener user
-        const { data:{ user } } = await supabase.auth.getUser();
-        if (!user){ showMsg('No se pudo obtener la sesión.'); return; }
-
-        // 4) ¿es admin?
-        const r = await checkAdmin(user.id);
-        if (r.admin){
-          if (!location.pathname.includes('admin')) location.href = '/admin.html';
-        } else {
-          showMsg('Iniciaste sesión, pero este usuario no es administrador.', 'orange');
-        }
-      }catch(err){
-        console.error('[login error]', err);
-        showMsg(err?.message || String(err));
       }
-    });
 
-    // Reset password
-    linkReset?.addEventListener('click', async (e)=>{
-      e.preventDefault();
-      const addr = (email?.value || '').trim();
-      if (!addr){ showMsg('Ingresá tu email para recuperar.'); return; }
-      const { error } = await supabase.auth.resetPasswordForEmail(addr, {
-        redirectTo: location.origin + '/reset.html'
+      form?.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        showMsg('');
+
+        try{
+          // 1) login
+          const { error } = await supabase.auth.signInWithPassword({
+            email: (email?.value || '').trim(),
+            password: pass?.value || ''
+          });
+          if (error) throw error;
+
+          // 2) cerrar modal
+          if (window.$ && window.$('#loginModal')?.modal) {
+            $('#loginModal').modal('hide');
+          }
+
+          // 3) obtener user
+          const { data:{ user } } = await supabase.auth.getUser();
+          if (!user){ showMsg('No se pudo obtener la sesión.'); return; }
+
+          // 4) ¿es admin?
+          const r = await checkAdmin(user.id);
+          if (r.admin){
+            if (!location.pathname.includes('admin')) location.href = '/admin.html';
+          } else {
+            showMsg('Iniciaste sesión, pero este usuario no es administrador.', 'orange');
+          }
+        }catch(err){
+          console.error('[login error]', err);
+          showMsg(err?.message || String(err));
+        }
       });
-      if (error) showMsg(error.message);
-      else showMsg('Listo. Revisá tu correo y abrí el enlace.', 'green');
-    });
-  });
-</script>
 
+      // Reset password
+      linkReset?.addEventListener('click', async (e)=>{
+        e.preventDefault();
+        const addr = (email?.value || '').trim();
+        if (!addr){ showMsg('Ingresá tu email para recuperar.'); return; }
+        const { error } = await supabase.auth.resetPasswordForEmail(addr, {
+          redirectTo: location.origin + '/reset.html'
+        });
+        if (error) showMsg(error.message);
+        else showMsg('Listo. Revisá tu correo y abrí el enlace.', 'green');
+      });
+    });
+  </script>
+
+  <!-- Control de botones Login / Panel (en TODAS las páginas con navbar) -->
+  <script type="module" src="/navbar-auth.js" defer></script>
 </body>
 </html>
