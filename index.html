@@ -281,218 +281,86 @@
   <script type="module" src="db.js"></script>
 
   <script type="module">
-    import { listProducts } from './db.js';
+  import { supabase } from "/js/supabaseClient.js";
 
-    const grid = document.getElementById('home-featured');
+  document.addEventListener("DOMContentLoaded", () => {
+    const $ = (id) => document.getElementById(id);
 
-    const esc = (s="") => String(s)
-      .replaceAll("&","&amp;").replaceAll("<","&lt;")
-      .replaceAll(">","&gt;").replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
+    const form  = $('loginForm');
+    const msg   = $('loginMsg');
+    const email = $('loginEmail');
+    const pass  = $('loginPassword');
+    const linkReset = $('linkReset');
 
-    async function renderFeatured() {
-      if(!grid) return;
-      grid.innerHTML = `<div class="col-12 text-center text-muted py-3">Cargando destacados?</div>`;
-      try {
-        const all = await listProducts();
-        const items = (all || []).slice(0,3); // top 3
-        grid.innerHTML = "";
+    function showMsg(text, color='red'){
+      if (!msg) return;
+      msg.textContent = text || '';
+      msg.style.display = text ? 'block' : 'none';
+      msg.style.color = color;
+    }
 
-        if (!items.length) {
-          grid.innerHTML = `<div class="col-12 text-center text-muted py-3">Aún no hay productos.</div>`;
-          return;
+    async function checkAdmin(userId){
+      try{
+        const { data, error } = await supabase
+          .from('admins')
+          .select('user_id')
+          .eq('user_id', userId)
+          .maybeSingle();
+        if (error){ console.error('[admins RLS]', error); return { admin:false, error }; }
+        return { admin: !!data };
+      }catch(err){
+        console.error('[checkAdmin]', err);
+        return { admin:false, error: err };
+      }
+    }
+
+    form?.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      showMsg('');
+
+      try{
+        // 1) login
+        const { error } = await supabase.auth.signInWithPassword({
+          email: (email?.value || '').trim(),
+          password: pass?.value || ''
+        });
+        if (error) throw error;
+
+        // 2) cerrar modal
+        if (window.$ && window.$('#loginModal')?.modal) {
+          $('#loginModal').modal('hide');
         }
 
-        const frag = document.createDocumentFragment();
+        // 3) obtener user
+        const { data:{ user } } = await supabase.auth.getUser();
+        if (!user){ showMsg('No se pudo obtener la sesión.'); return; }
 
-        items.forEach(p => {
-          const name = esc(p.name || "");
-          const price = Number(p.price || 0).toLocaleString('es-AR');
-          const col = document.createElement('div');
-          col.className = 'col-sm-6 col-md-4 mb-4';
-          col.innerHTML = `
-            <article class="product">
-              <div class="product__img">
-                <img src="${p.image_url || ''}" alt="${name}" loading="lazy"
-                     onerror="this.src='https://via.placeholder.com/600x450?text=Sin+imagen';this.style.objectFit='contain';">
-              </div>
-              <div class="product__body">
-                <div class="product__title">${name}</div>
-                <div class="badges"><span class="badge">24?72h</span><span class="badge badge--ok">Garantía 12m</span></div>
-                <div class="price">$ ${price}</div>
-                <div class="inline" style="margin-top:10px">
-                  <a class="btn" href="producto.html?id=${encodeURIComponent(p.id)}">Ver</a>
-                  <a class="text-link" href="tienda.html">Más productos</a>
-                </div>
-              </div>
-            </article>`;
-          frag.appendChild(col);
-        });
-
-        grid.appendChild(frag);
-      } catch (e) {
-        console.error(e);
-        grid.innerHTML = `<div class="col-12 text-center text-muted py-3">No se pudieron cargar los destacados.</div>`;
+        // 4) ¿es admin?
+        const r = await checkAdmin(user.id);
+        if (r.admin){
+          if (!location.pathname.includes('admin')) location.href = '/admin.html';
+        } else {
+          showMsg('Iniciaste sesión, pero este usuario no es administrador.', 'orange');
+        }
+      }catch(err){
+        console.error('[login error]', err);
+        showMsg(err?.message || String(err));
       }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      window.Cart?.updateCartBadge?.();
-      renderFeatured();
-    });
-  </script>
-
-  <!-- Modal Login -->
-  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <form id="loginForm" class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Acceso CODEN</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="loginEmail">Email</label>
-            <input id="loginEmail" type="email" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="loginPassword">Contraseña</label>
-            <input id="loginPassword" type="password" class="form-control" required>
-          </div>
-          <small class="text-muted d-block mt-2">
-            ¿Olvidaste tu contraseña? <a href="#" id="linkReset">Recuperar</a>
-          </small>
-          <div id="loginMsg" class="mt-2 small text-danger" style="display:none;"></div>
-        </div>
-
-        <div class="modal-footer">
-          <button class="btn btn-primary" type="submit">Ingresar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script type="module">
-  import { supabase } from "/js/supabaseClient.js";
-  const a = document.getElementById("linkReset");
-  const emailEl = document.getElementById("loginEmail");
-  const msg = document.getElementById("loginMsg");
-
-  a?.addEventListener("click", async (e)=>{
-    e.preventDefault();
-    const email = emailEl?.value?.trim();
-    if(!email){ msg.style.display="block"; msg.textContent="Ingresá tu email."; return; }
-
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `https://resonant-faun-ef8805.netlify.app/recovery.html`
-    });
-    if(error){ msg.style.display="block"; msg.textContent = error.message; return; }
-
-    msg.style.display="block"; msg.style.color="green";
-    msg.textContent = "Listo. Revisá tu email y abrí el enlace.";
-  });
-</script>
-
-
-
-  <!-- Auth UI -->
-  <script type="module">
-  import { supabase } from "/js/supabaseClient.js";
-
-  const $id = (id) => document.getElementById(id);
-
-  // --- refs navbar ---
-  const btnLogin = $id('btnLogin');
-  const btnAdmin = $id('btnAdmin');
-
-  // --- refs modal login ---
-  const loginForm   = $id('loginForm');
-  const loginMsg    = $id('loginMsg');
-  const loginEmail  = $id('loginEmail');
-  const loginPass   = $id('loginPassword');
-  const linkReset   = $id('linkReset');
-
-  // Mostrar/ocultar sólo estos dos botones según sesión y rol admin
-  async function updateNavButtons(){
-    // fallback seguro: mostrar login, ocultar panel
-    if (btnLogin) btnLogin.style.display = "inline-block";
-    if (btnAdmin) btnAdmin.style.display = "none";
-
-    const { data:{ user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    // ¿es admin?
-    let esAdmin = false;
-    try {
-      const { data, error } = await supabase
-        .from('admins')
-        .select('user_id')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      if (!error && data) esAdmin = true;
-    } catch {}
-
-    if (esAdmin){
-      if (btnLogin) btnLogin.style.display = "none";
-      if (btnAdmin) btnAdmin.style.display = "inline-block";
-    } else {
-      if (btnLogin) btnLogin.style.display = "inline-block";
-      if (btnAdmin) btnAdmin.style.display = "none";
-    }
-  }
-
-  // Si al loguear resulta ser admin y no estás en admin, redirigí
-  async function ensureAdminAndRedirect(){
-    const { data:{ user } } = await supabase.auth.getUser();
-    if (!user) return;
-    const { data } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
-    if (data && !location.pathname.includes('admin')) location.href = '/admin.html';
-  }
-
-  // === Wire UI ===
-  document.addEventListener('DOMContentLoaded', () => {
-    // botón login → abre modal
-    btnLogin?.addEventListener('click', () => $('#loginModal').modal('show'));
-
-    // submit login
-    loginForm?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (loginMsg) { loginMsg.style.display='none'; loginMsg.textContent=''; }
-      const email = loginEmail?.value.trim();
-      const password = loginPass?.value;
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error){
-        if (loginMsg){ loginMsg.textContent = error.message; loginMsg.style.display='block'; }
-        return;
-      }
-      $('#loginModal').modal('hide');
-      await updateNavButtons();
-      await ensureAdminAndRedirect();
     });
 
-    // reset password
+    // Reset password
     linkReset?.addEventListener('click', async (e)=>{
       e.preventDefault();
-      const email = loginEmail?.value?.trim();
-      if (!email) { alert('Ingresá tu email arriba.'); return; }
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      const addr = (email?.value || '').trim();
+      if (!addr){ showMsg('Ingresá tu email para recuperar.'); return; }
+      const { error } = await supabase.auth.resetPasswordForEmail(addr, {
         redirectTo: location.origin + '/reset.html'
       });
-      if (error) alert(error.message); else alert('Te enviamos un correo para restablecer la contraseña.');
+      if (error) showMsg(error.message);
+      else showMsg('Listo. Revisá tu correo y abrí el enlace.', 'green');
     });
-
-    // estado inicial
-    updateNavButtons();
-
-    // reacciona a cambios de sesión
-    supabase.auth.onAuthStateChange(() => updateNavButtons());
   });
 </script>
-
-<script type="module" src="/navbar-auth.js" defer></script>
 
 </body>
 </html>
