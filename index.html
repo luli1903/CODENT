@@ -400,101 +400,99 @@
 
   <!-- Auth UI -->
   <script type="module">
-    const $id = (id) => document.getElementById(id);
+  import { supabase } from "/js/supabaseClient.js";
 
-    async function refreshAuthUI(){
-      const { data:{ user } } = await supabase.auth.getUser();
+  const $id = (id) => document.getElementById(id);
 
-      let btnLogin  = $id('btnLogin');
-      let btnLogout = $id('btnLogout');
+  // --- refs navbar ---
+  const btnLogin = $id('btnLogin');
+  const btnAdmin = $id('btnAdmin');
 
-      if (!btnLogout && btnLogin?.parentElement) {
-        const rightBox = btnLogin.parentElement; 
-        btnLogout = document.createElement('button');
-        btnLogout.id = 'btnLogout';
-        btnLogout.className = 'btn btn-outline-secondary btn-sm mr-2 d-none';
-        btnLogout.textContent = 'Salir';
-        const cartBtn = rightBox.querySelector('a[href="carrito.html"]');
-        rightBox.insertBefore(btnLogout, cartBtn || null);
-        wireLogout(btnLogout);
-      }
+  // --- refs modal login ---
+  const loginForm   = $id('loginForm');
+  const loginMsg    = $id('loginMsg');
+  const loginEmail  = $id('loginEmail');
+  const loginPass   = $id('loginPassword');
+  const linkReset   = $id('linkReset');
 
-      if (user){
-        btnLogin?.classList.add('d-none');
-        if (btnLogout){
-          btnLogout.classList.remove('d-none');
-          btnLogout.style.display = 'inline-block';
-          btnLogout.style.visibility = 'visible';
-          btnLogout.removeAttribute('hidden');
-        }
-      } else {
-        btnLogin?.classList.remove('d-none');
-        btnLogout?.classList.add('d-none');
-      }
+  // Mostrar/ocultar sólo estos dos botones según sesión y rol admin
+  async function updateNavButtons(){
+    // fallback seguro: mostrar login, ocultar panel
+    if (btnLogin) btnLogin.style.display = "inline-block";
+    if (btnAdmin) btnAdmin.style.display = "none";
+
+    const { data:{ user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    // ¿es admin?
+    let esAdmin = false;
+    try {
+      const { data, error } = await supabase
+        .from('admins')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (!error && data) esAdmin = true;
+    } catch {}
+
+    if (esAdmin){
+      if (btnLogin) btnLogin.style.display = "none";
+      if (btnAdmin) btnAdmin.style.display = "inline-block";
+    } else {
+      if (btnLogin) btnLogin.style.display = "inline-block";
+      if (btnAdmin) btnAdmin.style.display = "none";
     }
+  }
 
-    function wireLogout(btn){
-      if (!btn || btn.dataset.bound === '1') return;
-      btn.addEventListener('click', async ()=>{
-        await supabase.auth.signOut();
-        await refreshAuthUI();
-        if (location.pathname.includes('admin')) location.href = '/index.html';
-      });
-      btn.dataset.bound = '1';
-    }
+  // Si al loguear resulta ser admin y no estás en admin, redirigí
+  async function ensureAdminAndRedirect(){
+    const { data:{ user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
+    if (data && !location.pathname.includes('admin')) location.href = '/admin.html';
+  }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      supabase.auth.onAuthStateChange(() => refreshAuthUI());
+  // === Wire UI ===
+  document.addEventListener('DOMContentLoaded', () => {
+    // botón login → abre modal
+    btnLogin?.addEventListener('click', () => $('#loginModal').modal('show'));
 
-
-      $id('btnLogin')?.addEventListener('click', () => $('#loginModal').modal('show'));
-
-    
-      const loginForm = $id('loginForm');
-      const loginMsg  = $id('loginMsg');
-      const linkReset = $id('linkReset');
-
-      loginForm?.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        if (loginMsg) loginMsg.style.display = 'none';
-        const email = $id('loginEmail').value.trim();
-        const password = $id('loginPassword').value;
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error){
-          if (loginMsg){ loginMsg.textContent = error.message; loginMsg.style.display='block'; }
-          return;
-        }
-        $('#loginModal').modal('hide');
-        await refreshAuthUI();
-        ensureAdminAndRedirect();
-      });
-
-      // Reset password
-      linkReset?.addEventListener('click', async (e)=>{
-        e.preventDefault();
-        const email = $id('loginEmail').value.trim();
-        if (!email) return alert('Ingresá tu email arriba.');
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: location.origin + '/reset.html'
-        });
-        if (error) alert(error.message); else alert('Te enviamos un correo para restablecer la contraseña.');
-      });
-
-      wireLogout($id('btnLogout'));
-      refreshAuthUI();
+    // submit login
+    loginForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (loginMsg) { loginMsg.style.display='none'; loginMsg.textContent=''; }
+      const email = loginEmail?.value.trim();
+      const password = loginPass?.value;
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error){
+        if (loginMsg){ loginMsg.textContent = error.message; loginMsg.style.display='block'; }
+        return;
+      }
+      $('#loginModal').modal('hide');
+      await updateNavButtons();
+      await ensureAdminAndRedirect();
     });
 
-    async function isAdmin(){
-      const { data:{ user } } = await supabase.auth.getUser();
-      if (!user) return false;
-      const { data, error } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
-      if (error){ console.error(error); return false; }
-      return !!data;
-    }
-    async function ensureAdminAndRedirect(){
-      if (await isAdmin() && !location.pathname.includes('admin')) location.href = '/admin.html';
-    }
-  </script>
+    // reset password
+    linkReset?.addEventListener('click', async (e)=>{
+      e.preventDefault();
+      const email = loginEmail?.value?.trim();
+      if (!email) { alert('Ingresá tu email arriba.'); return; }
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: location.origin + '/reset.html'
+      });
+      if (error) alert(error.message); else alert('Te enviamos un correo para restablecer la contraseña.');
+    });
+
+    // estado inicial
+    updateNavButtons();
+
+    // reacciona a cambios de sesión
+    supabase.auth.onAuthStateChange(() => updateNavButtons());
+  });
+</script>
+
+<script type="module" src="/navbar-auth.js" defer></script>
 
 </body>
 </html>

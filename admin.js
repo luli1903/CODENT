@@ -1,8 +1,12 @@
+// /admin.js
 import { onAuthStateChange, signIn, signOut, isAdmin } from "/auth.js";
-import { listProducts, getProduct, createProduct, updateProduct, removeProduct, uploadProductImage } from "/db.js";
+import {
+  listProducts, getProduct, createProduct, updateProduct,
+  removeProduct, uploadProductImage
+} from "/db.js";
 
 const $  = (id) => document.getElementById(id);
-const qs = (sel, ctx=document) => ctx.querySelector(sel);
+const qs = (sel, ctx = document) => ctx.querySelector(sel);
 
 const loginSection = $("loginSection");
 const crudSection  = $("crudSection");
@@ -22,20 +26,22 @@ function toast(msg, type="success"){
 }
 
 function setLoading(isLoading){
-  const submitBtn = productForm.querySelector('[type="submit"]');
+  const submitBtn = productForm?.querySelector('[type="submit"]');
   const resetBtn  = $("btnReset");
-  submitBtn.disabled = isLoading;
-  resetBtn.disabled  = isLoading;
-  if (isLoading) {
-    submitBtn.dataset._txt = submitBtn.textContent;
-    submitBtn.textContent = "Guardando…";
-  } else {
-    submitBtn.textContent = submitBtn.dataset._txt || "Guardar";
+  if (submitBtn) submitBtn.disabled = isLoading;
+  if (resetBtn)  resetBtn.disabled  = isLoading;
+  if (submitBtn) {
+    if (isLoading) {
+      submitBtn.dataset._txt = submitBtn.textContent;
+      submitBtn.textContent = "Guardando…";
+    } else {
+      submitBtn.textContent = submitBtn.dataset._txt || "Guardar";
+    }
   }
 }
 
-// entrada inválida: agrega borde y hint
 function markInvalid(input, hint){
+  if (!input) return;
   input.classList.add("is-invalid");
   input.setAttribute("aria-invalid","true");
   if (hint){
@@ -49,6 +55,7 @@ function markInvalid(input, hint){
   }
 }
 function clearInvalid(input){
+  if (!input) return;
   input.classList.remove("is-invalid");
   input.removeAttribute("aria-invalid");
   const small = input.nextElementSibling;
@@ -72,41 +79,47 @@ if (imageInput){
   });
 }
 
-// ---------- Sesión + guardia de admin ----------
+// ---------- Sesión + guardia de admin (UI del panel) ----------
 onAuthStateChange(async (user) => {
+  if (!loginSection || !crudSection) return; // por si abren este script en otra página
   if (!user) {
     loginSection.style.display = "";
     crudSection.style.display  = "none";
-    btnLogout.classList.add("d-none");
+    btnLogout?.classList.add("d-none");
     return;
   }
   if (!(await isAdmin(user.id))) {
-    loginMsg.textContent = "Tu usuario no tiene permisos de administrador.";
+    if (loginMsg) loginMsg.textContent = "Tu usuario no tiene permisos de administrador.";
     await signOut();
     return;
   }
   loginSection.style.display = "none";
   crudSection.style.display  = "";
-  btnLogout.classList.remove("d-none");
+  btnLogout?.classList.remove("d-none");
   await renderList();
 });
 
 // ---------- Login ----------
-loginForm.addEventListener("submit", async (e) => {
+loginForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  loginMsg.textContent = "";
+  if (loginMsg) loginMsg.textContent = "";
   try {
-    await signIn($("email").value.trim(), $("password").value);
+    await signIn($("email")?.value.trim(), $("password")?.value);
   } catch (err) {
-    loginMsg.textContent = "Error: " + (err?.message || err);
+    if (loginMsg) loginMsg.textContent = "Error: " + (err?.message || err);
   }
 });
 
 // ---------- Logout ----------
-btnLogout.addEventListener("click", () => signOut());
+btnLogout?.addEventListener("click", async () => {
+  await signOut();
+  // si estás en admin, redirigí al inicio
+  if (location.pathname.includes("/admin")) location.href = "/index.html";
+});
 
 // ---------- Listado ----------
 async function renderList() {
+  if (!adminList) return;
   adminList.innerHTML = "Cargando…";
   try {
     const rows = await listProducts();
@@ -169,31 +182,30 @@ async function renderList() {
 }
 
 // ---------- Guardar (create/update) ----------
-productForm.addEventListener("submit", async (e) => {
+productForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // limpiar estados inválidos previos
   ["name","price","stock"].forEach(id => clearInvalid($(id)));
 
-  const id = $("prodId").value.trim();
+  const id = $("prodId")?.value?.trim();
   const data = {
-    name: $("name").value.trim(),
-    price: parseFloat($("price").value),
-    stock: parseInt($("stock").value, 10),
-    category: $("category").value.trim(),
-    description: $("description").value.trim(),
+    name: $("name")?.value?.trim(),
+    price: parseFloat($("price")?.value),
+    stock: parseInt($("stock")?.value, 10),
+    category: $("category")?.value?.trim(),
+    description: $("description")?.value?.trim(),
   };
 
   // Validaciones mínimas
   let hasError = false;
-  if (!data.name) { markInvalid($("name"), "El nombre es obligatorio"); hasError = true; }
-  if (!(data.price >= 0)) { markInvalid($("price"), "Precio inválido"); hasError = true; }
-  if (!(data.stock >= 0)) { markInvalid($("stock"), "Stock inválido"); hasError = true; }
+  if (!data.name)              { markInvalid($("name"), "El nombre es obligatorio"); hasError = true; }
+  if (!(data.price >= 0))      { markInvalid($("price"), "Precio inválido");        hasError = true; }
+  if (!(data.stock >= 0))      { markInvalid($("stock"), "Stock inválido");         hasError = true; }
   if (hasError) { toast("Revisá los campos marcados", "error"); return; }
 
   try {
     setLoading(true);
-    const f = $("imageFile").files[0];
+    const f = $("imageFile")?.files?.[0];
     if (f) data.image_url = await uploadProductImage(f);
 
     if (id) {
@@ -205,7 +217,7 @@ productForm.addEventListener("submit", async (e) => {
     }
 
     productForm.reset();
-    $("prodId").value = "";
+    if ($("prodId")) $("prodId").value = "";
     const prev = $("imagePreview"); if (prev) prev.remove();
 
     await renderList();
@@ -219,47 +231,8 @@ productForm.addEventListener("submit", async (e) => {
 });
 
 // ---------- Reset ----------
-$("btnReset").addEventListener("click", () => {
-  productForm.reset();
-  $("prodId").value = "";
+$("btnReset")?.addEventListener("click", () => {
+  productForm?.reset();
+  if ($("prodId")) $("prodId").value = "";
   const prev = $("imagePreview"); if (prev) prev.remove();
 });
-
-// ---- Navbar: mostrar/ocultar botones según sesión ----
-import { onAuthStateChange, isAdmin } from "/auth.js";
-
-(function setupNavbarAuth(){
-  const btnLogin = document.getElementById("btnLogin");
-  const btnAdmin = document.getElementById("btnAdmin");
-
-  // Si esta página no tiene navbar, salir sin romper
-  if (!btnLogin && !btnAdmin) return;
-
-  onAuthStateChange(async (user) => {
-    // No logueado => solo "Iniciar sesión"
-    if (!user) {
-      if (btnLogin) btnLogin.style.display = "inline-block";
-      if (btnAdmin) btnAdmin.style.display = "none";
-      return;
-    }
-
-    // Logueado: mostrar Panel solo si es admin
-    let esAdmin = false;
-    try { esAdmin = await isAdmin(user.id); } catch {}
-    if (esAdmin) {
-      if (btnLogin) btnLogin.style.display = "none";
-      if (btnAdmin) btnAdmin.style.display = "inline-block";
-    } else {
-      if (btnLogin) btnLogin.style.display = "inline-block";
-      if (btnAdmin) btnAdmin.style.display = "none";
-    }
-  });
-
-  // (Opcional) acción del botón login
-  if (btnLogin) {
-    btnLogin.addEventListener("click", () => {
-      // redirigí a tu pantalla/modal de login
-      window.location.href = "login.html";
-    });
-  }
-})();

@@ -1,37 +1,36 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-
-  <link rel="icon" href="img/favicon.ico" />
+  <meta name="referrer" content="same-origin" />
   <title>Admin | E-commerce</title>
 
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/admin.css" />
-  <meta name="referrer" content="same-origin" />
+  <link rel="icon" href="/img/favicon.ico" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/admin.css" />
 
+  <!-- Guardia de acceso: solo admins -->
   <script type="module">
-    import { supabase } from './supabaseClient.js';
+    import { supabase } from "/js/supabaseClient.js";
     async function guardAdmin(){
       const { data:{ user } } = await supabase.auth.getUser();
-      if (!user){ location.href = '/index.html'; return; }
+      if (!user) { location.href = "/index.html"; return; }
       const { data } = await supabase
-        .from('admins')
-        .select('user_id')
-        .eq('user_id', user.id)
+        .from("admins")
+        .select("user_id")
+        .eq("user_id", user.id)
         .maybeSingle();
-      if (!data) location.href = '/index.html';
+      if (!data) location.href = "/index.html";
     }
     guardAdmin();
   </script>
 </head>
 <body class="admin">
   <header class="admin-header">
-  <h1>Panel de Administración</h1>
-  <button id="btnLogout" class="btn btn-secondary btn-sm d-none">Salir</button>
-</header>
-
+    <h1>Panel de Administración</h1>
+    <button id="btnLogout" class="btn btn-secondary btn-sm d-none">Salir</button>
+  </header>
 
   <main class="container" style="max-width:980px;margin:0 auto;padding:16px">
     <!-- LOGIN -->
@@ -42,7 +41,7 @@
         <input type="email" id="email" placeholder="Email" required autocomplete="username" />
         <label for="password" class="sr-only">Contraseña</label>
         <input type="password" id="password" placeholder="Contraseña" required autocomplete="current-password" />
-        <button type="submit">Entrar</button>
+        <button type="submit" class="btn btn-primary">Entrar</button>
       </form>
       <p id="loginMsg" role="status" aria-live="polite"></p>
     </section>
@@ -71,16 +70,16 @@
     </section>
   </main>
 
-  <script type="module" src="/supabaseClient.js"></script>
-  <script type="module" src="/auth.js"></script>
-  <script type="module" src="/db.js"></script>
-  <script type="module" src="/admin.js"></script>
-
   <style>
     .sr-only{
       position:absolute;width:1px;height:1px;padding:0;margin:-1px;
-      overflow:hidden;clip:rect(0,0,0,0);border:0
+      overflow:hidden;clip:rect(0,0,0,0);border:0;
     }
   </style>
+
+  <!-- Scripts del panel (solo los necesarios) -->
+  <script type="module" src="/admin.js"></script>
+  <!-- Navbar auth no hace nada si esta página no tiene los botones, pero es seguro incluirlo -->
+  <script type="module" src="/navbar-auth.js" defer></script>
 </body>
 </html>

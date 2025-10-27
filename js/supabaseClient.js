@@ -1,0 +1,9 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+// 👉 Si NO usás Vite, reemplazá estos valores directamente:
+const SUPABASE_URL =
+  import.meta.env?.VITE_SUPABASE_URL || "https://chzofyepqjomxfekvoux.supabase.co";
+const SUPABASE_ANON_KEY =
+  import.meta.env?.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoem9meWVwcWpvbXhmZWt2b3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MjQ2MjMsImV4cCI6MjA3MzAwMDYyM30.gldAo40K-YCPNdzgvDsqDpDtvYCTPn7KnVsww_RYFUw";
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
