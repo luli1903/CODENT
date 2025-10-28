@@ -19,26 +19,37 @@
   <!-- ===================== NAVBAR ===================== -->
   <div id="coden-v1">
  <nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
-  <a class="navbar-brand font-weight-bold" href="index.html">
+  <!-- Marca / logo -->
+  <a class="navbar-brand font-weight-bold" href="/index.html">
     <span class="brand-dot"></span> CODEN
   </a>
 
+  <!-- (Opcional) Links del sitio -->
+  <!--
+  <ul class="navbar-nav flex-row ml-3">
+    <li class="nav-item mx-2"><a class="nav-link" href="/index.html#mission">Nosotros</a></li>
+    <li class="nav-item mx-2"><a class="nav-link" href="/tienda.html">Tienda</a></li>
+    <li class="nav-item mx-2"><a class="nav-link" href="/index.html#contact">Contacto</a></li>
+  </ul>
+  -->
+
+  <!-- Controles de sesión + carrito (derecha) -->
   <div class="ml-auto d-flex align-items-center">
-    <!-- Login -->
+    <!-- Login (abre el modal) -->
     <button id="btnLogin"
             class="btn btn-outline-primary btn-sm mr-2"
             data-toggle="modal" data-target="#loginModal">
       Iniciar sesión
     </button>
 
-    <!-- Admin -->
-    <a href="admin.html" id="btnAdmin"
+    <!-- Panel Admin (solo si es admin) -->
+    <a href="/admin.html" id="btnAdmin"
        class="btn btn-primary btn-sm mr-2"
        style="display:none;">
       Panel Admin
     </a>
 
-    <!-- Logout -->
+    <!-- Cerrar sesión (cuando hay sesión) -->
     <button id="btnLogout"
             class="btn btn-outline-danger btn-sm mr-3"
             style="display:none;">
@@ -46,11 +57,12 @@
     </button>
 
     <!-- Carrito -->
-    <a href="carrito.html" class="btn btn-outline-primary btn-sm" aria-label="Carrito">
+    <a href="/carrito.html" class="btn btn-outline-primary btn-sm" aria-label="Carrito">
       🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
     </a>
   </div>
 </nav>
+
 
 </div>
 
