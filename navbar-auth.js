@@ -1,22 +1,19 @@
 // /js/navbar-auth.js
 import { onAuthStateChange, isAdmin, getUser, signOut } from "/js/auth.js";
 
-function showLoginOnly(btnLogin, btnAdmin, btnLogout) {
-  if (btnLogin)  btnLogin.style.display  = "inline-block";
-  if (btnAdmin)  btnAdmin.style.display  = "none";
-  if (btnLogout) btnLogout.style.display = "none";
-}
+function set(el, show){ if(el) el.style.display = show ? "inline-block" : "none"; }
 
-function showAdminOnly(btnLogin, btnAdmin, btnLogout) {
-  if (btnLogin)  btnLogin.style.display  = "none";
-  if (btnAdmin)  btnAdmin.style.display  = "inline-block";
-  if (btnLogout) btnLogout.style.display = "inline-block";
+function stateLoggedOut(btnLogin, btnAdmin, btnLogout){
+  set(btnLogin, true); set(btnAdmin, false); set(btnLogout, false);
+  console.log("[navbar] state: logged OUT");
 }
-
-function showLoggedOnly(btnLogin, btnAdmin, btnLogout) {
-  if (btnLogin)  btnLogin.style.display  = "none";
-  if (btnAdmin)  btnAdmin.style.display  = "none";
-  if (btnLogout) btnLogout.style.display = "inline-block";
+function stateLoggedInNonAdmin(btnLogin, btnAdmin, btnLogout){
+  set(btnLogin, false); set(btnAdmin, false); set(btnLogout, true);
+  console.log("[navbar] state: logged IN (no admin)");
+}
+function stateAdmin(btnLogin, btnAdmin, btnLogout){
+  set(btnLogin, false); set(btnAdmin, true); set(btnLogout, true);
+  console.log("[navbar] state: ADMIN");
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -24,17 +21,15 @@ window.addEventListener("DOMContentLoaded", () => {
   const btnAdmin  = document.getElementById("btnAdmin");
   const btnLogout = document.getElementById("btnLogout");
 
-  // Estado inicial
-  showLoginOnly(btnLogin, btnAdmin, btnLogout);
+  console.log("[navbar] loaded", {btnLogin:!!btnLogin, btnAdmin:!!btnAdmin, btnLogout:!!btnLogout});
 
-  // 🔹 Click Login → abrir modal
+  // Estado inicial
+  stateLoggedOut(btnLogin, btnAdmin, btnLogout);
+
+  // Abrir modal
   btnLogin?.addEventListener("click", () => {
     const modalEl = document.getElementById("loginModal");
-    if (!modalEl) {
-      window.location.href = "/login.html";
-      return;
-    }
-
+    if (!modalEl) { location.href = "/login.html"; return; }
     try {
       if (window.bootstrap?.Modal) {
         const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
@@ -45,32 +40,31 @@ window.addEventListener("DOMContentLoaded", () => {
         modalEl.style.display = "block";
         modalEl.classList.add("show");
       }
-    } catch {
-      modalEl.style.display = "block";
-      modalEl.classList.add("show");
-    }
+    } catch(e){ console.error("[navbar] modal error", e); }
   });
 
-  // 🔹 Click Logout → cerrar sesión
+  // Logout
   btnLogout?.addEventListener("click", async () => {
-    try {
-      await signOut();
-      location.reload();
-    } catch (err) {
-      console.error("[logout]", err);
-    }
+    try { await signOut(); } finally { location.reload(); }
   });
 
-  // 🔹 Escuchar cambios de sesión Supabase
-  onAuthStateChange(async () => {
+  // Pintar según sesión
+  const decide = async () => {
     const user = await getUser();
-    if (!user) return showLoginOnly(btnLogin, btnAdmin, btnLogout);
-
-    const admin = await isAdmin(user.id);
-    if (admin) {
-      showAdminOnly(btnLogin, btnAdmin, btnLogout);
-    } else {
-      showLoggedOnly(btnLogin, btnAdmin, btnLogout);
+    console.log("[navbar] user:", user?.id || null);
+    if (!user) return stateLoggedOut(btnLogin, btnAdmin, btnLogout);
+    try {
+      const admin = await isAdmin(user.id);
+      console.log("[navbar] isAdmin:", admin);
+      admin ? stateAdmin(btnLogin, btnAdmin, btnLogout)
+            : stateLoggedInNonAdmin(btnLogin, btnAdmin, btnLogout);
+    } catch (e) {
+      console.error("[navbar] isAdmin error", e);
+      stateLoggedInNonAdmin(btnLogin, btnAdmin, btnLogout);
     }
-  });
+  };
+
+  // Inicial + suscripción
+  decide();
+  onAuthStateChange(decide);
 });
