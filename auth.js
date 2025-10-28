@@ -1,4 +1,4 @@
-// /auth.js
+// /js/auth.js
 import { supabase } from "/js/supabaseClient.js";
 
 export async function getUser() {
@@ -7,9 +7,7 @@ export async function getUser() {
 }
 
 export function onAuthStateChange(cb) {
-  // Llamada inicial
   getUser().then(cb).catch(() => cb(null));
-  // Suscripción a cambios
   supabase.auth.onAuthStateChange(async () => {
     const user = await getUser();
     cb(user);
@@ -37,5 +35,6 @@ export async function isAdmin(userId) {
     console.error("[isAdmin]", error);
     return false;
   }
-  return !!data;
+  return Boolean(data?.user_id);
 }
+
