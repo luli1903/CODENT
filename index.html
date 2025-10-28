@@ -328,94 +328,12 @@
     </div>
   </div>
 
-  <!-- =============== SCRIPT LOGIN (estable) =============== 
-  <script type="module">
-    import { supabase } from "/js/supabaseClient.js";
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const $ = (id) => document.getElementById(id);
-
-      const form  = $('loginForm');
-      const msg   = $('loginMsg');
-      const email = $('loginEmail');
-      const pass  = $('loginPassword');
-      const linkReset = $('linkReset');
-
-      function showMsg(text, color='red'){
-        if (!msg) return;
-        msg.textContent = text || '';
-        msg.style.display = text ? 'block' : 'none';
-        msg.style.color = color;
-      }
-
-      async function checkAdmin(userId){
-        try{
-          const { data, error } = await supabase
-            .from('admins')
-            .select('user_id')
-            .eq('user_id', userId)
-            .maybeSingle();
-          if (error){ console.error('[admins RLS]', error); return { admin:false, error }; }
-          return { admin: !!data };
-        }catch(err){
-          console.error('[checkAdmin]', err);
-          return { admin:false, error: err };
-        }
-      }
-
-      form?.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        showMsg('');
-
-        try{
-          // 1) login
-          const { error } = await supabase.auth.signInWithPassword({
-            email: (email?.value || '').trim(),
-            password: pass?.value || ''
-          });
-          if (error) throw error;
-
-          // 2) cerrar modal
-          if (window.$ && window.$('#loginModal')?.modal) {
-            $('#loginModal').modal('hide');
-          }
-
-          // 3) obtener user
-          const { data:{ user } } = await supabase.auth.getUser();
-          if (!user){ showMsg('No se pudo obtener la sesión.'); return; }
-
-          // 4) ¿es admin?
-          const r = await checkAdmin(user.id);
-          if (r.admin){
-            if (!location.pathname.includes('admin')) location.href = '/admin.html';
-          } else {
-            showMsg('Iniciaste sesión, pero este usuario no es administrador.', 'orange');
-          }
-        }catch(err){
-          console.error('[login error]', err);
-          showMsg(err?.message || String(err));
-        }
-      });
-
-      // Reset password
-      linkReset?.addEventListener('click', async (e)=>{
-        e.preventDefault();
-        const addr = (email?.value || '').trim();
-        if (!addr){ showMsg('Ingresá tu email para recuperar.'); return; }
-        const { error } = await supabase.auth.resetPasswordForEmail(addr, {
-          redirectTo: location.origin + '/reset.html'
-        });
-        if (error) showMsg(error.message);
-        else showMsg('Listo. Revisá tu correo y abrí el enlace.', 'green');
-      });
-    });
-  </script>-->
-
 <!-- al final del <body> -->
-<script type="module" src="/js/supabaseClient.js"></script>
-<script type="module" src="/js/auth.js"></script>
-<script type="module" src="/js/admin-auth.js"></script>
-<script type="module" src="/js/navbar-auth.js"></script>
+<script type="module" src="./js/supabaseClient.js"></script>
+<script type="module" src="./auth.js"></script>
+<script type="module" src="./js/admin-auth.js"></script>
+<script type="module" src="./navbar-auth.js"></script>
+
 
 <!-- tus otros scripts, luego -->
 <script type="module" src="/js/cart.js"></script>
