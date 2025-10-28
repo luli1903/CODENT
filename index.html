@@ -18,23 +18,40 @@
 
   <!-- ===================== NAVBAR ===================== -->
   <div id="coden-v1">
-    <nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
-      <a class="navbar-brand font-weight-bold" href="index.html">
-        <span class="brand-dot"></span> CODEN
-      </a>
-
-      <div class="ml-auto d-flex align-items-center">
-  <button id="btnLogin"
-          class="btn btn-outline-primary btn-sm mr-2"
-          data-toggle="modal" data-target="#loginModal">
-    Iniciar sesión
-  </button>
-
-  <a href="admin.html" id="btnAdmin" class="btn btn-primary" style="display:none;">Panel Admin</a>
-
-  <a href="carrito.html" class="btn btn-outline-primary btn-sm" aria-label="Carrito">
-    🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
+ <nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
+  <a class="navbar-brand font-weight-bold" href="index.html">
+    <span class="brand-dot"></span> CODEN
   </a>
+
+  <div class="ml-auto d-flex align-items-center">
+    <!-- Login -->
+    <button id="btnLogin"
+            class="btn btn-outline-primary btn-sm mr-2"
+            data-toggle="modal" data-target="#loginModal">
+      Iniciar sesión
+    </button>
+
+    <!-- Admin -->
+    <a href="admin.html" id="btnAdmin"
+       class="btn btn-primary btn-sm mr-2"
+       style="display:none;">
+      Panel Admin
+    </a>
+
+    <!-- Logout -->
+    <button id="btnLogout"
+            class="btn btn-outline-danger btn-sm mr-3"
+            style="display:none;">
+      Cerrar sesión
+    </button>
+
+    <!-- Carrito -->
+    <a href="carrito.html" class="btn btn-outline-primary btn-sm" aria-label="Carrito">
+      🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
+    </a>
+  </div>
+</nav>
+
 </div>
 
     </nav>
@@ -399,20 +416,13 @@
   </script>-->
 
 <!-- al final del <body> -->
-<!-- Tu app -->
-<!-- Base de datos y auth -->
 <script type="module" src="/js/supabaseClient.js"></script>
 <script type="module" src="/js/auth.js"></script>
-
-<!-- Login del modal (usa los IDs del modal) -->
 <script type="module" src="/js/admin-auth.js"></script>
+<script type="module" src="/js/navbar-auth.js"></script>
 
-<!-- Navbar que cambia Login / Admin / Cerrar sesión -->
-<script type="module" src="/js/navbar.js"></script>
-
-<!-- Tu app (carrito, etc.) -->
+<!-- tus otros scripts, luego -->
 <script type="module" src="/js/cart.js"></script>
-
 
 
 </body>
