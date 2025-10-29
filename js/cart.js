@@ -1,5 +1,5 @@
 // CODEN v1 — carrito + Mercado Pago + helpers
-import { supabase } from "../supabaseClient.js";
+import { supabase } from "/js/supabaseClient.js";
 
 const CART_KEY = "coden_cart";
 

@@ -27,21 +27,20 @@ window.addEventListener("DOMContentLoaded", () => {
   stateLoggedOut(btnLogin, btnAdmin, btnLogout);
 
   // Abrir modal
-  btnLogin?.addEventListener("click", () => {
-    const modalEl = document.getElementById("loginModal");
-    if (!modalEl) { location.href = "/login.html"; return; }
-    try {
-      if (window.bootstrap?.Modal) {
-        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-        modal.show();
-      } else if (window.jQuery) {
-        window.jQuery("#loginModal").modal("show");
-      } else {
-        modalEl.style.display = "block";
-        modalEl.classList.add("show");
-      }
-    } catch(e){ console.error("[navbar] modal error", e); }
-  });
+  // /navbar-auth.js
+btnLogin?.addEventListener("click", () => {
+  const hasModal = !!document.getElementById("loginModal");
+  if (!hasModal) { location.href = "/login.html"; return; }
+  if (window.jQuery?.fn?.modal) {
+    window.jQuery("#loginModal").modal("show");
+  } else {
+    // fallback
+    const el = document.getElementById("loginModal");
+    el.style.display = "block";
+    el.classList.add("show");
+  }
+});
+
 
   // Logout
   btnLogout?.addEventListener("click", async () => {

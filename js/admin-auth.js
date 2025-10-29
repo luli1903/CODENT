@@ -42,3 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form && e) doLogin(e);
   });
 });
+function closeModal(){
+  const el = document.getElementById('loginModal');
+  if (!el) return;
+  if (window.jQuery?.fn?.modal) {
+    window.jQuery('#loginModal').modal('hide');
+  } else {
+    el.classList.remove('show');
+    el.style.display = 'none';
+  }
+}
