@@ -1,5 +1,5 @@
 // /js/navbar-auth.js
-import { onAuthStateChange, isAdmin, getUser, signOut } from "/js/auth.js";
+import { onAuthStateChange, isAdmin, getUser, signOut } from "/auth.js";
 
 function set(el, show){ if(el) el.style.display = show ? "inline-block" : "none"; }
 

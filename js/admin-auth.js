@@ -1,5 +1,5 @@
 // js/admin-auth.js
-import { signIn } from '/js/auth.js';
+import { signIn } from '/auth.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const form  = document.getElementById('loginForm');
