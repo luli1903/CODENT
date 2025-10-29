@@ -1,4 +1,6 @@
 // /js/admin-auth.js  (login por fetch + setSession)
+console.log('[admin-auth] build v6 LOADED from /js/admin-auth.js');
+
 import { supabase } from '/js/supabaseClient.js';
 
 function $(sel, root=document){ return root.querySelector(sel); }
@@ -57,6 +59,7 @@ async function fetchToken(email, password){
 }
 
 async function handleLogin(e){
+  console.log('[admin-auth] handleLogin fired');
   e?.preventDefault?.();
 
   const modal = document.getElementById('loginModal');
