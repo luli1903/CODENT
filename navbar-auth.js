@@ -1,8 +1,7 @@
 // /js/navbar-auth.js
 import { getUser, isAdmin, onAuthStateChange, signOut } from '/auth.js';
 
-const $ = (s) => document.querySelector(s);
-
+const $ = (sel) => document.querySelector(sel);
 const els = {
   login:  $('#btnOpenLogin'),
   admin:  $('#btnAdmin'),
@@ -10,6 +9,7 @@ const els = {
   modal:  $('#loginModal'),
 };
 
+// helpers visuales seguros
 function show(el){
   if(!el) return;
   el.hidden = false;
@@ -24,27 +24,34 @@ function hide(el){
   el.style.setProperty('display','none','important');
 }
 
+let painting = false;
 async function paint(){
-  const user = await getUser();
-  console.log('[navbar] repaint →', user ? user.email : 'no user');
+  if (painting) return;      // evita repintados simultáneos
+  painting = true;
 
-  if (!user) {
-    show(els.login);
-    hide(els.logout);
-    hide(els.admin);
-    return;
+  try {
+    const user = await getUser();
+
+    if (!user) {
+      show(els.login);
+      hide(els.admin);
+      hide(els.logout);
+      return;
+    }
+
+    hide(els.login);
+    show(els.logout);
+
+    const admin = await isAdmin(user.id);
+    admin ? show(els.admin) : hide(els.admin);
+  } finally {
+    painting = false;
   }
-
-  hide(els.login);
-  show(els.logout);
-
-  let admin = false;
-  try { admin = await isAdmin(user.id); } catch {}
-  admin ? show(els.admin) : hide(els.admin);
 }
 
-// Eventos de botones
-els.login?.addEventListener('click', () => {
+// abrir modal de login
+els.login?.addEventListener('click', (e) => {
+  e.preventDefault();
   const modal = els.modal;
   if (modal && window.jQuery?.fn?.modal) {
     window.jQuery('#loginModal').modal('show');
@@ -56,10 +63,19 @@ els.login?.addEventListener('click', () => {
   }
 });
 
-els.logout?.addEventListener('click', async () => {
-  try { await signOut(); } finally { await paint(); }
+// logout robusto
+els.logout?.addEventListener('click', async (e) => {
+  e.preventDefault();
+  try { await signOut(); } catch {}
+  try {
+    // por si queda el token cacheado, limpiamos todo
+    Object.keys(localStorage).forEach(k => {
+      if (k.startsWith('sb-') && k.endsWith('-auth-token')) localStorage.removeItem(k);
+    });
+  } catch {}
+  location.reload();
 });
 
-// Inicialización
+// init
 document.addEventListener('DOMContentLoaded', paint);
 onAuthStateChange(paint);
