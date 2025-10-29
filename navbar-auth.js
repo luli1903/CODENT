@@ -1,55 +1,65 @@
 // /js/navbar-auth.js
-import { supabase } from '/js/supabaseClient.js';
-import { isAdmin, signOut, getUser, onAuthStateChange } from '/auth.js';
+import { getUser, isAdmin, onAuthStateChange, signOut } from '/auth.js';
 
-function show(el, v){ if (el) el.style.display = v ? 'inline-block' : 'none'; }
+const $ = (s) => document.querySelector(s);
 
-async function paint(){
-  const btnOpenLogin = document.getElementById('btnOpenLogin');
-  const btnAdmin = document.getElementById('btnAdmin');
-  const btnLogout = document.getElementById('btnLogout');
+const els = {
+  login:  $('#btnOpenLogin'),
+  admin:  $('#btnAdmin'),
+  logout: $('#btnLogout'),
+  modal:  $('#loginModal'),
+};
 
-  const user = await getUser();
-  console.log('[navbar] user:', user?.id || null);
-
-  if (!user){
-    show(btnOpenLogin, true); show(btnAdmin, false); show(btnLogout, false);
-    return;
-  }
-  // si hay user, pintar logout y admin si corresponde
-  show(btnOpenLogin, false); show(btnLogout, true);
-
-  try{
-    const admin = await isAdmin(user.id);
-    console.log('[navbar] isAdmin:', admin);
-    show(btnAdmin, !!admin);
-  } catch(e){
-    console.warn('[navbar] isAdmin error', e);
-    show(btnAdmin, false);
-  }
+function show(el){
+  if(!el) return;
+  el.hidden = false;
+  el.classList.remove('d-none');
+  el.style.removeProperty('display');
+  el.style.setProperty('display','inline-block','important');
+}
+function hide(el){
+  if(!el) return;
+  el.hidden = true;
+  el.classList.add('d-none');
+  el.style.setProperty('display','none','important');
 }
 
-window.addEventListener('DOMContentLoaded', ()=>{
-  console.log('[navbar] loaded v10');
+async function paint(){
+  const user = await getUser();
+  console.log('[navbar] repaint →', user ? user.email : 'no user');
 
-  // abrir modal
-  document.getElementById('btnOpenLogin')?.addEventListener('click', ()=>{
-    if (window.jQuery?.fn?.modal) window.jQuery('#loginModal').modal('show');
-    else {
-      const el = document.getElementById('loginModal');
-      if (el){ el.style.display = 'block'; el.classList.add('show'); }
-    }
-  });
+  if (!user) {
+    show(els.login);
+    hide(els.logout);
+    hide(els.admin);
+    return;
+  }
 
-  // logout
-  document.getElementById('btnLogout')?.addEventListener('click', async ()=>{
-    try { await signOut(); } finally { localStorage.removeItem('sb-chzofyepqjomxfekvoux-auth-token'); location.reload(); }
-  });
+  hide(els.login);
+  show(els.logout);
 
-  // pintar al cargar
-  paint();
+  let admin = false;
+  try { admin = await isAdmin(user.id); } catch {}
+  admin ? show(els.admin) : hide(els.admin);
+}
 
-  // y en cada cambio de sesión
-  onAuthStateChange(()=>paint());
+// Eventos de botones
+els.login?.addEventListener('click', () => {
+  const modal = els.modal;
+  if (modal && window.jQuery?.fn?.modal) {
+    window.jQuery('#loginModal').modal('show');
+  } else if (modal) {
+    modal.classList.add('show');
+    modal.style.display = 'block';
+  } else {
+    location.href = '/login.html';
+  }
 });
 
+els.logout?.addEventListener('click', async () => {
+  try { await signOut(); } finally { await paint(); }
+});
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', paint);
+onAuthStateChange(paint);
