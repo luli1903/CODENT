@@ -29,16 +29,20 @@ async function handleLogin(e){
   e?.preventDefault?.();
 
   const modal = document.getElementById('loginModal');
-  const email = $('#loginEmail', modal)?.value?.trim() || '';
-  const pass  = $('#loginPassword', modal)?.value || '';
+  const email = document.querySelector('#loginModal #loginEmail')?.value?.trim() || '';
+  const pass  = document.querySelector('#loginModal #loginPassword')?.value || '';
 
-  setMsg(modal,''); setBusy(modal,true);
+  setMsg(modal, '');
+  setBusy(modal, true);
 
-  // endpoint + key de tu proyecto (las mismas que probaste a mano)
+  // Endpoint y anon key (las que ya probaste con 200)
   const API_URL = "https://chzofyepqjomxfekvoux.supabase.co/auth/v1/token?grant_type=password";
   const APIKEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoem9meWVwcWpvbXhmZWt2b3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MjQ2MjMsImV4cCI6MjA3MzAwMDYyM30.gldAo40K-YCPNdzgvDsqDpDtvYCTPn7KnVsww_RYFUw";
 
-  try{
+  // Clave de almacenamiento que usa Supabase Web v2
+  const STORAGE_KEY = "sb-chzofyepqjomxfekvoux-auth-token";
+
+  try {
     if (!email || !pass) throw new Error('Completá email y contraseña.');
 
     console.time('[login] fetch token');
@@ -49,52 +53,86 @@ async function handleLogin(e){
         'Authorization': `Bearer ${APIKEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        email, password: pass, gotrue_meta_security: { captcha_token: "" }
-      })
+      body: JSON.stringify({ email, password: pass, gotrue_meta_security: { captcha_token: "" } })
     });
     const text = await rsp.text();
     console.timeEnd('[login] fetch token');
     console.log('[login] token status:', rsp.status);
 
     let tok = {};
-    try { tok = text ? JSON.parse(text) : {}; } catch(e){ console.warn('[login] parse fail', e, text); }
-    if (!rsp.ok){
+    try { tok = text ? JSON.parse(text) : {}; } catch(e){ console.warn('[login] parse JSON fail', e); }
+    if (!rsp.ok) {
       const msg = tok?.msg || tok?.error_description || tok?.error || `Error ${rsp.status}`;
       throw new Error(msg);
     }
-    console.log('[login] got access_token?', !!tok.access_token, 'user?', !!tok.user);
+    console.log('[login] got access_token?', !!tok.access_token, 'true user?', !!tok.user);
 
-    // ✅ SETEAR SESIÓN EN EL SDK
-    const { error: setErr, data: setData } = await supabase.auth.setSession({
+    // ---------- 1) Intento normal: setSession con timeout ----------
+    const setSessionPromise = supabase.auth.setSession({
       access_token: tok.access_token,
       refresh_token: tok.refresh_token
     });
-    if (setErr) { console.error('[login] setSession error', setErr); throw setErr; }
-    console.log('[login] setSession OK', setData?.user?.id || null);
 
-    // Verificación: el SDK debe exponer la sesión y el user
-    for (let i=0; i<12; i++){
-      const s = (await supabase.auth.getSession()).data.session;
-      if (s?.access_token){
-        console.log('[login] SDK session OK (loop)', !!s?.access_token);
-        break;
+    const timeoutMs = 4000;
+    const result = await Promise.race([
+      setSessionPromise.then(res => ({ ok:true, res })).catch(err => ({ ok:false, err })),
+      new Promise(r => setTimeout(()=>r({ timeout:true }), timeoutMs))
+    ]);
+
+    if (result?.timeout) {
+      console.warn('[login] setSession timeout → fallback localStorage');
+
+      // ---------- 2) Fallback: guardamos sesión nosotros ----------
+      const nowSec = Math.floor(Date.now()/1000);
+      const expires_at = nowSec + (tok.expires_in ?? 3600);
+
+      // Estructura que espera supabase-js v2
+      const value = {
+        currentSession: {
+          access_token: tok.access_token,
+          refresh_token: tok.refresh_token,
+          token_type: tok.token_type || 'bearer',
+          expires_in: tok.expires_in ?? 3600,
+          expires_at,
+          user: tok.user || null
+        },
+        expiresAt: expires_at,
+        // campos que supabase puede leer
+        // (no son estrictamente obligatorios, pero ayudan)
+        tokenRefreshTimestamp: Date.now()
+      };
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+        console.log('[login] localStorage fallback OK');
+      } catch (e) {
+        console.error('[login] localStorage fallback error', e);
+        throw new Error('No se pudo guardar la sesión.');
       }
-      await sleep(150);
+    } else if (!result.ok) {
+      console.error('[login] setSession error', result.err);
+      throw new Error(result.err?.message || 'No se pudo establecer la sesión.');
+    } else {
+      console.log('[login] setSession OK');
     }
 
-    const { data:{ user } } = await supabase.auth.getUser();
-    console.log('[login] SDK getUser →', user?.id || null);
+    // Verificación breve (no bloqueante)
+    try {
+      const { data:{ session } } = await supabase.auth.getSession();
+      console.log('[login] SDK getSession →', !!session?.access_token);
+    } catch {}
 
+    // Cerrar y refrescar para que pinte la navbar
     closeModal(modal);
     location.reload();
 
-  }catch(err){
+  } catch (err) {
     console.error('[login] ERROR', err);
     setMsg(modal, err?.message || 'No se pudo iniciar sesión.');
-    setBusy(modal,false);
+    setBusy(modal, false);
   }
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('loginModal');
