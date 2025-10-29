@@ -63,39 +63,69 @@ async function handleLogin(e){
   e?.preventDefault?.();
 
   const modal = document.getElementById('loginModal');
-  const email = $('#loginEmail', modal)?.value?.trim() || '';
-  const pass  = $('#loginPassword', modal)?.value || '';
+  const email = document.querySelector('#loginModal #loginEmail')?.value?.trim() || '';
+  const pass  = document.querySelector('#loginModal #loginPassword')?.value || '';
 
   setMsg(modal, '');
   setBusy(modal, true);
 
+  const API_URL = "https://chzofyepqjomxfekvoux.supabase.co/auth/v1/token?grant_type=password";
+  const APIKEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoem9meWVwcWpvbXhmZWt2b3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MjQ2MjMsImV4cCI6MjA3MzAwMDYyM30.gldAo40K-YCPNdzgvDsqDpDtvYCTPn7KnVsww_RYFUw";
+
   try {
     if (!email || !pass) throw new Error('Completá email y contraseña.');
 
-    // 1) Pedimos tokens (como el test que te dio 200)
-    const tok = await fetchToken(email, pass);
-    // 2) Inyectamos la sesión en el SDK (queda todo consistente)
+    console.time('[login] fetch token');
+    const rsp = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'apikey': APIKEY,
+        'Authorization': `Bearer ${APIKEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email,
+        password: pass,
+        gotrue_meta_security: { captcha_token: "" }
+      })
+    });
+    const text = await rsp.text();
+    console.timeEnd('[login] fetch token');
+    console.log('[login] token status:', rsp.status);
+
+    let tok = {};
+    try { tok = text ? JSON.parse(text) : {}; } catch(e) {
+      console.warn('[login] parse token JSON fail', e, text);
+    }
+    if (!rsp.ok) {
+      const msg = tok?.msg || tok?.error_description || tok?.error || `Error ${rsp.status}`;
+      throw new Error(msg);
+    }
+
+    console.log('[login] got access_token?', !!tok.access_token, 'user?', !!tok.user);
+
+    // Inyectar sesión en el SDK
     const { error: setErr } = await supabase.auth.setSession({
       access_token: tok.access_token,
       refresh_token: tok.refresh_token
     });
     if (setErr) throw setErr;
+    console.log('[login] setSession OK');
 
-    // 3) (opcional) esperamos a que el SDK exponga el user
-    for (let i=0; i<10; i++){
+    // Pequeño loop para asegurarnos que el SDK expone el user
+    for (let i = 0; i < 10; i++) {
       const { data:{ user } } = await supabase.auth.getUser();
-      if (user) break;
-      await delay(150);
+      if (user) { console.log('[login] SDK user OK', user.id); break; }
+      await new Promise(r=>setTimeout(r,150));
     }
 
-    // 4) cerramos modal y refrescamos (navbar pinta estado)
+    // Cerrar y refrescar
     closeModal(modal);
     location.reload();
 
-  } catch (err){
-    console.error('[login]', err);
+  } catch (err) {
+    console.error('[login] ERROR', err);
     setMsg(modal, err?.message || 'No se pudo iniciar sesión.');
-  } finally {
     setBusy(modal, false);
   }
 }
