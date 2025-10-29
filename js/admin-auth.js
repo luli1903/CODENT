@@ -1,49 +1,27 @@
-// js/admin-auth.js
+// /js/admin-auth.js
 import { signIn } from '/auth.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form  = document.getElementById('loginForm');
-  const email = document.getElementById('loginEmail');
-  const pass  = document.getElementById('loginPassword');
-  const btn   = document.getElementById('btnLogin');
-  const msg   = document.getElementById('loginMsg'); // <small> para feedback
+function $(id){ return document.getElementById(id); }
 
-  function uiBusy(isBusy, text = 'Ingresar') {
-    if (!btn) return;
-    btn.disabled   = isBusy;
-    btn.textContent = isBusy ? 'Ingresando…' : text;
-  }
+function setMsg(text, type='danger'){
+  const msg = $('loginMsg');
+  if (!msg) return;
+  msg.textContent = text || '';
+  msg.className = 'mt-2 small text-' + (
+    type === 'ok' ? 'success' : type === 'warn' ? 'warning' : 'danger'
+  );
+  msg.style.display = text ? 'block' : 'none';
+}
 
-  async function doLogin(e) {
-    e?.preventDefault?.();
-    if (msg) msg.textContent = '';
-    uiBusy(true);
+function setBusy(isBusy){
+  const btn = $('btnLogin') || $('btnDoLogin') || $('loginForm')?.querySelector('button[type="submit"]');
+  if (!btn) return;
+  btn.disabled = isBusy;
+  btn.textContent = isBusy ? 'Ingresando…' : 'Ingresar';
+}
 
-    try {
-      await signIn(email.value.trim(), pass.value);
-      uiBusy(true, 'Listo');
-      // Si lo usás dentro de modal, podés cerrarlo aquí si existe:
-      const modal = document.getElementById('loginModal');
-      if (modal) {
-        modal.classList.remove('show');
-        modal.style.display = 'none';
-      }
-      location.reload();
-    } catch (error) {
-      uiBusy(false);
-      if (msg) msg.textContent = error?.message || 'No se pudo iniciar sesión.';
-      return;
-    }
-  }
-
-  form?.addEventListener('submit', doLogin);
-  btn?.addEventListener('click', (e) => {
-    // por si el botón no está dentro del <form>
-    if (form && e) doLogin(e);
-  });
-});
 function closeModal(){
-  const el = document.getElementById('loginModal');
+  const el = $('loginModal');
   if (!el) return;
   if (window.jQuery?.fn?.modal) {
     window.jQuery('#loginModal').modal('hide');
@@ -52,3 +30,31 @@ function closeModal(){
     el.style.display = 'none';
   }
 }
+
+async function handleLogin(e){
+  e?.preventDefault?.();
+  setMsg('');
+  setBusy(true);
+
+  const email = $('loginEmail')?.value?.trim() || '';
+  const pass  = $('loginPassword')?.value || '';
+
+  try{
+    console.log('[login] try', email);
+    await signIn(email, pass); // esto throwea si hay error
+    console.log('[login] ok');
+    closeModal();
+    location.reload();
+  }catch(err){
+    console.error('[login] error', err);
+    setMsg(err?.message || 'No se pudo iniciar sesión.');
+    setBusy(false);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = $('loginForm');
+  const btn  = $('btnLogin') || $('btnDoLogin') || form?.querySelector('button[type="submit"]');
+  form?.addEventListener('submit', handleLogin);
+  btn?.addEventListener('click', handleLogin);
+});
