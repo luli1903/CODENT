@@ -28,22 +28,18 @@
 
   <div class="ml-auto d-flex align-items-center">
     <!-- antes: id="btnLogin" -->
-<button id="btnOpenLogin"
-        class="btn btn-outline-primary btn-sm mr-2"
-        data-toggle="modal" data-target="#loginModal">
+<button id="btnOpenLogin" class="btn btn-outline-primary btn-sm mr-2" data-toggle="modal" data-target="#loginModal">
   Iniciar sesión
 </button>
 
+<a href="/admin.html" id="btnAdmin" class="btn btn-primary btn-sm mr-2" style="display:none;">
+  Panel Admin
+</a>
 
-    <a href="/admin.html" id="btnAdmin"
-       class="btn btn-primary btn-sm mr-2">
-      Panel Admin
-    </a>
+<button id="btnLogout" class="btn btn-outline-danger btn-sm" style="display:none;">
+  Cerrar sesión
+</button>
 
-    <button id="btnLogout"
-            class="btn btn-outline-danger btn-sm mr-3">
-      Cerrar sesión
-    </button>
 
     <a href="/carrito.html" class="btn btn-outline-primary btn-sm" aria-label="Carrito">
       🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
@@ -289,8 +285,42 @@
   </footer>
 
 
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="loginForm" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Acceso CODENT</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
 
-  <!-- =============== MODAL LOGIN =============== -->
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" class="form-control" required autocomplete="username"/>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Contraseña</label>
+          <input id="loginPassword" type="password" class="form-control" required autocomplete="current-password"/>
+        </div>
+
+        <small class="text-muted d-block mt-2">
+          ¿Olvidaste tu contraseña? <a href="#" id="linkReset">Recuperar</a>
+        </small>
+
+        <div id="loginMsg" class="mt-2 small text-danger" style="display:none;"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btnDoLogin" class="btn btn-primary" type="submit">Ingresar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!--
+  
   <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
       <form id="loginForm" class="modal-content">
@@ -324,10 +354,7 @@
       </form>
     </div>
   </div>
-
-
-  
-  <!-- ===================== SCRIPTS ===================== -->
+   ===================== SCRIPTS ===================== -->
  <!-- Dependencias Bootstrap 4 -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
