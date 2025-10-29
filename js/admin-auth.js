@@ -60,14 +60,13 @@ form?.addEventListener('submit', async (e) => {
     const user = data?.user;
     if (!user) throw new Error('No se pudo abrir sesión.');
 
-    // cerramos modal y redirigimos
     closeModal();
 
     const admin = await isAdmin(user.id);
     if (admin) {
       location.href = '/admin.html';
     } else {
-      location.reload(); // solo repinta navbar
+      location.reload();   // repinta navbar
     }
   } catch (err) {
     showMsg(err?.message || 'No se pudo iniciar sesión.');
@@ -75,7 +74,6 @@ form?.addEventListener('submit', async (e) => {
   }
 });
 
-// Recuperar contraseña
 linkReset?.addEventListener('click', async (e) => {
   e.preventDefault();
   const addr = (email?.value || '').trim();

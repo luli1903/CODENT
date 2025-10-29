@@ -9,7 +9,6 @@ const els = {
   modal:  $('#loginModal'),
 };
 
-// helpers visuales seguros
 function show(el){
   if(!el) return;
   el.hidden = false;
@@ -26,9 +25,8 @@ function hide(el){
 
 let painting = false;
 async function paint(){
-  if (painting) return;      // evita repintados simultáneos
+  if (painting) return;
   painting = true;
-
   try {
     const user = await getUser();
 
@@ -49,7 +47,7 @@ async function paint(){
   }
 }
 
-// abrir modal de login
+// abrir modal
 els.login?.addEventListener('click', (e) => {
   e.preventDefault();
   const modal = els.modal;
@@ -68,7 +66,6 @@ els.logout?.addEventListener('click', async (e) => {
   e.preventDefault();
   try { await signOut(); } catch {}
   try {
-    // por si queda el token cacheado, limpiamos todo
     Object.keys(localStorage).forEach(k => {
       if (k.startsWith('sb-') && k.endsWith('-auth-token')) localStorage.removeItem(k);
     });
@@ -76,6 +73,5 @@ els.logout?.addEventListener('click', async (e) => {
   location.reload();
 });
 
-// init
 document.addEventListener('DOMContentLoaded', paint);
 onAuthStateChange(paint);
