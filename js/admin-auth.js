@@ -1,8 +1,8 @@
-// /js/admin-auth.js
+// /js/admin-auth.js (versión debug)
 import { supabase } from '/js/supabaseClient.js';
-import { signIn } from '/auth.js';
 
 function $(sel, root=document){ return root.querySelector(sel); }
+function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
 function setMsg(modal, text, type='danger'){
   const msg = $('#loginMsg', modal);
@@ -29,16 +29,6 @@ function closeModal(modal){
   }
 }
 
-async function waitForSession(maxMs=4000, step=200){
-  const t0 = Date.now();
-  while (Date.now() - t0 < maxMs) {
-    const { data:{ user } } = await supabase.auth.getUser();
-    if (user) return user;
-    await new Promise(r=>setTimeout(r, step));
-  }
-  return null;
-}
-
 async function handleLogin(e){
   e?.preventDefault?.();
   const modal = document.getElementById('loginModal');
@@ -47,33 +37,51 @@ async function handleLogin(e){
   const email = $('#loginEmail', modal)?.value?.trim() || '';
   const pass  = $('#loginPassword', modal)?.value || '';
 
-  setMsg(modal, '');
-  setBusy(modal, true);
+  setMsg(modal,'');
+  setBusy(modal,true);
+
+  // ⚠️ timeout duro para no colgar
+  const KILL_AFTER_MS = 6000;
+  const kill = delay(KILL_AFTER_MS).then(()=>({ timeout:true }));
+
+  // login real
+  const doLogin = (async ()=>{
+    try{
+      if (!email || !pass) throw new Error('Completá email y contraseña.');
+      console.log('[login] calling signInWithPassword', { email });
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+      console.log('[login] token rsp:', { hasUser: !!data?.user, error });
+
+      if (error) return { error };
+      // no esperamos nada más: redirigimos
+      return { ok:true };
+    }catch(err){
+      return { error: err };
+    }
+  })();
+
+  // carrera entre login y timeout
+  const result = await Promise.race([doLogin, kill]);
 
   try{
-    if (!email || !pass) throw new Error('Completá email y contraseña.');
-    console.log('[login] signIn start', email);
-
-    // 1) login
-    const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
-    if (error) throw error;
-
-    // 2) esperamos la sesión (con timeout)
-    const user = await waitForSession();
-    if (!user) throw new Error('No se pudo establecer la sesión. Probá de nuevo.');
-
-    console.log('[login] OK user', user.id);
-
-    // 3) cerrar modal y refrescar (navbar se actualiza)
+    if (result?.timeout){
+      console.error('[login] timeout');
+      throw new Error('El inicio de sesión tardó demasiado. Probá de nuevo.');
+    }
+    if (result?.error){
+      console.error('[login] error', result.error);
+      throw new Error(result.error?.message || 'No se pudo iniciar sesión.');
+    }
+    // éxito
+    console.log('[login] OK → redirect');
     closeModal(modal);
+    // opcional: si querés ir directo al panel de admin, usá: location.href = '/admin.html';
     location.reload();
-
-  } catch (err){
-    console.error('[login] error', err);
-    setMsg(modal, err?.message || 'No se pudo iniciar sesión.');
-  } finally {
-    // siempre devolvemos el botón
-    setBusy(modal, false);
+  }catch(err){
+    setMsg(modal, err.message);
+  }finally{
+    setBusy(modal,false);
   }
 }
 
@@ -85,5 +93,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form?.addEventListener('submit', handleLogin);
   btn?.addEventListener('click', handleLogin);
-  console.log('[login] ready');
+  console.log('[login] ready (debug build)');
 });
