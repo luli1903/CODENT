@@ -1,114 +1,118 @@
-// js/shop.js — CODEN v1 (grilla de productos con UI moderna)
-// Requisitos en el HTML: <div id="product-list"></div>
-//
-// Notas de rutas:
-// - Este archivo está en /js
-// - db.js está en la raíz → import "../db.js"
-// - cart.js está en /js → import "./cart.js"
+// /js/shop.js
+import { listProducts } from "/db.js";
 
-import { listProducts as fetchProducts } from "../db.js";
-import { addToCart } from "./cart.js";
+// Definimos 4 categorías (slugs compatibles con la columna `category`)
+const CATEGORIES = [
+  { id: "todos",      label: "Todos" },
+  { id: "equipos",    label: "Equipos" },
+  { id: "insumos",    label: "Insumos dentales" },
+  { id: "repuestos",  label: "Repuestos" },
+  { id: "accesorios", label: "Accesorios" },
+];
 
-// Sanitiza para evitar inyecciones simples en innerHTML
-const esc = (s = "") =>
-  String(s)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+const $  = (q, ctx=document) => ctx.querySelector(q);
+const $$ = (q, ctx=document) => [...ctx.querySelectorAll(q)];
 
-// Render de la grilla con la estética CODEN (1 CTA + link)
-function render(products) {
-  const grid = document.getElementById("product-list");
-  if (!grid) return;
+const catNav     = $("#catNav");
+const productGrid= $("#productGrid");
+const emptyState = $("#emptyState");
+const errorState = $("#errorState");
 
-  if (!products?.length) {
-    grid.innerHTML =
-      '<div class="col-12 text-center text-muted py-5">No hay productos todavía.</div>';
-    return;
-  }
+let currentCat = new URL(location.href).searchParams.get("cat") || "todos";
 
-  // Si usás Bootstrap, este contenedor suele ser un .row
-  // Si NO usás Bootstrap, podés quitar las clases col-*
-  const frag = document.createDocumentFragment();
+init();
 
-  products.forEach((p) => {
-    const name = esc(p.name || "");
-    const price = Number(p.price || 0);
+async function init(){
+  renderChips();
+  await loadProducts(currentCat);
+}
 
-    const col = document.createElement("div");
-    col.className = "col-sm-6 col-md-4 col-lg-3 mb-4";
+function renderChips(){
+  catNav.innerHTML = CATEGORIES.map(c => `
+    <button class="chip ${c.id===currentCat?'is-active':''}" data-cat="${c.id}">
+      ${c.label}
+    </button>
+  `).join("");
 
-    col.innerHTML = `
-      <article class="coden-product h-100">
-        <div class="coden-product__img">
-          <img
-            src="${p.image_url || ""}"
-            alt="${name}"
-            loading="lazy"
-            onerror="this.src='https://via.placeholder.com/600x450?text=Sin+imagen';this.style.objectFit='contain';"
-          >
-        </div>
-        <div class="coden-product__body">
-          <div class="coden-product__title">${name}</div>
+  catNav.addEventListener("click", (e) => {
+    const btn = e.target.closest(".chip");
+    if (!btn) return;
 
-          <div class="coden-badges" style="margin:.25rem 0 .5rem">
-            <span class="coden-badge">24–72h</span>
-            <span class="coden-badge coden-badge--ok">Garantía 12m</span>
-          </div>
+    const cat = btn.dataset.cat;
+    if (cat === currentCat) return;
 
-          <div class="coden-price">$ ${price.toLocaleString("es-AR")}</div>
+    currentCat = cat;
+    $$(".chip", catNav).forEach(c => c.classList.toggle("is-active", c.dataset.cat===currentCat));
 
-          <div class="coden-inline" style="margin-top:10px">
-            <button class="coden-btn add-to-cart" data-id="${p.id}">Agregar</button>
-            <a class="coden-textlink" href="producto.html?id=${encodeURIComponent(
-              p.id
-            )}">Detalles</a>
-          </div>
-        </div>
-      </article>
-    `;
+    const u = new URL(location.href);
+    if (currentCat === "todos") u.searchParams.delete("cat");
+    else u.searchParams.set("cat", currentCat);
+    history.replaceState({}, "", u);
 
-    frag.appendChild(col);
-  });
-
-  // Vacío y pinto de una (mejor performance que innerHTML acumulado)
-  grid.innerHTML = "";
-  grid.appendChild(frag);
-
-  // Wire de eventos (una sola vez por render)
-  grid.querySelectorAll(".add-to-cart").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const id = btn.dataset.id;
-      if (!id) return;
-      btn.disabled = true;
-      try {
-        await addToCart(id, 1);
-      } finally {
-        btn.disabled = false;
-      }
-    });
+    loadProducts(currentCat);
   });
 }
 
-// Init de la página de tienda
-async function initShop() {
-  const grid = document.getElementById("product-list");
-  if (!grid) return; // no estoy en la tienda
-
-  // Mensaje de carga
-  grid.innerHTML =
-    '<div class="col-12 text-center text-muted py-4">Cargando…</div>';
-
+async function loadProducts(cat){
   try {
-    const products = await fetchProducts();
-    render(products);
-  } catch (e) {
-    console.error(e);
-    grid.innerHTML =
-      '<div class="col-12 text-center text-muted py-4">No se pudo cargar el catálogo.</div>';
+    toggleStates({ loading:true, empty:false, error:false });
+    const category = (cat && cat !== "todos") ? cat : undefined;
+    const items = await listProducts({ category });
+    renderGrid(items);
+    toggleStates({ empty: items.length === 0 });
+  } catch (err) {
+    console.error("Error cargando productos:", err);
+    toggleStates({ error:true });
+  } finally {
+    toggleStates({ loading:false });
   }
 }
 
-document.addEventListener("DOMContentLoaded", initShop);
+function renderGrid(items){
+  productGrid.innerHTML = items.map(p => cardHTML(p)).join("");
+}
+
+function cardHTML(p){
+  const price = formatPrice(p.price);
+  const img   = p.image_url || "/img/placeholder.png";
+  return `
+    <article class="card" data-id="${p.id}">
+      <img class="thumb" src="${img}" alt="${escapeHTML(p.name)}" loading="lazy"/>
+      <div class="body">
+        <h3 class="name">${escapeHTML(p.name)}</h3>
+        <p class="desc">${escapeHTML(p.description || "")}</p>
+        <div class="meta">
+          <span class="price">${price}</span>
+          <span class="cat">${categoryLabel(p.category)}</span>
+        </div>
+        <div class="cta">
+          <button class="btn" data-action="details">Ver</button>
+          <button class="btn primary" data-action="add">Agregar</button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function categoryLabel(slug){
+  return CATEGORIES.find(c => c.id === slug)?.label || "—";
+}
+
+function formatPrice(n){
+  try {
+    return new Intl.NumberFormat("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0})
+      .format(Number(n||0));
+  } catch {
+    return `$ ${n ?? 0}`;
+  }
+}
+
+function toggleStates({ loading=false, empty=false, error=false }={}){
+  emptyState.hidden = !empty;
+  errorState.hidden = !error;
+  productGrid.style.opacity = loading ? .5 : 1;
+}
+
+function escapeHTML(str=""){
+  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}

@@ -3,14 +3,23 @@ import { supabase } from "./js/supabaseClient.js";
 
 const PRODUCT_COLS = "id,name,description,category,price,stock,image_url,created_at";
 
-export async function listProducts() {
-  const { data, error } = await supabase
+// 👇 pegá esto debajo del PRODUCT_COLS o arriba de getProduct()
+export async function listProducts({ category } = {}) {
+  let query = supabase
     .from("products")
     .select(PRODUCT_COLS)
     .order("created_at", { ascending: false });
+
+  // Si llega un filtro, lo aplicamos
+  if (category) {
+    query = query.eq("category", category);
+  }
+
+  const { data, error } = await query;
   if (error) throw error;
   return data || [];
 }
+
 
 export async function getProduct(id) {
   const { data, error } = await supabase
