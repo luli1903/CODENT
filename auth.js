@@ -5,7 +5,6 @@ import { supabase } from "./js/supabaseClient.js";
 export async function getSession() {
   const { data, error } = await supabase.auth.getSession();
   if (error) {
-    // Si no hay sesión, no lo trates como error fatal
     if (error.name === "AuthSessionMissingError") return null;
     console.error("[auth] getSession error", error);
     return null;
@@ -16,7 +15,6 @@ export async function getSession() {
 export async function getUser() {
   const { data, error } = await supabase.auth.getUser();
   if (error) {
-    // Evitar rojo cuando simplemente no hay sesión aún
     if (error.name === "AuthSessionMissingError") {
       console.info("[auth] getUser: no session (ok)");
       return null;
@@ -27,7 +25,31 @@ export async function getUser() {
   return data?.user ?? null;
 }
 
-/* ========== Sign In / Out ========== */
+export async function getUserId() {
+  const u = await getUser();
+  return u?.id ?? null;
+}
+
+/* ========== Sign Up / Sign In / Out ========== */
+// Registro con verificación por email.
+// IMPORTANT: cambiá el redirect si preferís otra página distinta a /recovery.html
+export async function signUp(email, password) {
+  console.info("[auth] signUp start", email);
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: location.origin + "/recovery.html", // <- ya la tenés en tu repo
+    },
+  });
+  if (error) {
+    console.error("[auth] signUp error", error);
+    throw error;
+  }
+  console.info("[auth] signUp ok", data?.user?.id);
+  return data;
+}
+
 export async function signIn(email, password) {
   console.info("[auth] signIn start", email);
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -46,6 +68,57 @@ export async function signOut() {
     console.error("[auth] signOut error", error);
     throw error;
   }
+}
+
+/* ========== Email verification helpers ========== */
+export async function isEmailVerified() {
+  const user = await getUser();
+  // v2: email_confirmed_at se setea cuando el usuario verifica el correo
+  const ok = !!user?.email_confirmed_at;
+  console.info("[auth] isEmailVerified =", ok);
+  return ok;
+}
+
+// Reenviar correo de verificación (usa el correo actual o el que pases por parámetro)
+export async function resendVerificationEmail(email) {
+  const target = email || (await getUser())?.email;
+  if (!target) {
+    throw new Error("No hay email para re-enviar verificación.");
+  }
+  console.info("[auth] resendVerificationEmail", target);
+  const { data, error } = await supabase.auth.resend({
+    type: "signup",
+    email: target,
+    options: {
+      emailRedirectTo: location.origin + "/recovery.html",
+    },
+  });
+  if (error) {
+    console.error("[auth] resendVerificationEmail error", error);
+    throw error;
+  }
+  return data;
+}
+
+/* ========== Guards (útiles en páginas protegidas) ========== */
+export async function requireAuth(redirectTo = "/index.html") {
+  const session = await getSession();
+  if (!session?.user) {
+    location.href = redirectTo;
+    return null;
+  }
+  return session.user;
+}
+
+// Útil para pantallas de datos de envío / checkout
+export async function requireEmailVerified(redirectIfFail = "") {
+  const ok = await isEmailVerified();
+  if (!ok) {
+    // Podés mostrar un banner en la UI en vez de redirigir
+    if (redirectIfFail) location.href = redirectIfFail;
+    throw new Error("Necesitás verificar tu email para continuar.");
+  }
+  return true;
 }
 
 /* ========== Admin check ========== */
@@ -69,7 +142,6 @@ export async function isAdmin(userId) {
 /* ========== Auth state subscription ========== */
 export function onAuthStateChange(callback) {
   console.info("[auth] subscribe onAuthStateChange");
-  // Llamada inicial: usa getSession (no tira error cuando no hay sesión)
   supabase.auth.getSession().then(({ data }) => {
     callback(data?.session?.user ?? null);
   });

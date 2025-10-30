@@ -1,5 +1,6 @@
 // db.js (versión pulida)
 import { supabase } from "./js/supabaseClient.js";
+import { supabase } from "./auth.js";
 
 const PRODUCT_COLS = "id,name,description,category,price,stock,image_url,created_at";
 
@@ -103,3 +104,77 @@ function normalize(v, partial = false) {
   if (obj.stock === undefined) obj.stock = 0;
   return obj;
 }
+
+/* ============================
+   Carrito persistente (por user)
+============================ */
+
+/** Obtiene o crea el carrito ACTIVO del usuario */
+export async function getOrCreateActiveCart() {
+  const uid = await getUserId();
+  if (!uid) throw new Error("Necesitás iniciar sesión.");
+
+  // ¿Ya existe carrito activo?
+  let { data: cart, error } = await supabase
+    .from("carts")
+    .select("id, status")
+    .eq("user_id", uid)
+    .eq("status", "active")
+    .maybeSingle();
+  if (error) throw error;
+
+  if (cart) return cart;
+
+  // Si no existe, lo creo
+  const { data: created, error: e2 } = await supabase
+    .from("carts")
+    .insert({ user_id: uid, status: "active" })
+    .select("id, status")
+    .single();
+  if (e2) throw e2;
+
+  return created;
+}
+
+/** Agrega un producto al carrito (suma qty si ya existe) */
+export async function addItemToCart(cart_id, product_id, qty = 1, unit_price = 0) {
+  // ¿existe ya este product en el cart?
+  const { data: existing, error: e1 } = await supabase
+    .from("cart_items")
+    .select("id, qty")
+    .eq("cart_id", cart_id)
+    .eq("product_id", product_id)
+    .maybeSingle();
+  if (e1) throw e1;
+
+  if (existing) {
+    const { error: e2 } = await supabase
+      .from("cart_items")
+      .update({ qty: (existing.qty || 0) + qty, unit_price })
+      .eq("id", existing.id);
+    if (e2) throw e2;
+  } else {
+    const { error: e3 } = await supabase
+      .from("cart_items")
+      .insert({ cart_id, product_id, qty, unit_price });
+    if (e3) throw e3;
+  }
+}
+
+/** Lista los items del carrito con datos del producto */
+export async function listCartItems(cart_id) {
+  const { data, error } = await supabase
+    .from("cart_items")
+    .select("id, product_id, qty, unit_price, products:product_id(name, image_url, price)")
+    .eq("cart_id", cart_id)
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return data || [];
+}
+
+/** Vacía el carrito (opcional) */
+export async function clearCart(cart_id) {
+  const { error } = await supabase.from("cart_items").delete().eq("cart_id", cart_id);
+  if (error) throw error;
+}
+
