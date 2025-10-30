@@ -319,11 +319,12 @@ export async function payWithMercadoPago() {
       }
     };
 
-    const res = await fetch('/api/create-preference', {   // <— UNIFICADO
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    const res = await fetch('/.netlify/functions/create-preference', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(payload)
+});
+
 
     const data = await res.json();
     if (!res.ok) {
