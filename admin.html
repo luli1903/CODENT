@@ -48,7 +48,7 @@
     <section id="crudSection" aria-labelledby="crudTitle">
       <h2 id="crudTitle">Productos</h2>
 
-      <form id="productForm" autocomplete="off">
+    <form id="productForm" onsubmit="return false" novalidate>
         <input type="hidden" id="prodId" />
 
         <label>Nombre
@@ -56,23 +56,21 @@
         </label>
 
         <div class="grid-2" style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
-          <label>Precio (ARS)
-            <input type="number" step="0.01" id="price" placeholder="Precio" required inputmode="decimal" />
-          </label>
+         <input type="number" step="0.01" min="0" id="price" placeholder="Precio" required inputmode="decimal"/>
+          <input type="number" min="0" id="stock" placeholder="Stock" required inputmode="numeric"/>
 
-          <label>Stock
-            <input type="number" id="stock" placeholder="Stock" required inputmode="numeric" />
-          </label>
         </div>
 
         <label for="category">Categoría</label>
-        <select id="category" required>
+        <select id="category" required aria-describedby="categoryHelp">
           <option value="">Elegí una categoría…</option>
           <option value="equipos">Equipos</option>
           <option value="insumos">Insumos dentales</option>
           <option value="repuestos">Repuestos</option>
           <option value="accesorios">Accesorios</option>
         </select>
+        <small id="categoryHelp" class="help-text">Usamos categorías fijas para que la tienda filtre perfecto.</small>
+
         <small class="help-text">Usamos categorías fijas para que la tienda filtre perfecto.</small>
 
         <label>Descripción

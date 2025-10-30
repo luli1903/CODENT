@@ -1,26 +1,36 @@
-// /admin.js
+// /admin.js (versión saneada)
 import { onAuthStateChange, signOut, isAdmin } from "/auth.js";
 import {
   listProducts, getProduct, createProduct, updateProduct,
   removeProduct, uploadProductImage
 } from "/db.js";
 
+// ---------- Helpers DOM ----------
 const $  = (id) => document.getElementById(id);
 
+// Refs
 const btnLogout   = $("btnLogout");
 const crudSection = $("crudSection");
-const productForm = $("productForm");
 const adminList   = $("adminList");
+const formEl      = $("productForm");
+
+// Airbag: evitar submit nativo pase lo que pase
+formEl?.addEventListener("submit", (e) => e.preventDefault(), { capture: true });
 
 // ---------- Sesión + guardia de admin ----------
 onAuthStateChange(async (user) => {
-  if (!user || !(await isAdmin(user.id))) {
+  try {
+    if (!user || !(await isAdmin(user.id))) {
+      location.href = "/index.html";
+      return;
+    }
+    crudSection.style.display = "";
+    btnLogout?.classList.remove("d-none");
+    await renderList();
+  } catch (err) {
+    console.error("[admin] guard error:", err);
     location.href = "/index.html";
-    return;
   }
-  crudSection.style.display = "";
-  btnLogout?.classList.remove("d-none");
-  await renderList();
 });
 
 // ---------- Logout ----------
@@ -45,7 +55,7 @@ function toast(msg, type="success"){
 }
 
 function setLoading(isLoading){
-  const submitBtn = productForm?.querySelector('[type="submit"]');
+  const submitBtn = formEl?.querySelector('[type="submit"]');
   const resetBtn  = $("btnReset");
   if (submitBtn) submitBtn.disabled = isLoading;
   if (resetBtn)  resetBtn.disabled  = isLoading;
@@ -115,10 +125,12 @@ async function renderList() {
       card.className = "product-card";
       const img = p.image_url || "/img/placeholder.png";
       const cat = p.category || "-";
+      const safeName = String(p.name || "").replace(/"/g,"&quot;");
+
       card.innerHTML = `
-        <img src="${img}" alt="${p.name || ""}">
+        <img src="${img}" alt="${safeName}">
         <div class="product-body">
-          <h4 class="product-title">${p.name || ""}</h4>
+          <h4 class="product-title">${safeName}</h4>
           <div class="product-price">$${Number(p.price || 0).toLocaleString("es-AR")}</div>
           <div class="product-meta">
             <span class="chip chip--stock">Stock: ${p.stock ?? 0}</span>
@@ -157,14 +169,14 @@ async function renderList() {
       })
     );
   } catch (e) {
-    console.error(e);
+    console.error("[admin] renderList error:", e?.message || e, e);
     adminList.textContent = "Error cargando productos";
     toast("Error cargando productos", "error");
   }
 }
 
 // ---------- Guardar ----------
-productForm?.addEventListener("submit", async (e) => {
+formEl?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   ["name","price","stock","category"].forEach(id => clearInvalid($(id)));
@@ -178,15 +190,16 @@ productForm?.addEventListener("submit", async (e) => {
     description: $("description")?.value?.trim(),
   };
 
-  // Validaciones
+  // Validaciones mínimas
   let hasError = false;
   if (!data.name)         { markInvalid($("name"), "El nombre es obligatorio"); hasError = true; }
   if (!(data.price >= 0)) { markInvalid($("price"), "Precio inválido");        hasError = true; }
   if (!(data.stock >= 0)) { markInvalid($("stock"), "Stock inválido");         hasError = true; }
 
-  const allowed = new Set(['equipos','insumos','repuestos','accesorios']);
+  // Si tenés constraint CHECK en la DB, mantené este set en sync:
+  const allowed = new Set(["equipos","insumos","repuestos","accesorios"]);
   if (!data.category || !allowed.has(data.category)) {
-    markInvalid($("category"), "Elegí una categoría válida");
+    markInvalid($("category"), "Elegí una categoría válida (equipos/insumos/repuestos/accesorios)");
     hasError = true;
   }
 
@@ -205,13 +218,13 @@ productForm?.addEventListener("submit", async (e) => {
       toast("Producto creado", "success");
     }
 
-    productForm.reset();
+    formEl.reset();
     if ($("prodId")) $("prodId").value = "";
     const prev = $("imagePreview"); if (prev) prev.remove();
 
     await renderList();
   } catch (err) {
-    console.error(err);
+    console.error("[admin] save error:", err?.message || err, err);
     toast("No se pudo guardar el producto", "error");
     alert("No se pudo guardar el producto: " + (err?.message || err));
   } finally {
@@ -221,7 +234,7 @@ productForm?.addEventListener("submit", async (e) => {
 
 // ---------- Reset ----------
 $("btnReset")?.addEventListener("click", () => {
-  productForm?.reset();
+  formEl?.reset();
   if ($("prodId")) $("prodId").value = "";
   const prev = $("imagePreview"); if (prev) prev.remove();
 });
