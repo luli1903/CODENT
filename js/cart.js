@@ -181,10 +181,11 @@ window.toastCoden = (msg)=>{
 ======================= */
 function readShipAddress(){
   return {
-    name:    document.getElementById('ship_name')?.value || '',
-    surname: document.getElementById('ship_surname')?.value || '',
-    email:   document.getElementById('ship_email')?.value || '',
-    phone:   document.getElementById('ship_phone')?.value || '',
+    // acepta ambos conjuntos de campos (contacto y envío)
+    name:    document.getElementById('ship_name')?.value || document.getElementById('nombre')?.value || '',
+    surname: document.getElementById('ship_surname')?.value || document.getElementById('apellido')?.value || '',
+    email:   document.getElementById('ship_email')?.value || document.getElementById('email')?.value || '',
+    phone:   document.getElementById('ship_phone')?.value || document.getElementById('telefono')?.value || '',
     zip:     document.getElementById('ship_zip')?.value || '',
     state:   document.getElementById('ship_state')?.value || '',
     city:    document.getElementById('ship_city')?.value || '',
@@ -194,6 +195,7 @@ function readShipAddress(){
     refs:    document.getElementById('ship_refs')?.value || '',
   };
 }
+
 function isHome(){ return document.querySelector('input[name="shipping_method"]:checked')?.value === 'home'; }
 
 function calculateShipping(cart, addr){
@@ -269,9 +271,26 @@ export async function renderTotalsBox() {
    Pago MP (redirect clásico)
 ======================= */
 function getCustomerFromForm() {
-  const a = readShipAddress();
-  return { name: a.name, surname: a.surname, email: a.email, phone: a.phone };
+  // primero intentamos leer los campos del bloque de envío; si no, usamos los de contacto
+  const email =
+    document.querySelector('#ship_email')?.value?.trim() ||
+    document.querySelector('#email')?.value?.trim() || '';
+
+  const name =
+    document.querySelector('#ship_name')?.value?.trim() ||
+    document.querySelector('#nombre')?.value?.trim() || '';
+
+  const surname =
+    document.querySelector('#ship_surname')?.value?.trim() ||
+    document.querySelector('#apellido')?.value?.trim() || '';
+
+  const phone =
+    document.querySelector('#ship_phone')?.value?.trim() ||
+    document.querySelector('#telefono')?.value?.trim() || '';
+
+  return { name, surname, email, phone };
 }
+
 
 export async function payWithMercadoPago() {
   try {
