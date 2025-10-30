@@ -1,5 +1,5 @@
 // db.js (versión pulida)
-import { supabase } from "./supabaseClient.js";
+import { supabase } from "./js/supabaseClient.js";
 
 const PRODUCT_COLS = "id,name,description,category,price,stock,image_url,created_at";
 

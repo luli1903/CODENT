@@ -9,22 +9,26 @@
   <link rel="icon" href="/img/favicon.ico" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/admin.css" />
-
-  <!-- Guardia de acceso: solo admins -->
-  <script type="module">
-    import { supabase } from "/js/supabaseClient.js";
-    async function guardAdmin(){
-      const { data:{ user } } = await supabase.auth.getUser();
-      if (!user) { location.href = "/index.html"; return; }
-      const { data } = await supabase
-        .from("admins")
-        .select("user_id")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (!data) location.href = "/index.html";
+\
+<!-- Guardia de acceso: solo admins -->
+<script type="module">
+  import { getSession, isAdmin } from "/auth.js";
+  (async function guardAdmin() {
+    const session = await getSession();
+    const user = session?.user;
+    if (!user) {
+      location.href = "/index.html";
+      return;
     }
-    guardAdmin();
-  </script>
+    const admin = await isAdmin(user.id);
+    if (!admin) {
+      location.href = "/index.html";
+      return;
+    }
+  })();
+</script>
+
+
 </head>
 <body class="admin">
   <header class="admin-header">
@@ -79,7 +83,6 @@
 
   <!-- Scripts del panel (solo los necesarios) -->
   <script type="module" src="/admin.js"></script>
-  <!-- Navbar auth no hace nada si esta página no tiene los botones, pero es seguro incluirlo -->
-  <script type="module" src="/navbar-auth.js" defer></script>
+  
 </body>
 </html>
