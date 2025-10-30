@@ -5,6 +5,8 @@ import { supabase } from "./js/supabaseClient.js";
 export async function getSession() {
   const { data, error } = await supabase.auth.getSession();
   if (error) {
+    // Si no hay sesión, no lo trates como error fatal
+    if (error.name === "AuthSessionMissingError") return null;
     console.error("[auth] getSession error", error);
     return null;
   }
@@ -14,6 +16,11 @@ export async function getSession() {
 export async function getUser() {
   const { data, error } = await supabase.auth.getUser();
   if (error) {
+    // Evitar rojo cuando simplemente no hay sesión aún
+    if (error.name === "AuthSessionMissingError") {
+      console.info("[auth] getUser: no session (ok)");
+      return null;
+    }
     console.error("[auth] getUser error", error);
     return null;
   }
@@ -62,14 +69,14 @@ export async function isAdmin(userId) {
 /* ========== Auth state subscription ========== */
 export function onAuthStateChange(callback) {
   console.info("[auth] subscribe onAuthStateChange");
-  // Llamada inicial
-  supabase.auth.getUser().then(({ data }) => callback(data?.user ?? null));
+  // Llamada inicial: usa getSession (no tira error cuando no hay sesión)
+  supabase.auth.getSession().then(({ data }) => {
+    callback(data?.session?.user ?? null);
+  });
 
-  // Suscripción (v2 retorna { data: { subscription } })
   const { data } = supabase.auth.onAuthStateChange((_event, session) => {
     callback(session?.user ?? null);
   });
 
-  // Devuelvo una función para desuscribirse por si la necesitás
   return () => data?.subscription?.unsubscribe?.();
 }
