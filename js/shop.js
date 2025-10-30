@@ -61,9 +61,10 @@ async function loadProducts(cat){
     renderGrid(items);
     toggleStates({ empty: items.length === 0 });
   } catch (err) {
-    console.error("Error cargando productos:", err);
-    toggleStates({ error:true });
-  } finally {
+  console.error("Error cargando productos:", err?.message || err, err);
+  toggleStates?.({ error: true });
+}
+ finally {
     toggleStates({ loading:false });
   }
 }
