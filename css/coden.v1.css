@@ -62,3 +62,26 @@
 }
 /* Failsafe: si hay sesión, forzamos visibilidad del botón en navbar */
 #coden-v1 #btnLogout:not(.d-none){ display:inline-block !important; visibility:visible !important; }
+/* Failsafe para los 3 botones (si no tienen .d-none, que se vean) */
+#btnOpenLogin:not(.d-none),
+#btnLogout:not(.d-none),
+#btnAdmin:not(.d-none) {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Asegurar que .d-none siempre oculte */
+#btnOpenLogin.d-none,
+#btnLogout.d-none,
+#btnAdmin.d-none {
+  display: none !important;
+}
+
+/* Por si los tenés en un contenedor de acciones */
+.coden-nav__actions, #navAuthZone {
+  display: flex !important;
+  gap: .5rem;
+  align-items: center;
+}

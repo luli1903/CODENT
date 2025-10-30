@@ -21,38 +21,34 @@
 <body id="top">
 
   <!-- ===================== NAVBAR ===================== -->
-  <nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
+<nav class="navbar navbar-light coden-nav sticky-top" aria-label="Principal">
   <a class="navbar-brand font-weight-bold" href="/index.html">
     <span class="brand-dot"></span> CODEN
   </a>
 
   <div class="ml-auto d-flex align-items-center">
-    <!-- antes: id="btnLogin" -->
-<!-- En la navbar -->
-<button id="btnOpenLogin" class="btn btn-outline-primary btn-sm mr-2">
-  Iniciar sesión
-</button>
+    <!-- Botón para abrir modal de login -->
+    <button id="btnOpenLogin" class="btn btn-outline-primary btn-sm mr-2" type="button">
+      Iniciar sesión
+    </button>
 
-<a id="btnAdmin" href="/admin.html" class="btn btn-primary btn-sm mr-2 d-none">
-  Panel Admin
-</a>
+    <!-- Link visible solo si es admin -->
+    <a id="btnAdmin" href="/admin.html" class="btn btn-primary btn-sm mr-2 d-none">
+      Panel Admin
+    </a>
 
-<button id="btnLogout" class="btn btn-outline-danger btn-sm d-none">
-  Cerrar sesión
-</button>
+    <!-- Botón para cerrar sesión (se muestra si hay sesión) -->
+    <button id="btnLogout" class="btn btn-outline-danger btn-sm d-none" type="button">
+      Cerrar sesión
+    </button>
 
-
-
-
-    <a href="/carrito.html" class="btn btn-outline-primary btn-sm" aria-label="Carrito">
+    <!-- Carrito -->
+    <a href="/carrito.html" class="btn btn-outline-primary btn-sm ml-2" aria-label="Carrito">
       🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
     </a>
   </div>
 </nav>
 
-
-    </nav>
-  </div>
 
   <!-- ===================== CONTENIDO ===================== -->
   <main id="coden-main">
@@ -365,7 +361,6 @@
 <!-- al final del <body> -->
 <script type="module" src="./js/supabaseClient.js"></script>
 <script type="module" src="./auth.js"></script>
-<script type="module" src="./js/admin-auth.js"></script>
 <script type="module" src="./navbar-auth.js"></script>
 
 </body>
