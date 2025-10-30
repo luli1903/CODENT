@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="referrer" content="same-origin" />
-  <title>Admin | E-commerce</title>
+  <title>Admin | CODENT</title>
 
   <link rel="icon" href="/img/favicon.ico" />
   <link rel="stylesheet" href="/css/style.css" />
@@ -13,6 +13,7 @@
   <!-- Evitar "flash": ocultar CRUD hasta validar sesión/rol -->
   <style>
     body.auth-wait #crudSection { display: none !important; }
+    .help-text{color:#64748b;font-size:.85rem}
   </style>
 
   <!-- Guardia de acceso: solo admins -->
@@ -23,10 +24,12 @@
       const user = session?.user;
       if (!user) { location.href = "/index.html"; return; }
       if (!(await isAdmin(user.id))) { location.href = "/index.html"; return; }
-      // OK → quitamos el "wait" para mostrar el CRUD
-      document.addEventListener('DOMContentLoaded', () => {
-        document.body.classList.remove('auth-wait');
-      });
+      const ready = () => document.body.classList.remove('auth-wait');
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ready, { once:true });
+      } else {
+        ready();
+      }
     })();
   </script>
 </head>
@@ -41,20 +44,45 @@
   </header>
 
   <main class="container" style="max-width:980px;margin:0 auto;padding:16px">
-    <!-- CRUD (única sección) -->
+    <!-- CRUD -->
     <section id="crudSection" aria-labelledby="crudTitle">
       <h2 id="crudTitle">Productos</h2>
 
-      <form id="productForm">
+      <form id="productForm" autocomplete="off">
         <input type="hidden" id="prodId" />
-        <input type="text" id="name" placeholder="Nombre" required />
-        <input type="number" step="0.01" id="price" placeholder="Precio" required inputmode="decimal" />
-        <input type="number" id="stock" placeholder="Stock" required inputmode="numeric" />
-        <input type="text" id="category" placeholder="Categoría" />
-        <textarea id="description" placeholder="Descripción"></textarea>
+
+        <label>Nombre
+          <input type="text" id="name" placeholder="Nombre" required />
+        </label>
+
+        <div class="grid-2" style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+          <label>Precio (ARS)
+            <input type="number" step="0.01" id="price" placeholder="Precio" required inputmode="decimal" />
+          </label>
+
+          <label>Stock
+            <input type="number" id="stock" placeholder="Stock" required inputmode="numeric" />
+          </label>
+        </div>
+
+        <label for="category">Categoría</label>
+        <select id="category" required>
+          <option value="">Elegí una categoría…</option>
+          <option value="equipos">Equipos</option>
+          <option value="insumos">Insumos dentales</option>
+          <option value="repuestos">Repuestos</option>
+          <option value="accesorios">Accesorios</option>
+        </select>
+        <small class="help-text">Usamos categorías fijas para que la tienda filtre perfecto.</small>
+
+        <label>Descripción
+          <textarea id="description" rows="3" placeholder="Descripción del producto"></textarea>
+        </label>
+
         <label for="imageFile">Imagen (opcional)</label>
         <input type="file" id="imageFile" accept="image/*" />
-        <div class="actions">
+
+        <div class="actions" style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
           <button type="submit" class="btn btn-primary">Guardar</button>
           <button type="button" id="btnReset" class="btn btn-secondary">Nuevo</button>
         </div>
@@ -65,7 +93,6 @@
     </section>
   </main>
 
-  <!-- Scripts del panel -->
   <script type="module" src="/admin.js"></script>
 </body>
 </html>

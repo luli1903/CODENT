@@ -14,12 +14,10 @@ const adminList   = $("adminList");
 
 // ---------- Sesión + guardia de admin ----------
 onAuthStateChange(async (user) => {
-  // si no hay user o no es admin → afuera
   if (!user || !(await isAdmin(user.id))) {
     location.href = "/index.html";
     return;
   }
-  // mostrar CRUD y logout
   crudSection.style.display = "";
   btnLogout?.classList.remove("d-none");
   await renderList();
@@ -36,8 +34,14 @@ function toast(msg, type="success"){
   const el = document.createElement("div");
   el.className = `toast ${type}`;
   el.textContent = msg;
+  el.style.cssText = `
+    position:fixed;bottom:20px;right:20px;z-index:9999;
+    background:${type==="error"?"#ef4444":"#0ea5e9"};
+    color:#fff;padding:10px 16px;border-radius:10px;
+    font-weight:600;box-shadow:0 8px 16px rgba(0,0,0,.1);
+  `;
   document.body.appendChild(el);
-  setTimeout(() => el.remove(), 3200);
+  setTimeout(() => el.remove(), 3000);
 }
 
 function setLoading(isLoading){
@@ -77,7 +81,7 @@ function clearInvalid(input){
   if (small && small.classList?.contains("help-text")) small.remove();
 }
 
-// preview de imagen
+// ---------- Preview imagen ----------
 const imageInput = $("imageFile");
 if (imageInput){
   imageInput.addEventListener("change", () => {
@@ -101,23 +105,24 @@ async function renderList() {
   try {
     const rows = await listProducts();
     adminList.innerHTML = "";
-    adminList.classList.add("product-grid");
+    if (!rows.length){
+      adminList.innerHTML = "<p class='muted'>No hay productos.</p>";
+      return;
+    }
 
     rows.forEach((p) => {
       const card = document.createElement("div");
       card.className = "product-card";
-
-      const safeName = (p.name || "").replace(/"/g, "&quot;");
-      const img = p.image_url || "";
-
+      const img = p.image_url || "/img/placeholder.png";
+      const cat = p.category || "-";
       card.innerHTML = `
-        <img src="${img}" alt="${safeName}">
+        <img src="${img}" alt="${p.name || ""}">
         <div class="product-body">
           <h4 class="product-title">${p.name || ""}</h4>
           <div class="product-price">$${Number(p.price || 0).toLocaleString("es-AR")}</div>
           <div class="product-meta">
             <span class="chip chip--stock">Stock: ${p.stock ?? 0}</span>
-            <span class="chip chip--cat">Cat: ${p.category || "-"}</span>
+            <span class="chip chip--cat">Cat: ${cat}</span>
           </div>
           <div class="card-actions">
             <button class="edit btn btn-ghost btn-sm" data-id="${p.id}">Editar</button>
@@ -158,11 +163,11 @@ async function renderList() {
   }
 }
 
-// ---------- Guardar (create/update) ----------
+// ---------- Guardar ----------
 productForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  ["name","price","stock"].forEach(id => clearInvalid($(id)));
+  ["name","price","stock","category"].forEach(id => clearInvalid($(id)));
 
   const id = $("prodId")?.value?.trim();
   const data = {
@@ -173,11 +178,18 @@ productForm?.addEventListener("submit", async (e) => {
     description: $("description")?.value?.trim(),
   };
 
-  // Validaciones mínimas
+  // Validaciones
   let hasError = false;
-  if (!data.name)              { markInvalid($("name"), "El nombre es obligatorio"); hasError = true; }
-  if (!(data.price >= 0))      { markInvalid($("price"), "Precio inválido");        hasError = true; }
-  if (!(data.stock >= 0))      { markInvalid($("stock"), "Stock inválido");         hasError = true; }
+  if (!data.name)         { markInvalid($("name"), "El nombre es obligatorio"); hasError = true; }
+  if (!(data.price >= 0)) { markInvalid($("price"), "Precio inválido");        hasError = true; }
+  if (!(data.stock >= 0)) { markInvalid($("stock"), "Stock inválido");         hasError = true; }
+
+  const allowed = new Set(['equipos','insumos','repuestos','accesorios']);
+  if (!data.category || !allowed.has(data.category)) {
+    markInvalid($("category"), "Elegí una categoría válida");
+    hasError = true;
+  }
+
   if (hasError) { toast("Revisá los campos marcados", "error"); return; }
 
   try {
