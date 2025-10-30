@@ -1,11 +1,12 @@
+// /netlify/functions/create-preference.js
 import { MercadoPagoConfig, Preference } from "mercadopago";
 
 export const handler = async (event) => {
   try {
-    // 🔎 DIAGNÓSTICO: ver si la función corre y si el token está disponible
     console.log("createPreference ejecutado 🚀");
     console.log("TOKEN:", process.env.MP_ACCESS_TOKEN ? "SET ✅" : "MISSING ❌");
 
+    // CORS preflight
     if (event.httpMethod === "OPTIONS") {
       return { statusCode: 200, headers: cors(), body: "" };
     }
@@ -14,42 +15,39 @@ export const handler = async (event) => {
     }
 
     const accessToken = process.env.MP_ACCESS_TOKEN || "";
+    const integratorId = process.env.MP_INTEGRATOR_ID || ""; // opcional
     const baseUrl =
       process.env.URL ||                // producción (dominio principal)
       process.env.DEPLOY_PRIME_URL ||   // deploy previews / branch deploys
       process.env.DEPLOY_URL ||         // fallback
-      "https://resonant-faun-ef8805.netlify.app"; // último recurso (tu dominio)
+      "https://resonant-faun-ef8805.netlify.app"; // último recurso
 
     console.log("BASE_URL:", baseUrl);
-
     if (!accessToken) return err(500, "MP_ACCESS_TOKEN no definido");
-    //if (!accessToken.startsWith("TEST-")) return err(500, "MP_ACCESS_TOKEN no es TEST- (sandbox)");
 
+    // Body esperado: { cart:[], customer:{name,surname,email,phone?}, shipping:{method,label,cost,address{...}} }
     const { cart = [], customer = {}, shipping = null } = JSON.parse(event.body || "{}");
     if (!Array.isArray(cart) || !cart.length) return err(400, "cart[] requerido");
     if (!customer.email) return err(400, "customer.email requerido");
 
-    // ✅ Tolerante a distintos nombres de campos de precio y a strings
-    const items = cart.map(p => {
-      const price =
-        p.unit_price ?? p.price ?? p.unitPrice ?? p.precio ?? 0;
+    // ==== Items (normalize + validar precios) ====
+    const items = cart.map((p) => {
+      const price = p.unit_price ?? p.price ?? p.unitPrice ?? p.precio ?? 0;
       const unit_price = Number(price);
-
       if (!Number.isFinite(unit_price) || unit_price <= 0) {
         throw new Error(`Precio inválido para item ${p.title || p.id} -> ${price}`);
       }
-
       return {
         id: String(p.id ?? ""),
         title: String(p.title ?? "Producto"),
         quantity: Number(p.quantity ?? 1),
         unit_price,
         currency_id: "ARS",
-        picture_url: p.picture_url || p.img || undefined
+        picture_url: p.picture_url || p.img || undefined,
       };
     });
 
-    // ✅ Acepta shipping.cost o shipping.amount
+    // Ítem de envío extra (para que el total cierre con el cliente)
     const shipCost = shipping ? Number(shipping.cost ?? shipping.amount ?? 0) : 0;
     if (Number.isFinite(shipCost) && shipCost > 0) {
       items.push({
@@ -57,30 +55,57 @@ export const handler = async (event) => {
         title: `Envío: ${shipping?.label || shipping?.method || "Envío"}`,
         quantity: 1,
         unit_price: shipCost,
-        currency_id: "ARS"
+        currency_id: "ARS",
       });
     }
 
+    // ==== Dirección de envío real (queda registrada en la preferencia/pago) ====
+    const shipments =
+      (shipping?.method === "home")
+        ? {
+            mode: "not_specified", // no usamos Mercado Envíos automático
+            cost: Number(shipping.cost || 0),
+            receiver_address: {
+              zip_code: shipping.address?.zip || "",
+              street_name: shipping.address?.street || "",
+              street_number: Number(shipping.address?.number || 0),
+              floor: shipping.address?.floor || "",
+              apartment: shipping.address?.floor || "",
+              city_name: shipping.address?.city || "",
+              state_name: shipping.address?.state || "",
+            },
+          }
+        : undefined;
+
+    // ==== Preferencia ====
     const preferenceBody = {
       items,
-      payer: { name: customer.name || "", surname: customer.surname || "", email: customer.email },
+      payer: {
+        name: customer.name || "",
+        surname: customer.surname || "",
+        email: customer.email,
+        phone: customer.phone ? { area_code: "", number: customer.phone } : undefined,
+      },
       external_reference: `order_${Date.now()}`,
-      statement_descriptor: "CODEN",
+      statement_descriptor: "CODENT",
       back_urls: {
-        back_urls: {
-          success: `${baseUrl}/carrito.html?mp=success`,
-          pending: `${baseUrl}/carrito.html?mp=pending`,
-          failure: `${baseUrl}/carrito.html?mp=failure`
-        },
-
+        success: `${baseUrl}/carrito.html?mp=success`,
+        pending: `${baseUrl}/carrito.html?mp=pending`,
+        failure: `${baseUrl}/carrito.html?mp=failure`,
       },
       auto_return: "approved",
-      notification_url: `${baseUrl}/.netlify/functions/mpWebhook`
+      notification_url: `${baseUrl}/.netlify/functions/mpWebhook`, // asegurate que exista esa función
+      shipments, // ← dirección y costo de envío
+      metadata: {
+        project: "CODENT",
+        shipping_selected: shipping?.label || shipping?.method || "",
+        address: shipping?.address || null,
+      },
     };
 
     console.log("Creando preferencia con:", JSON.stringify(preferenceBody, null, 2));
 
-    const client = new MercadoPagoConfig({ accessToken });
+    const client = new MercadoPagoConfig({ accessToken, ...(integratorId ? { options: { integratorId } } : {}) });
     const pref = new Preference(client);
 
     let resp;
@@ -89,7 +114,6 @@ export const handler = async (event) => {
       console.log("Preferencia creada ✅", resp?.id);
     } catch (e) {
       console.error("MP create error:", e);
-      // Si la SDK trae causa, mostrámosla para leerla en el alert del front
       return err(502, e?.cause?.[0]?.description || e?.message || "Error creando preferencia");
     }
 
@@ -97,11 +121,11 @@ export const handler = async (event) => {
       statusCode: 200,
       headers: cors(),
       body: JSON.stringify({
-        preference_id: resp.id,
+        id: resp.id, // para Wallet Brick si más adelante lo querés usar
         init_point: resp.init_point,
         sandbox_init_point: resp.sandbox_init_point,
-        external_reference: preferenceBody.external_reference
-      })
+        external_reference: preferenceBody.external_reference,
+      }),
     };
   } catch (e) {
     console.error("createPreference fatal:", e);
@@ -109,10 +133,14 @@ export const handler = async (event) => {
   }
 };
 
-function cors(){ return {
-  "Content-Type":"application/json",
-  "Access-Control-Allow-Origin":"*",
-  "Access-Control-Allow-Methods":"POST,OPTIONS",
-  "Access-Control-Allow-Headers":"Content-Type",
-};}
-function err(code,msg){ return { statusCode: code, headers: cors(), body: JSON.stringify({ error: msg }) }; }
+function cors() {
+  return {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
+function err(code, msg) {
+  return { statusCode: code, headers: cors(), body: JSON.stringify({ error: msg }) };
+}

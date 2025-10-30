@@ -138,5 +138,68 @@
 <!-- (si usás este) -->
 <script type="module" src="/navbar-auth.js" defer></script>
 
+<section class="card">
+  <h3>Método de entrega</h3>
+  <label><input type="radio" name="shipping_method" value="pickup" checked> Retiro en local (sin costo)</label><br>
+  <label><input type="radio" name="shipping_method" value="home"> Envío a domicilio</label>
+</section>
+
+<section id="shippingAddress" class="card" style="display:none">
+  <h3>Dirección de envío</h3>
+  <div class="grid">
+    <label>Nombre<input id="ship_name" autocomplete="name"></label>
+    <label>Apellido<input id="ship_surname" autocomplete="family-name"></label>
+    <label>Email<input id="ship_email" type="email" autocomplete="email"></label>
+    <label>Teléfono<input id="ship_phone" type="tel" autocomplete="tel"></label>
+    <label>Código Postal<input id="ship_zip" inputmode="numeric" maxlength="10" autocomplete="postal-code"></label>
+    <label>Provincia
+      <select id="ship_state">
+        <option value="">Seleccioná…</option>
+        <option>Buenos Aires</option>
+        <option>CABA</option>
+        <option>Córdoba</option>
+        <option>Santa Fe</option>
+        <option>Mendoza</option>
+        <option>Neuquén</option>
+        <option>Chubut</option>
+        <option>Río Negro</option>
+        <option>Tierra del Fuego</option>
+        <option>La Pampa</option>
+        <option>Entre Ríos</option>
+        <option>San Luis</option>
+        <option>San Juan</option>
+        <option>Salta</option>
+        <option>Jujuy</option>
+        <option>Catamarca</option>
+        <option>La Rioja</option>
+        <option>Santiago del Estero</option>
+        <option>Chaco</option>
+        <option>Formosa</option>
+        <option>Misiones</option>
+        <option>Corrientes</option>
+        <option>Santa Cruz</option>
+        <option>Tucumán</option>
+      </select>
+    </label>
+    <label>Ciudad / Localidad<input id="ship_city" autocomplete="address-level2"></label>
+    <label>Calle<input id="ship_street" autocomplete="address-line1"></label>
+    <label>Número<input id="ship_number" inputmode="numeric"></label>
+    <label>Piso/Depto (opcional)<input id="ship_floor"></label>
+    <label>Referencias (opcional)<input id="ship_refs"></label>
+  </div>
+</section>
+
+<section class="card">
+  <h3>Resumen</h3>
+  <div class="row"><span>Subtotal</span><strong id="sum_subtotal">$0</strong></div>
+  <div class="row"><span>Envío</span><strong id="sum_shipping">—</strong></div>
+  <div class="row total"><span>Total</span><strong id="sum_total">$0</strong></div>
+  <div id="ship_calc_msg" style="font-size:.9rem;color:#64748b;margin-top:.5rem"></div>
+</section>
+
+<button id="btnPagarMP" class="btn btn-primary">Pagar con Mercado Pago</button>
+<div id="wallet_container" style="margin-top:16px"></div>
+
+
 </body>
 </html>
