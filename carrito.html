@@ -97,11 +97,29 @@
     </div>
   </div>
 
+
 <!-- Scripts -->
 <!-- Quitar esta: <script type="module" src="supabaseClient.js"></script> -->
 
 <!-- Lógica del carrito (DB o local) -->
 <script type="module" src="/js/cart.js"></script>
+<script>
+  (function(){
+    const mp = new URL(location.href).searchParams.get('mp');
+    if (mp === 'success') {
+      try {
+        window.Cart?.setCart?.([]);
+        window.Cart?.updateCartBadge?.();
+        alert('¡Pago aprobado! Gracias por tu compra.');
+        const u = new URL(location.href);
+        u.searchParams.delete('mp');
+        history.replaceState({}, '', u);
+        window.Cart?.renderCartPage?.();
+        window.Pay?.renderTotalsBox?.();
+      } catch (e) { console.error(e); }
+    }
+  })();
+</script>
 
 <!-- Modal de autenticación reutilizable -->
 <script type="module" src="/js/auth-modal.js"></script>
