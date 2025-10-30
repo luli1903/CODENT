@@ -1,20 +1,35 @@
 // /admin.js
-import { onAuthStateChange, signIn, signOut, isAdmin } from "/auth.js";
+import { onAuthStateChange, signOut, isAdmin } from "/auth.js";
 import {
   listProducts, getProduct, createProduct, updateProduct,
   removeProduct, uploadProductImage
 } from "/db.js";
 
 const $  = (id) => document.getElementById(id);
-const qs = (sel, ctx = document) => ctx.querySelector(sel);
 
-const loginSection = $("loginSection");
-const crudSection  = $("crudSection");
-const loginForm    = $("loginForm");
-const loginMsg     = $("loginMsg");
-const btnLogout    = $("btnLogout");
-const productForm  = $("productForm");
-const adminList    = $("adminList");
+const btnLogout   = $("btnLogout");
+const crudSection = $("crudSection");
+const productForm = $("productForm");
+const adminList   = $("adminList");
+
+// ---------- Sesión + guardia de admin ----------
+onAuthStateChange(async (user) => {
+  // si no hay user o no es admin → afuera
+  if (!user || !(await isAdmin(user.id))) {
+    location.href = "/index.html";
+    return;
+  }
+  // mostrar CRUD y logout
+  crudSection.style.display = "";
+  btnLogout?.classList.remove("d-none");
+  await renderList();
+});
+
+// ---------- Logout ----------
+btnLogout?.addEventListener("click", async () => {
+  await signOut();
+  location.href = "/index.html";
+});
 
 // ---------- UI helpers ----------
 function toast(msg, type="success"){
@@ -78,44 +93,6 @@ if (imageInput){
     if (f) prev.src = URL.createObjectURL(f); else prev.remove();
   });
 }
-
-// ---------- Sesión + guardia de admin (UI del panel) ----------
-onAuthStateChange(async (user) => {
-  if (!loginSection || !crudSection) return; // por si abren este script en otra página
-  if (!user) {
-    loginSection.style.display = "";
-    crudSection.style.display  = "none";
-    btnLogout?.classList.add("d-none");
-    return;
-  }
-  if (!(await isAdmin(user.id))) {
-    if (loginMsg) loginMsg.textContent = "Tu usuario no tiene permisos de administrador.";
-    await signOut();
-    return;
-  }
-  loginSection.style.display = "none";
-  crudSection.style.display  = "";
-  btnLogout?.classList.remove("d-none");
-  await renderList();
-});
-
-// ---------- Login ----------
-loginForm?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (loginMsg) loginMsg.textContent = "";
-  try {
-    await signIn($("email")?.value.trim(), $("password")?.value);
-  } catch (err) {
-    if (loginMsg) loginMsg.textContent = "Error: " + (err?.message || err);
-  }
-});
-
-// ---------- Logout ----------
-btnLogout?.addEventListener("click", async () => {
-  await signOut();
-  // si estás en admin, redirigí al inicio
-  if (location.pathname.includes("/admin")) location.href = "/index.html";
-});
 
 // ---------- Listado ----------
 async function renderList() {

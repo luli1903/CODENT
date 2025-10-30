@@ -9,49 +9,40 @@
   <link rel="icon" href="/img/favicon.ico" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/admin.css" />
-\
-<!-- Guardia de acceso: solo admins -->
-<script type="module">
-  import { getSession, isAdmin } from "/auth.js";
-  (async function guardAdmin() {
-    const session = await getSession();
-    const user = session?.user;
-    if (!user) {
-      location.href = "/index.html";
-      return;
-    }
-    const admin = await isAdmin(user.id);
-    if (!admin) {
-      location.href = "/index.html";
-      return;
-    }
-  })();
-</script>
 
+  <!-- Evitar "flash": ocultar CRUD hasta validar sesión/rol -->
+  <style>
+    body.auth-wait #crudSection { display: none !important; }
+  </style>
 
+  <!-- Guardia de acceso: solo admins -->
+  <script type="module">
+    import { getSession, isAdmin } from "/auth.js";
+    (async function guardAdmin() {
+      const session = await getSession();
+      const user = session?.user;
+      if (!user) { location.href = "/index.html"; return; }
+      if (!(await isAdmin(user.id))) { location.href = "/index.html"; return; }
+      // OK → quitamos el "wait" para mostrar el CRUD
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.classList.remove('auth-wait');
+      });
+    })();
+  </script>
 </head>
-<body class="admin">
+
+<body class="admin auth-wait">
   <header class="admin-header">
     <h1>Panel de Administración</h1>
-    <button id="btnLogout" class="btn btn-secondary btn-sm d-none">Salir</button>
+    <div class="btn-group">
+      <a href="/index.html" class="btn btn-outline-secondary btn-sm">Inicio</a>
+      <button id="btnLogout" class="btn btn-secondary btn-sm d-none">Salir</button>
+    </div>
   </header>
 
   <main class="container" style="max-width:980px;margin:0 auto;padding:16px">
-    <!-- LOGIN -->
-    <section id="loginSection" aria-labelledby="loginTitle">
-      <h2 id="loginTitle">Ingresar</h2>
-      <form id="loginForm" autocomplete="on" style="display:grid;gap:10px;max-width:420px">
-        <label for="email" class="sr-only">Correo electrónico</label>
-        <input type="email" id="email" placeholder="Email" required autocomplete="username" />
-        <label for="password" class="sr-only">Contraseña</label>
-        <input type="password" id="password" placeholder="Contraseña" required autocomplete="current-password" />
-        <button type="submit" class="btn btn-primary">Entrar</button>
-      </form>
-      <p id="loginMsg" role="status" aria-live="polite"></p>
-    </section>
-
-    <!-- CRUD -->
-    <section id="crudSection" style="display:none" aria-labelledby="crudTitle">
+    <!-- CRUD (única sección) -->
+    <section id="crudSection" aria-labelledby="crudTitle">
       <h2 id="crudTitle">Productos</h2>
 
       <form id="productForm">
@@ -74,15 +65,7 @@
     </section>
   </main>
 
-  <style>
-    .sr-only{
-      position:absolute;width:1px;height:1px;padding:0;margin:-1px;
-      overflow:hidden;clip:rect(0,0,0,0);border:0;
-    }
-  </style>
-
-  <!-- Scripts del panel (solo los necesarios) -->
+  <!-- Scripts del panel -->
   <script type="module" src="/admin.js"></script>
-  
 </body>
 </html>
