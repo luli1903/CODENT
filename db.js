@@ -1,33 +1,26 @@
-// db.js (versión pulida)
-import { supabase } from "./js/supabaseClient.js";
-import { supabase } from "./auth.js";
+// /db.js
+// Importá UNA sola vez el cliente ya creado
+import { supabase } from "/js/supabaseClient.js";
 
 const PRODUCT_COLS = "id,name,description,category,price,stock,image_url,created_at";
 
-// 👇 pegá esto debajo del PRODUCT_COLS o arriba de getProduct()
+/* =========================
+   Productos (tienda/admin)
+========================= */
 export async function listProducts({ category } = {}) {
-  let query = supabase
-    .from("products")
-    .select(PRODUCT_COLS)
-    .order("created_at", { ascending: false });
-
-  // Si llega un filtro, lo aplicamos
-  if (category) {
-    query = query.eq("category", category);
-  }
-
-  const { data, error } = await query;
+  let q = supabase.from("products").select(PRODUCT_COLS).order("created_at", { ascending: false });
+  if (category) q = q.eq("category", category);
+  const { data, error } = await q;
   if (error) throw error;
   return data || [];
 }
-
 
 export async function getProduct(id) {
   const { data, error } = await supabase
     .from("products")
     .select(PRODUCT_COLS)
     .eq("id", id)
-    .maybeSingle(); // no rompe si no existe
+    .maybeSingle();
   if (error) throw error;
   return data ?? null;
 }
@@ -60,11 +53,12 @@ export async function removeProduct(id) {
   if (error) throw error;
 }
 
-/** Sube imagen, retorna publicUrl */
+/* =========================
+   Storage (imágenes)
+========================= */
 export async function uploadProductImage(file) {
   if (!file) return null;
 
-  // nombre seguro
   const safeName = String(file.name || "img")
     .normalize("NFKD").replace(/[^\w.\-]+/g, "_")
     .replace(/_+/g, "_").slice(0, 80);
@@ -79,14 +73,57 @@ export async function uploadProductImage(file) {
       upsert: false,
       contentType: file.type || "image/*",
     });
-
   if (upErr) throw upErr;
 
   const { data } = supabase.storage.from("products").getPublicUrl(path);
   return data?.publicUrl || null;
 }
 
-/** Normaliza payload; si partial=true, quita undefined */
+/* =========================
+   Carritos (para el merge)
+========================= */
+export async function getOrCreateActiveCart() {
+  // Tabla sugerida: carts (id, user_id, status='active', created_at)
+  const { data: me } = await supabase.auth.getUser();
+  const uid = me?.user?.id;
+  if (!uid) throw new Error("No user");
+
+  // Busco activo
+  let { data: cart, error } = await supabase
+    .from("carts")
+    .select("id,status")
+    .eq("user_id", uid)
+    .eq("status", "active")
+    .maybeSingle();
+  if (error && error.code !== "PGRST116") throw error;
+
+  // Creo si no hay
+  if (!cart) {
+    const ins = await supabase
+      .from("carts")
+      .insert({ user_id: uid, status: "active" })
+      .select("id,status")
+      .single();
+    if (ins.error) throw ins.error;
+    cart = ins.data;
+  }
+  return cart;
+}
+
+export async function addItemToCart(cartId, productId, qty = 1, unitPrice = 0) {
+  // Tabla sugerida: cart_items (id, cart_id, product_id, qty, unit_price)
+  const { data, error } = await supabase
+    .from("cart_items")
+    .insert({ cart_id: cartId, product_id: productId, qty, unit_price: unitPrice })
+    .select("id")
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+/* =========================
+   Utils
+========================= */
 function normalize(v, partial = false) {
   const num = (x) => (x === undefined || x === null || x === "" ? undefined : Number(x));
   const obj = {
@@ -104,77 +141,3 @@ function normalize(v, partial = false) {
   if (obj.stock === undefined) obj.stock = 0;
   return obj;
 }
-
-/* ============================
-   Carrito persistente (por user)
-============================ */
-
-/** Obtiene o crea el carrito ACTIVO del usuario */
-export async function getOrCreateActiveCart() {
-  const uid = await getUserId();
-  if (!uid) throw new Error("Necesitás iniciar sesión.");
-
-  // ¿Ya existe carrito activo?
-  let { data: cart, error } = await supabase
-    .from("carts")
-    .select("id, status")
-    .eq("user_id", uid)
-    .eq("status", "active")
-    .maybeSingle();
-  if (error) throw error;
-
-  if (cart) return cart;
-
-  // Si no existe, lo creo
-  const { data: created, error: e2 } = await supabase
-    .from("carts")
-    .insert({ user_id: uid, status: "active" })
-    .select("id, status")
-    .single();
-  if (e2) throw e2;
-
-  return created;
-}
-
-/** Agrega un producto al carrito (suma qty si ya existe) */
-export async function addItemToCart(cart_id, product_id, qty = 1, unit_price = 0) {
-  // ¿existe ya este product en el cart?
-  const { data: existing, error: e1 } = await supabase
-    .from("cart_items")
-    .select("id, qty")
-    .eq("cart_id", cart_id)
-    .eq("product_id", product_id)
-    .maybeSingle();
-  if (e1) throw e1;
-
-  if (existing) {
-    const { error: e2 } = await supabase
-      .from("cart_items")
-      .update({ qty: (existing.qty || 0) + qty, unit_price })
-      .eq("id", existing.id);
-    if (e2) throw e2;
-  } else {
-    const { error: e3 } = await supabase
-      .from("cart_items")
-      .insert({ cart_id, product_id, qty, unit_price });
-    if (e3) throw e3;
-  }
-}
-
-/** Lista los items del carrito con datos del producto */
-export async function listCartItems(cart_id) {
-  const { data, error } = await supabase
-    .from("cart_items")
-    .select("id, product_id, qty, unit_price, products:product_id(name, image_url, price)")
-    .eq("cart_id", cart_id)
-    .order("created_at", { ascending: true });
-  if (error) throw error;
-  return data || [];
-}
-
-/** Vacía el carrito (opcional) */
-export async function clearCart(cart_id) {
-  const { error } = await supabase.from("cart_items").delete().eq("cart_id", cart_id);
-  if (error) throw error;
-}
-
