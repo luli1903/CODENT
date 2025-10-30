@@ -40,16 +40,35 @@ async function fetchOne(id){
 /* =======================
    API carrito
 ======================= */
-export async function addToCart(productId, qty=1){
-  const cart=getCart();
-  const i=cart.findIndex(x=>String(x.id)===String(productId));
-  if(i>=0) cart[i].qty+=qty; else cart.push({id:productId, qty});
+export async function addToCart(productId, qty = 1){
+  const cart = getCart();
+  const idx  = cart.findIndex(x => String(x.id) === String(productId));
+
+  // obtenemos snapshot (para render si el fetch a DB falla)
+  let snap = null;
+  try {
+    const p = await fetchOne(productId);
+    if (p) {
+      snap = {
+        name: p.name || "Producto",
+        price: Number(p.price || 0),
+        image_url: p.image_url || ""
+      };
+    }
+  } catch (_) {}
+
+  if (idx >= 0){
+    cart[idx].qty += qty;
+    // refrescá snapshot si llegó algo nuevo
+    if (snap) cart[idx] = { ...cart[idx], ...snap };
+  } else {
+    cart.push({ id: productId, qty, ...(snap || {}) });
+  }
+
   setCart(cart);
-  try{
-    const p=await fetchOne(productId);
-    if(p&&window.toastCoden) window.toastCoden(`Agregado: ${p.name}`);
-  }catch{}
+  if (snap && window.toastCoden) window.toastCoden(`Agregado: ${snap.name}`);
 }
+
 export function removeFromCart(productId){
   setCart(getCart().filter(i=>String(i.id)!==String(productId)));
 }
@@ -80,56 +99,64 @@ export async function renderCartPage(){
     return;
   }
 
-  const ids=cart.map(i=>i.id);
-  const prods=await fetchByIds(ids); const map=new Map(prods.map(p=>[String(p.id),p]));
-  let total=0;
+  const ids   = cart.map(i => i.id);
+const prods = await fetchByIds(ids);
+const map   = new Map(prods.map(p => [String(p.id), p]));
 
-  cart.forEach(item=>{
-    const p=map.get(String(item.id)); if(!p) return;
-    const price=Number(p.price||0), qty=Number(item.qty||1), sub=price*qty; total+=sub;
+let total = 0;
 
-    const row=document.createElement("div");
-    row.className="coden-product";
-    row.style.display="grid";
-    row.style.gridTemplateColumns="auto 1fr auto";
-    row.style.alignItems="center";
-    row.style.gap="12px";
-    row.style.padding="10px";
-    row.style.marginBottom="10px";
+cart.forEach(item => {
+  const p = map.get(String(item.id));
+  // si no vino de DB, usamos snapshot del carrito
+  const name  = (p?.name ?? item.name ?? "Producto");
+  const price = Number(p?.price ?? item.price ?? 0);
+  const img   = (p?.image_url ?? item.image_url ?? "");
+  const qty   = Number(item.qty || 1);
+  const sub   = price * qty;
 
-    const safeName = String(p.name||"").replace(/"/g,"&quot;");
+  total += sub;
 
-    row.innerHTML=`
-      <div class="coden-product__img" style="width:72px; height:54px; border-radius:12px; overflow:hidden">
-        <img src="${p.image_url||""}" alt="${safeName}">
+  const row = document.createElement("div");
+  row.className = "coden-product";
+  row.style.cssText = "display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:10px;margin-bottom:10px";
+
+  const safeName = String(name).replace(/"/g,"&quot;");
+
+  row.innerHTML = `
+    <div class="coden-product__img" style="width:72px; height:54px; border-radius:12px; overflow:hidden">
+      <img src="${img}" alt="${safeName}">
+    </div>
+    <div>
+      <div class="coden-product__title">${name}</div>
+      <div class="coden-badges" style="margin-top:4px">
+        <span class="coden-badge">Unidad</span>
+        <span class="coden-badge coden-badge--ok">$ ${price.toLocaleString("es-AR")}</span>
       </div>
-      <div>
-        <div class="coden-product__title">${p.name||""}</div>
-        <div class="coden-badges" style="margin-top:4px">
-          <span class="coden-badge">Unidad</span>
-          <span class="coden-badge coden-badge--ok">$ ${price.toLocaleString("es-AR")}</span>
-        </div>
-      </div>
-      <div style="display:flex; align-items:center; gap:8px">
-        <input type="number" min="1" value="${qty}" class="form-control form-control-sm" style="width:82px">
-        <button class="coden-btn coden-btn--ghost" style="padding:.45rem .8rem">Eliminar</button>
-      </div>
-    `;
+    </div>
+    <div style="display:flex; align-items:center; gap:8px">
+      <input type="number" min="1" value="${qty}" class="form-control form-control-sm" style="width:82px">
+      <button class="coden-btn coden-btn--ghost" style="padding:.45rem .8rem">Eliminar</button>
+    </div>
+  `;
 
-    const qtyInput=row.querySelector("input");
-    const delBtn=row.querySelector("button");
+  const qtyInput = row.querySelector("input");
+  const delBtn   = row.querySelector("button");
 
-    qtyInput.addEventListener("change", async ()=>{
-      const q=Math.max(1, parseInt(qtyInput.value)||1); setQty(p.id,q);
-      const t=await cartTotal(); totalEl.textContent="$"+t.toLocaleString("es-AR");
-    });
-    delBtn.addEventListener("click", async ()=>{
-      removeFromCart(p.id);
-      await renderCartPage();
-    });
-
-    list.appendChild(row);
+  qtyInput.addEventListener("change", async ()=>{
+    const q = Math.max(1, parseInt(qtyInput.value)||1);
+    setQty(item.id, q);
+    const t = await cartTotal(); // sigue intentando con DB pero ya no quedará en 0 si falla
+    totalEl.textContent = "$" + t.toLocaleString("es-AR");
   });
+
+  delBtn.addEventListener("click", async ()=>{
+    removeFromCart(item.id);
+    await renderCartPage();
+  });
+
+  list.appendChild(row);
+});
+
 
   totalEl.textContent="$"+total.toLocaleString("es-AR");
   updateCartBadge();
