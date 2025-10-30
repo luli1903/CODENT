@@ -9,13 +9,11 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="icon" href="img/favicon.ico">
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- Estética del contenido (cards, badges, botones) -->
   <link rel="stylesheet" href="css/coden.main.css?v=2">
 </head>
 <body class="bg-light">
 
-  <!-- NAVBAR (intacta) -->
+  <!-- NAVBAR -->
   <nav class="navbar navbar-light coden-nav sticky-top">
     <a class="navbar-brand font-weight-bold" href="index.html">
       <span class="brand-dot"></span> CODEN
@@ -33,34 +31,11 @@
     <div class="container py-4">
       <h2 class="mb-3" style="font-family:'Cormorant',serif"><strong>Tu carrito</strong></h2>
 
-      <!-- Lista de ítems (se renderiza con JS) -->
+      <!-- Items -->
       <div id="cartItems" class="mb-3"></div>
-
-      <!-- Subtotal rápido (compat con tu lógica previa) -->
       <p class="mb-4">Total productos: <strong id="cartTotal">$0</strong></p>
 
-      <!-- Método de entrega -->
-      <div class="card p-3 mb-3">
-        <h5 class="mb-2">Método de entrega</h5>
-        <div class="custom-control custom-radio">
-          <input class="custom-control-input" type="radio" name="shipping" id="ship-retiro" value="retiro" checked>
-          <label class="custom-control-label" for="ship-retiro">Retiro en local (sin costo)</label>
-        </div>
-        <div class="custom-control custom-radio">
-          <input class="custom-control-input" type="radio" name="shipping" id="ship-mdp" value="mdp">
-          <label class="custom-control-label" for="ship-mdp">Envío urbano MDP ($3000)</label>
-        </div>
-        <div class="custom-control custom-radio">
-          <input class="custom-control-input" type="radio" name="shipping" id="ship-pba" value="pba">
-          <label class="custom-control-label" for="ship-pba">Provincia de Buenos Aires ($5500)</label>
-        </div>
-        <div class="custom-control custom-radio">
-          <input class="custom-control-input" type="radio" name="shipping" id="ship-resto" value="resto">
-          <label class="custom-control-label" for="ship-resto">Resto del país ($7500)</label>
-        </div>
-      </div>
-
-      <!-- Datos de contacto mínimos -->
+      <!-- Datos de contacto -->
       <div class="card p-3 mb-3">
         <h5 class="mb-2">Datos de contacto</h5>
         <div class="form-row">
@@ -79,7 +54,81 @@
         </div>
       </div>
 
-      <!-- Resumen final Mercado Pago -->
+      <!-- Método de entrega NUEVO -->
+      <div class="card p-3 mb-3">
+        <h5 class="mb-2">Método de entrega</h5>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="shipping_method" id="ship-pickup" value="pickup" checked>
+          <label class="custom-control-label" for="ship-pickup">Retiro en local (sin costo)</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="shipping_method" id="ship-home" value="home">
+          <label class="custom-control-label" for="ship-home">Envío a domicilio</label>
+        </div>
+      </div>
+
+      <!-- Dirección de envío (se muestra solo si envío a domicilio) -->
+      <div id="shippingAddress" class="card p-3 mb-3" style="display:none">
+        <h5 class="mb-2">Dirección de envío</h5>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Nombre</label>
+            <input id="ship_name" class="form-control" autocomplete="name">
+          </div>
+          <div class="form-group col-md-6">
+            <label>Apellido</label>
+            <input id="ship_surname" class="form-control" autocomplete="family-name">
+          </div>
+          <div class="form-group col-md-6">
+            <label>Email</label>
+            <input id="ship_email" type="email" class="form-control" autocomplete="email">
+          </div>
+          <div class="form-group col-md-6">
+            <label>Teléfono</label>
+            <input id="ship_phone" type="tel" class="form-control" autocomplete="tel">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Código Postal</label>
+            <input id="ship_zip" class="form-control" inputmode="numeric" maxlength="10" autocomplete="postal-code">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Provincia</label>
+            <select id="ship_state" class="form-control">
+              <option value="">Seleccioná…</option>
+              <option>Buenos Aires</option><option>CABA</option><option>Córdoba</option>
+              <option>Santa Fe</option><option>Mendoza</option><option>Neuquén</option>
+              <option>Chubut</option><option>Río Negro</option><option>Tierra del Fuego</option>
+              <option>La Pampa</option><option>Entre Ríos</option><option>San Luis</option>
+              <option>San Juan</option><option>Salta</option><option>Jujuy</option>
+              <option>Catamarca</option><option>La Rioja</option><option>Santiago del Estero</option>
+              <option>Chaco</option><option>Formosa</option><option>Misiones</option>
+              <option>Corrientes</option><option>Santa Cruz</option><option>Tucumán</option>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Ciudad / Localidad</label>
+            <input id="ship_city" class="form-control" autocomplete="address-level2">
+          </div>
+          <div class="form-group col-md-6">
+            <label>Calle</label>
+            <input id="ship_street" class="form-control" autocomplete="address-line1">
+          </div>
+          <div class="form-group col-md-3">
+            <label>Número</label>
+            <input id="ship_number" class="form-control" inputmode="numeric">
+          </div>
+          <div class="form-group col-md-3">
+            <label>Piso/Depto (opcional)</label>
+            <input id="ship_floor" class="form-control">
+          </div>
+          <div class="form-group col-12">
+            <label>Referencias (opcional)</label>
+            <input id="ship_refs" class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen -->
       <ul class="list-group my-3">
         <li class="list-group-item d-flex justify-content-between">
           <span>Subtotal</span> <strong id="subtotal">$ 0</strong>
@@ -91,115 +140,42 @@
           <span>Total</span> <strong id="total">$ 0</strong>
         </li>
       </ul>
+      <div id="ship_calc_msg" style="font-size:.9rem;color:#64748b;margin-top:-6px; margin-bottom:12px"></div>
 
-      <!-- CTA de pago -->
+      <!-- CTA pago -->
       <button id="btn-pagar" class="btn btn-primary btn-lg btn-block">Pagar con Mercado Pago</button>
     </div>
   </div>
 
+  <!-- Scripts -->
+  <script type="module" src="/js/cart.js"></script>
 
-<!-- Scripts -->
-<!-- Quitar esta: <script type="module" src="supabaseClient.js"></script> -->
+  <!-- Limpia query mp=success y vacía carrito -->
+  <script>
+    (function(){
+      const mp = new URL(location.href).searchParams.get('mp');
+      if (mp === 'success') {
+        try {
+          window.Cart?.setCart?.([]);
+          window.Cart?.updateCartBadge?.();
+          alert('¡Pago aprobado! Gracias por tu compra.');
+          const u = new URL(location.href);
+          u.searchParams.delete('mp');
+          history.replaceState({}, '', u);
+          window.Cart?.renderCartPage?.();
+          window.Pay?.renderTotalsBox?.();
+        } catch (e) { console.error(e); }
+      }
+    })();
+  </script>
 
-<!-- Lógica del carrito (DB o local) -->
-<script type="module" src="/js/cart.js"></script>
-<script>
-  (function(){
-    const mp = new URL(location.href).searchParams.get('mp');
-    if (mp === 'success') {
-      try {
-        window.Cart?.setCart?.([]);
-        window.Cart?.updateCartBadge?.();
-        alert('¡Pago aprobado! Gracias por tu compra.');
-        const u = new URL(location.href);
-        u.searchParams.delete('mp');
-        history.replaceState({}, '', u);
-        window.Cart?.renderCartPage?.();
-        window.Pay?.renderTotalsBox?.();
-      } catch (e) { console.error(e); }
-    }
-  })();
-</script>
-
-<!-- Modal de autenticación reutilizable -->
-<script type="module" src="/js/auth-modal.js"></script>
-
-
-<!-- Checkout a Mercado Pago -->
-<script type="module" src="/js/checkout.js"></script>
-
-<!-- Badge del navbar (compat con tu código) -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    window.Cart?.updateCartBadge?.();
-  });
-</script>
-
-<!-- (si usás este) -->
-<script type="module" src="/navbar-auth.js" defer></script>
-
-<section class="card">
-  <h3>Método de entrega</h3>
-  <label><input type="radio" name="shipping_method" value="pickup" checked> Retiro en local (sin costo)</label><br>
-  <label><input type="radio" name="shipping_method" value="home"> Envío a domicilio</label>
-</section>
-
-<section id="shippingAddress" class="card" style="display:none">
-  <h3>Dirección de envío</h3>
-  <div class="grid">
-    <label>Nombre<input id="ship_name" autocomplete="name"></label>
-    <label>Apellido<input id="ship_surname" autocomplete="family-name"></label>
-    <label>Email<input id="ship_email" type="email" autocomplete="email"></label>
-    <label>Teléfono<input id="ship_phone" type="tel" autocomplete="tel"></label>
-    <label>Código Postal<input id="ship_zip" inputmode="numeric" maxlength="10" autocomplete="postal-code"></label>
-    <label>Provincia
-      <select id="ship_state">
-        <option value="">Seleccioná…</option>
-        <option>Buenos Aires</option>
-        <option>CABA</option>
-        <option>Córdoba</option>
-        <option>Santa Fe</option>
-        <option>Mendoza</option>
-        <option>Neuquén</option>
-        <option>Chubut</option>
-        <option>Río Negro</option>
-        <option>Tierra del Fuego</option>
-        <option>La Pampa</option>
-        <option>Entre Ríos</option>
-        <option>San Luis</option>
-        <option>San Juan</option>
-        <option>Salta</option>
-        <option>Jujuy</option>
-        <option>Catamarca</option>
-        <option>La Rioja</option>
-        <option>Santiago del Estero</option>
-        <option>Chaco</option>
-        <option>Formosa</option>
-        <option>Misiones</option>
-        <option>Corrientes</option>
-        <option>Santa Cruz</option>
-        <option>Tucumán</option>
-      </select>
-    </label>
-    <label>Ciudad / Localidad<input id="ship_city" autocomplete="address-level2"></label>
-    <label>Calle<input id="ship_street" autocomplete="address-line1"></label>
-    <label>Número<input id="ship_number" inputmode="numeric"></label>
-    <label>Piso/Depto (opcional)<input id="ship_floor"></label>
-    <label>Referencias (opcional)<input id="ship_refs"></label>
-  </div>
-</section>
-
-<section class="card">
-  <h3>Resumen</h3>
-  <div class="row"><span>Subtotal</span><strong id="sum_subtotal">$0</strong></div>
-  <div class="row"><span>Envío</span><strong id="sum_shipping">—</strong></div>
-  <div class="row total"><span>Total</span><strong id="sum_total">$0</strong></div>
-  <div id="ship_calc_msg" style="font-size:.9rem;color:#64748b;margin-top:.5rem"></div>
-</section>
-
-<button id="btnPagarMP" class="btn btn-primary">Pagar con Mercado Pago</button>
-<div id="wallet_container" style="margin-top:16px"></div>
-
-
+  <script type="module" src="/js/auth-modal.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.Cart?.updateCartBadge?.();
+    });
+  </script>
+  <script type="module" src="/navbar-auth.js" defer></script>
 </body>
 </html>
+
