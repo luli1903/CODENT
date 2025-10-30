@@ -120,8 +120,9 @@ function formatPrice(n){
   }
 }
 
-function toggleStates({ loading=false, empty=false, error=false }={}){
-  emptyState.hidden = !empty;
-  errorState.hidden = !error;
-  productGrid.style.opacity = loading ? .5 : 1;
+function toggleStates({ loading=false, empty=false, error=false } = {}) {
+  if (emptyState) emptyState.hidden = !empty;
+  if (errorState) errorState.hidden = !error;
+  if (productGrid) productGrid.style.opacity = loading ? 0.5 : 1;
 }
+
