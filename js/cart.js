@@ -333,7 +333,7 @@ export async function payWithMercadoPago() {
       return;
     }
 
-    const redirect = data.init_point || data.sandbox_init_point;
+    const redirect = data.sandbox_init_point || data.init_point;
     if (!redirect) throw new Error('Preferencia sin init_point');
 
     window.location.href = redirect;
