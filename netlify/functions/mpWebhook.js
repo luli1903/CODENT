@@ -1,39 +1,34 @@
-import { MercadoPagoConfig, Payment } from "mercadopago";
-import crypto from "crypto";
-
+// netlify/functions/mpWebhook.js
 export const handler = async (event) => {
   try {
-    if (event.httpMethod !== "POST") return { statusCode: 200, body: "OK" };
-
-    // Validación opcional por firma simple
-    const secret = process.env.MP_WEBHOOK_SECRET || "";
-    const reqId = event.headers["x-request-id"] || "";
-    const signature = event.headers["x-signature"] || "";
-    if (secret) {
-      const expected = crypto.createHmac("sha256", secret).update(reqId).digest("hex");
-      if (signature !== expected) {
-        console.warn("Firma inválida, ignorando webhook");
-        return { statusCode: 200, body: "IGNORED" };
-      }
+    if (event.httpMethod === "OPTIONS") {
+      return { statusCode: 200, headers: cors(), body: "" };
     }
 
-    const body = JSON.parse(event.body || "{}");
+    // MP a veces manda GET ?topic=payment&id=... o POST {type:'payment', data:{id}}
+    const qs = event.queryStringParameters || {};
+    let body = {};
+    try { body = JSON.parse(event.body || "{}"); } catch {}
 
-    if (body?.type === "payment" && body?.data?.id) {
-      const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
-      const paymentApi = new Payment(client);
-      const payment = await paymentApi.get({ id: body.data.id });
+    const topic = qs.topic || qs.type || body.type || "";
+    const id = qs.id || body?.data?.id || body?.data?.resource || null;
 
-      const status = payment.status; // approved / pending / rejected
-      const externalRef = payment.external_reference;
+    console.log("Webhook recibido:", {
+      method: event.httpMethod,
+      topic, id, qs, body
+    });
 
-      // Aquí podrías actualizar tu BD (orders) con status/externalRef
-      console.log("MP webhook:", { paymentId: body.data.id, status, externalRef });
-    }
-
-    return { statusCode: 200, body: "OK" };
+    // no hacemos nada más por ahora: solo devolvemos 200
+    return { statusCode: 200, headers: cors(), body: "OK" };
   } catch (e) {
-    console.error("mpWebhook error:", e);
-    return { statusCode: 200, body: "OK" }; // Respondemos 200 para evitar reintentos infinitos
+    console.error("mpWebhook fatal:", e);
+    return { statusCode: 200, headers: cors(), body: "OK" };
   }
 };
+
+function cors(){ return {
+  "Content-Type":"application/json",
+  "Access-Control-Allow-Origin":"*",
+  "Access-Control-Allow-Methods":"POST,GET,OPTIONS",
+  "Access-Control-Allow-Headers":"Content-Type",
+};}
