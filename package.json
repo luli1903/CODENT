@@ -3,6 +3,6 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "mercadopago": "^2.0.10"
+    "mercadopago": "^2.9.0"
   }
 }

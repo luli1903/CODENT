@@ -1,34 +1,44 @@
-// netlify/functions/mpWebhook.js
+// /netlify/functions/mp-webhook.js
+import { MercadoPagoConfig, Payment } from "mercadopago";
+
 export const handler = async (event) => {
   try {
-    if (event.httpMethod === "OPTIONS") {
-      return { statusCode: 200, headers: cors(), body: "" };
+    if (event.httpMethod !== "POST") {
+      return { statusCode: 405, body: "Method Not Allowed" };
     }
 
-    // MP a veces manda GET ?topic=payment&id=... o POST {type:'payment', data:{id}}
-    const qs = event.queryStringParameters || {};
-    let body = {};
-    try { body = JSON.parse(event.body || "{}"); } catch {}
+    const accessToken = process.env.MP_ACCESS_TOKEN || "";
+    if (!accessToken) return { statusCode: 500, body: "Missing MP_ACCESS_TOKEN" };
 
-    const topic = qs.topic || qs.type || body.type || "";
-    const id = qs.id || body?.data?.id || body?.data?.resource || null;
+    const data = JSON.parse(event.body || "{}");
+    const type = data?.type || data?.action || data?.topic;
 
-    console.log("Webhook recibido:", {
-      method: event.httpMethod,
-      topic, id, qs, body
-    });
+    const paymentId =
+      data?.data?.id ||
+      data?.resource?.id ||
+      data?.id ||
+      null;
 
-    // no hacemos nada más por ahora: solo devolvemos 200
-    return { statusCode: 200, headers: cors(), body: "OK" };
-  } catch (e) {
-    console.error("mpWebhook fatal:", e);
-    return { statusCode: 200, headers: cors(), body: "OK" };
+    if (type === "payment" && paymentId) {
+      const client = new MercadoPagoConfig({ accessToken });
+      const payment = new Payment(client);
+      const res = await payment.get({ id: paymentId.toString() });
+
+      console.log("Payment status:", {
+        id: res.id,
+        status: res.status,
+        status_detail: res.status_detail,
+        external_reference: res.external_reference
+      });
+
+      // TODO: actualizar tu DB (Supabase) con estado de orden acá
+    } else {
+      console.log("Webhook recibido:", data);
+    }
+
+    return { statusCode: 200, body: "OK" };
+  } catch (err) {
+    console.error("mp-webhook error:", err);
+    return { statusCode: 500, body: "Error" };
   }
 };
-
-function cors(){ return {
-  "Content-Type":"application/json",
-  "Access-Control-Allow-Origin":"*",
-  "Access-Control-Allow-Methods":"POST,GET,OPTIONS",
-  "Access-Control-Allow-Headers":"Content-Type",
-};}

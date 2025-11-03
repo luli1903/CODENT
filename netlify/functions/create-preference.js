@@ -1,12 +1,15 @@
 // /netlify/functions/create-preference.js
 import { MercadoPagoConfig, Preference } from "mercadopago";
 
+const cors = () => ({
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization"
+});
+
 export const handler = async (event) => {
   try {
-    console.log("createPreference ejecutado 🚀");
-    console.log("TOKEN:", process.env.MP_ACCESS_TOKEN ? "SET ✅" : "MISSING ❌");
-
-    // CORS preflight
+    // Preflight CORS
     if (event.httpMethod === "OPTIONS") {
       return { statusCode: 200, headers: cors(), body: "" };
     }
@@ -14,133 +17,74 @@ export const handler = async (event) => {
       return { statusCode: 405, headers: cors(), body: "Method Not Allowed" };
     }
 
-    const accessToken = process.env.MP_ACCESS_TOKEN || "";
-    const integratorId = process.env.MP_INTEGRATOR_ID || ""; // opcional
-    const baseUrl =
-      process.env.URL ||                // producción (dominio principal)
-      process.env.DEPLOY_PRIME_URL ||   // deploy previews / branch deploys
-      process.env.DEPLOY_URL ||         // fallback
-      "https://resonant-faun-ef8805.netlify.app"; // último recurso
-
-    console.log("BASE_URL:", baseUrl);
-    if (!accessToken) return err(500, "MP_ACCESS_TOKEN no definido");
-
-    // Body esperado: { cart:[], customer:{name,surname,email,phone?}, shipping:{method,label,cost,address{...}} }
-    const { cart = [], customer = {}, shipping = null } = JSON.parse(event.body || "{}");
-    if (!Array.isArray(cart) || !cart.length) return err(400, "cart[] requerido");
-    if (!customer.email) return err(400, "customer.email requerido");
-
-    // ==== Items (normalize + validar precios) ====
-    const items = cart.map((p) => {
-      const price = p.unit_price ?? p.price ?? p.unitPrice ?? p.precio ?? 0;
-      const unit_price = Number(price);
-      if (!Number.isFinite(unit_price) || unit_price <= 0) {
-        throw new Error(`Precio inválido para item ${p.title || p.id} -> ${price}`);
-      }
-      return {
-        id: String(p.id ?? ""),
-        title: String(p.title ?? "Producto"),
-        quantity: Number(p.quantity ?? 1),
-        unit_price,
-        currency_id: "ARS",
-        picture_url: p.picture_url || p.img || undefined,
-      };
-    });
-
-    // Ítem de envío extra (para que el total cierre con el cliente)
-    const shipCost = shipping ? Number(shipping.cost ?? shipping.amount ?? 0) : 0;
-    if (Number.isFinite(shipCost) && shipCost > 0) {
-      items.push({
-        id: "shipping",
-        title: `Envío: ${shipping?.label || shipping?.method || "Envío"}`,
-        quantity: 1,
-        unit_price: shipCost,
-        currency_id: "ARS",
-      });
+    const accessToken  = process.env.MP_ACCESS_TOKEN || "";
+    const integratorId = process.env.MP_INTEGRATOR_ID || "";
+    if (!accessToken) {
+      return { statusCode: 500, headers: cors(), body: "Missing MP_ACCESS_TOKEN" };
     }
 
-    // ==== Dirección de envío real (queda registrada en la preferencia/pago) ====
-    const shipments =
-      (shipping?.method === "home")
-        ? {
-            mode: "not_specified", // no usamos Mercado Envíos automático
-            cost: Number(shipping.cost || 0),
-            receiver_address: {
-              zip_code: shipping.address?.zip || "",
-              street_name: shipping.address?.street || "",
-              street_number: Number(shipping.address?.number || 0),
-              floor: shipping.address?.floor || "",
-              apartment: shipping.address?.floor || "",
-              city_name: shipping.address?.city || "",
-              state_name: shipping.address?.state || "",
-            },
-          }
-        : undefined;
+    const body = JSON.parse(event.body || "{}");
+    const {
+      items = [],                 // [{ title, quantity, unit_price, currency_id, picture_url, category_id }]
+      payer = {},                 // { name, surname, email, phone, address }
+      shipments = null,           // { cost, mode: 'not_specified' }
+      metadata = {},
+      external_reference = "",
+      notification_url = "",
+      back_urls = {}
+    } = body;
 
-    // ==== Preferencia ====
-    const preferenceBody = {
-      items,
-      payer: {
-        name: customer.name || "",
-        surname: customer.surname || "",
-        email: customer.email,
-        phone: customer.phone ? { area_code: "", number: customer.phone } : undefined,
-      },
-      external_reference: `order_${Date.now()}`,
-      statement_descriptor: "CODENT",
-      back_urls: {
-        success: `${baseUrl}/carrito.html?mp=success`,
-        pending: `${baseUrl}/carrito.html?mp=pending`,
-        failure: `${baseUrl}/carrito.html?mp=failure`,
-      },
-      auto_return: "approved",
-      notification_url: `${baseUrl}/.netlify/functions/mpWebhook`, // asegurate que exista esa función
-      shipments, // ← dirección y costo de envío
-      metadata: {
-        project: "CODENT",
-        shipping_selected: shipping?.label || shipping?.method || "",
-        address: shipping?.address || null,
-      },
+    if (!Array.isArray(items) || items.length === 0) {
+      return { statusCode: 400, headers: cors(), body: "items[] is required" };
+    }
+
+    const baseUrl =
+      process.env.BASE_URL ||
+      process.env.URL ||              // dominio principal Netlify
+      process.env.DEPLOY_PRIME_URL || // deploy preview / branch
+      "";
+
+    const defaultBackUrls = {
+      success: `${baseUrl}/checkout/success.html`,
+      pending: `${baseUrl}/checkout/pending.html`,
+      failure: `${baseUrl}/checkout/failure.html`
     };
 
-    console.log("Creando preferencia con:", JSON.stringify(preferenceBody, null, 2));
+    const client = new MercadoPagoConfig({
+      accessToken,
+      options: integratorId ? { integratorId } : undefined
+    });
+    const preference = new Preference(client);
 
-    const client = new MercadoPagoConfig({ accessToken, ...(integratorId ? { options: { integratorId } } : {}) });
-    const pref = new Preference(client);
+    const prefData = {
+      items: items.map(it => ({
+        title: it.title,
+        quantity: Number(it.quantity || 1),
+        unit_price: Number(it.unit_price || 0),
+        currency_id: it.currency_id || "ARS",
+        picture_url: it.picture_url,
+        category_id: it.category_id
+      })),
+      payer,
+      shipments: shipments || undefined,
+      back_urls: Object.keys(back_urls).length ? back_urls : defaultBackUrls,
+      auto_return: "approved",
+      binary_mode: true,
+      external_reference: external_reference || undefined,
+      metadata: { ...metadata, source: "CODENT" },
+      notification_url: notification_url || undefined
+    };
 
-    let resp;
-    try {
-      resp = await pref.create({ body: preferenceBody });
-      console.log("Preferencia creada ✅", resp?.id);
-    } catch (e) {
-      console.error("MP create error:", e);
-      return err(502, e?.cause?.[0]?.description || e?.message || "Error creando preferencia");
-    }
+    const pref = await preference.create({ body: prefData });
+    const { id, init_point, sandbox_init_point } = pref;
 
     return {
       statusCode: 200,
-      headers: cors(),
-      body: JSON.stringify({
-        id: resp.id, // para Wallet Brick si más adelante lo querés usar
-        init_point: resp.init_point,
-        sandbox_init_point: resp.sandbox_init_point,
-        external_reference: preferenceBody.external_reference,
-      }),
+      headers: { "Content-Type": "application/json", ...cors() },
+      body: JSON.stringify({ preferenceId: id, init_point, sandbox_init_point })
     };
-  } catch (e) {
-    console.error("createPreference fatal:", e);
-    return err(500, e.message || "Error creating preference");
+  } catch (err) {
+    console.error("create-preference error:", err);
+    return { statusCode: 500, headers: cors(), body: `Error: ${err?.message || "Internal Server Error"}` };
   }
 };
-
-function cors() {
-  return {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
-}
-function err(code, msg) {
-  return { statusCode: code, headers: cors(), body: JSON.stringify({ error: msg }) };
-}
