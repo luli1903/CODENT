@@ -89,30 +89,25 @@ export const handler = async (event) => {
     const preference = new Preference(client);
 
     const prefData = {
-  items,
-  payer,                 // dejalo como lo tenés (si podés, con email del buyer test)
-  shipments: shipments || undefined,
-  back_urls,
+  // ...lo que ya tenías (items, payer, shipments, back_urls, etc.)
   auto_return: "approved",
   binary_mode: true,
 
-  // 🚫 Forzamos que NO use saldo ni medios guardados
+  // ✅ NO excluimos account_money
   payment_methods: {
-    excluded_payment_methods: [
-      { id: "account_money" }     // saldo en cuenta MP
-    ],
     excluded_payment_types: [
-      { id: "ticket" },           // cupones/boletas
-      { id: "bank_transfer" },    // transferencia
+      { id: "ticket" },         // boletas/cupones
+      { id: "bank_transfer" },  // transferencia
       { id: "atm" },
-      { id: "digital_currency" },
-      { id: "prepaid_card" }      // opcional
-      // (dejamos habilitado 'credit_card' y 'debit_card')
+      { id: "digital_currency" }
+      // (dejamos credit_card / debit_card habilitados)
     ],
-    installments: 1,                 // 1 cuota (simple para sandbox)
-    default_payment_method_id: "visa" // sugiere “Tarjeta Visa”
+    default_payment_method_id: "visa", // sugiere tarjeta Visa
+    installments: 1                    // 1 cuota (simple para pruebas)
+    // También podrías usar "default_installments": 1 o "max_installments": 1 según versión
   },
 };
+
 
 
     const pref = await preference.create({ body: prefData });
