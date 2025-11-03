@@ -79,19 +79,12 @@ export const handler = async (event) => {
     const preference = new Preference(client);
 
     const prefData = {
-  items,
-  payer: payer && payer.email ? {
-    ...payer,
-    // fuerza datos válidos de prueba
-    email: payer.email, // usá el email del buyer test
-    identification: { type: "DNI", number: "12345678" }
-  } : undefined,
-  shipments,
-  back_urls,              // absolutas (ya lo dejamos resuelto)
+  items,                    // ya adaptados
+  back_urls,                // absolutas como ya pusimos
   auto_return: "approved",
   binary_mode: true
-  // 🔕 sin payment_methods por ahora (nada de excluded / default / installments)
 };
+
 
 
 
