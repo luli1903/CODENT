@@ -79,23 +79,23 @@ export const handler = async (event) => {
     const preference = new Preference(client);
 
     const prefData = {
-      items,
-      payer,
-      shipments,
-      back_urls,
-      auto_return: "approved", // <- ahora sí, válido porque success existe
-      binary_mode: true,
-      payment_methods: {
-        excluded_payment_types: [
-          { id: "ticket" },
-          { id: "bank_transfer" },
-          { id: "atm" },
-          { id: "digital_currency" }
-        ],
-        default_payment_method_id: "visa",
-        installments: 1
-      }
-    };
+  items,
+  payer: payer && payer.email ? {
+    ...payer,
+    // fuerza email y DNI válidos de PRUEBA
+    email: payer.email,                 // poné el email del buyer test
+    identification: { type: "DNI", number: "12345678" }
+  } : undefined,
+  shipments,
+  back_urls,                // absolutas como ya pusimos
+  auto_return: "approved",
+  binary_mode: true,
+
+  // 🔧 Quitar por ahora TODA restricción de medios:
+  // (sin excluded_payment_types, sin default_payment_method_id, sin installments)
+  // payment_methods: {  }   <-- directamente NO incluyas este bloque
+};
+
 
     const pref = await preference.create({ body: prefData });
     const { id, init_point, sandbox_init_point } = pref;
