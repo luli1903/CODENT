@@ -70,17 +70,47 @@ export const handler = async (event) => {
 
     if (!items.length) return json(400, { error: "items have non-positive price/qty" });
 
-    const baseUrl =
-      process.env.BASE_URL ||
-      process.env.URL ||
-      process.env.DEPLOY_PRIME_URL ||
-      "";
+    // --- URL absolutas sí o sí ---
+const proto = (event.headers["x-forwarded-proto"] || "https");
+const host  = (event.headers["x-forwarded-host"] || event.headers["host"] || "");
+const runtimeUrl = host ? `${proto}://${host}` : "";
 
-    const back_urls = {
-      success: `${baseUrl}/checkout/success.html`,
-      pending: `${baseUrl}/checkout/pending.html`,
-      failure: `${baseUrl}/checkout/failure.html`
-    };
+// Permití sobreescribir desde ENV, si no usá lo que detectamos del request
+const baseUrl =
+  process.env.BASE_URL ||
+  process.env.URL ||
+  process.env.DEPLOY_PRIME_URL ||
+  runtimeUrl ||
+  "";
+
+// helper para asegurar absoluto
+const abs = (u) => {
+  if (!u) return null;
+  if (/^https?:\/\//i.test(u)) return u;
+  const path = u.startsWith("/") ? u : `/${u}`;
+  return `${baseUrl}${path}`;
+};
+
+// Si el front no manda back_urls, ponemos defaults ABSOLUTOS
+const defaultsBack = {
+  success: abs("/checkout/success.html"),
+  pending: abs("/checkout/pending.html"),
+  failure: abs("/checkout/failure.html")
+};
+
+// Si el body trae back_urls, normalizalas a absoluto
+const incomingBack = body.back_urls || {};
+const back_urls = {
+  success: abs(incomingBack.success) || defaultsBack.success,
+  pending: abs(incomingBack.pending) || defaultsBack.pending,
+  failure: abs(incomingBack.failure) || defaultsBack.failure
+};
+
+// Validación dura: si no hay success absoluto, error claro
+if (!back_urls.success || !/^https?:\/\//i.test(back_urls.success)) {
+  return json(400, { error: "back_urls.success must be an absolute https URL" });
+}
+
 
     const client = new MercadoPagoConfig({
       accessToken,
@@ -95,17 +125,16 @@ export const handler = async (event) => {
 
   // ✅ NO excluimos account_money
   payment_methods: {
-    excluded_payment_types: [
-      { id: "ticket" },         // boletas/cupones
-      { id: "bank_transfer" },  // transferencia
-      { id: "atm" },
-      { id: "digital_currency" }
-      // (dejamos credit_card / debit_card habilitados)
-    ],
-    default_payment_method_id: "visa", // sugiere tarjeta Visa
-    installments: 1                    // 1 cuota (simple para pruebas)
-    // También podrías usar "default_installments": 1 o "max_installments": 1 según versión
-  },
+  excluded_payment_types: [
+    { id: "ticket" },
+    { id: "bank_transfer" },
+    { id: "atm" },
+    { id: "digital_currency" }
+  ],
+  default_payment_method_id: "visa",
+  installments: 1
+},
+
 };
 
 
