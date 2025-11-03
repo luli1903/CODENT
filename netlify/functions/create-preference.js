@@ -82,19 +82,17 @@ export const handler = async (event) => {
   items,
   payer: payer && payer.email ? {
     ...payer,
-    // fuerza email y DNI válidos de PRUEBA
-    email: payer.email,                 // poné el email del buyer test
+    // fuerza datos válidos de prueba
+    email: payer.email, // usá el email del buyer test
     identification: { type: "DNI", number: "12345678" }
   } : undefined,
   shipments,
-  back_urls,                // absolutas como ya pusimos
+  back_urls,              // absolutas (ya lo dejamos resuelto)
   auto_return: "approved",
-  binary_mode: true,
-
-  // 🔧 Quitar por ahora TODA restricción de medios:
-  // (sin excluded_payment_types, sin default_payment_method_id, sin installments)
-  // payment_methods: {  }   <-- directamente NO incluyas este bloque
+  binary_mode: true
+  // 🔕 sin payment_methods por ahora (nada de excluded / default / installments)
 };
+
 
 
     const pref = await preference.create({ body: prefData });
