@@ -1,7 +1,24 @@
-<!doctype html><html lang="es"><meta charset="utf-8">
-<title>Pago pendiente</title>
-<body style="font-family:system-ui;padding:2rem">
-  <h1>⏳ Pago pendiente</h1>
-  <p>Cuando se acredite te avisamos por email.</p>
-  <a href="/">Volver a la tienda</a>
-</body></html>
+<!doctype html><meta charset="utf-8">
+<title>Pago aprobado | CODENT</title>
+<link rel="stylesheet" href="/css/style.css">
+<main class="container" style="max-width:680px">
+  <h1>Pago pendiente </h1>
+  <p>Te enviamos el detalle por email.</p>
+  <div id="info" class="card" style="padding:12px"></div>
+  <p><a href="/index.html" class="btn">Volver a la tienda</a></p>
+</main>
+<script>
+  const q=new URLSearchParams(location.search);
+  const data={
+    payment_id:q.get("payment_id"),
+    status:q.get("status"),
+    preference_id:q.get("preference_id"),
+    external_reference:q.get("external_reference"),
+    collection_id:q.get("collection_id")
+  };
+  document.getElementById('info').innerHTML =
+    `<b>Pago:</b> ${data.payment_id || "-"}<br>
+     <b>Estado:</b> ${data.status || "-"}<br>
+     <b>Preferencia:</b> ${data.preference_id || "-"}<br>
+     <b>Ref:</b> ${data.external_reference || "-"}`
+</script>
