@@ -102,3 +102,35 @@ footer{ border-top:1px solid var(--line); padding:28px 0 40px; background:#fbfdf
 .text-link{ color:#0f172a; font-weight:800; border-bottom:2px solid transparent; }
 .text-link:hover{ color:var(--accent-600); border-color:var(--accent-600); }
 .text-muted-ink{ color:var(--muted)!important; }
+/* Base única para todos los botones */
+.btn, .cbtn, a.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  padding:.78rem 1.2rem; border-radius:16px;       /* más cuadraditos */
+  font-weight:800; letter-spacing:.2px;
+  border:1px solid #e2e8f0; box-shadow:0 2px 12px rgba(0,0,0,.06);
+  transition:.18s ease;
+}
+
+/* Primario pastel (por defecto en el sitio) */
+.btn-primary, .cbtn-primary {
+  background:#7fb3ff; border-color:#7fb3ff; color:#0f172a;
+}
+.btn-primary:hover, .cbtn-primary:hover {
+  background:#5a98f2; border-color:#5a98f2; color:#fff;
+}
+
+/* Ghost */
+.btn-ghost, .cbtn-ghost, .btn-outline-primary {
+  background:#fff; color:#0f172a; border-color:#e2e8f0;
+}
+.btn-ghost:hover, .cbtn-ghost:hover, .btn-outline-primary:hover {
+  background:#fff; border-color:#cbd5e1;
+}
+
+/* En el HERO forzamos contraste (el primario se invierte automáticamente) */
+.hero .btn-primary { 
+  background:#111827; border-color:#111827; color:#fff;
+}
+.hero .btn-primary:hover {
+  filter:brightness(1.08);
+}
