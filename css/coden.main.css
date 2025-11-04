@@ -1,5 +1,5 @@
-/* ===== CODENT MAIN (estilos base globales) ===== */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap');
+/* ===== CODENT · BASE GLOBAL ===== */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&display=swap');
 
 :root{
   --ink:#0f172a;
@@ -7,220 +7,81 @@
   --line:#e2e8f0;
   --bg:#ffffff;
   --card:#fbfbfe;
-  --accent:#22c55e;       /* verde salvia */
-  --accent-600:#16a34a;
+
+  /* Acento suave (sin celeste chillón) */
+  --accent:#7fb3ff;         /* azul pastel */
+  --accent-600:#5a98f2;     /* un tono más fuerte para hover */
+
   --font-sans:"Raleway","Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   --r-sm:10px; --r-md:14px; --r-lg:18px;
   --shadow-0:0 2px 12px rgba(0,0,0,.06);
-  --shadow-1:0 8px 22px rgba(0,0,0,.08);
+  --shadow-1:0 8px 22px rgba(0,0,0,.10);
   --container:min(1200px,92vw);
 }
 
-*,*::before,*::after{ box-sizing:border-box; }
-html,body{ height:100%; margin:0; padding:0; }
-
+/* Fondo global con degradé muy leve (no blanco liso) */
+html,body{height:100%;margin:0;padding:0}
 body{
   font-family:var(--font-sans);
   color:var(--ink);
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   background:
-    radial-gradient(1200px 600px at -10% -10%, #eef3f7 10%, transparent 60%),
-    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 8%, transparent 55%),
+    radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
+    radial-gradient(1200px 600px at 110% 120%, #f4f6ff 12%, transparent 55%),
     #ffffff;
 }
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+ul{list-style:none;margin:0;padding:0}
+button{font:inherit;cursor:pointer}
+.container{width:var(--container);margin-inline:auto}
 
-img{ max-width:100%; display:block; }
-a{ color:inherit; text-decoration:none; }
-ul{ list-style:none; margin:0; padding:0; }
-button{ font:inherit; cursor:pointer; }
-.container{ width:var(--container); margin-inline:auto; }
-
-/* ===== NAVBAR ===== */
-.navbar{
-  position:sticky; top:0; z-index:50;
-  backdrop-filter: blur(10px);
-  background: rgba(255,255,255,.88) !important;
-  border-bottom:1px solid var(--line);
-}
-.navbar-brand.brand{
-  font-family:var(--font-sans);
-  font-weight:700;
-  letter-spacing:.2px;
-  color:#0f172a !important;
-}
-
-/* ===== BOTONES ===== */
-.btn{
-  border-radius:999px !important;
-  padding:.75rem 1.2rem !important;
-  font-weight:800 !important;
-  border:1px solid #e2e8f0 !important;
-  box-shadow: var(--shadow-0) !important;
-}
-.btn-primary{
-  background:#111827 !important;
-  border-color:#111827 !important;
-  color:#fff !important;
-}
-.btn-primary:hover{ filter:brightness(1.08); }
-.btn-outline-primary{
-  background:#fff !important;
-  color:#111827 !important;
-  border-color:#e2e8f0 !important;
-}
-.btn-outline-primary:hover{
-  background:#fff !important; border-color:#cbd5e1 !important;
-}
-
-/* Enlaces tipo texto */
-.text-link{
-  font-weight:700;
-  border-bottom:2px solid transparent;
-  text-decoration:none;
-  color:#0f172a;
-  transition:.2s;
-}
-.text-link:hover{ color:var(--accent); border-color:var(--accent); }
-
-/* ===== ICONOS EN CAJITA ===== */
-.icon-spot{
-  width:44px; height:44px; border-radius:12px;
-  display:flex; align-items:center; justify-content:center;
-  background:#f1f5f9; border:1px solid var(--line);
-  box-shadow:var(--shadow-0);
-  margin-bottom:.6rem; flex-shrink:0;
-}
-.icon-spot img{
-  width:22px; height:22px; object-fit:contain;
-  filter: brightness(0) saturate(100%)
-          invert(40%) sepia(94%) saturate(1900%)
-          hue-rotate(182deg) brightness(96%) contrast(101%);
-}
-
-/* ===== FOOTER ===== */
-footer{ border-top:1px solid var(--line); padding:28px 0 40px; background:#fbfdff }
-.foot-grid{ display:grid; gap:22px; grid-template-columns: 1.2fr .8fr .8fr }
-.foot h4{ margin:.2rem 0 .6rem }
-.foot a{ color:var(--muted); display:block; margin:.3rem 0 }
-
-/* ===== UTILIDADES ===== */
-.text-muted-ink{ color:var(--muted)!important; }
-.mb-1{ margin-bottom:.5rem!important; }
-.mt-1{ margin-top:.75rem!important; }
-
-/* ===== HERO / CTAs comunes ===== */
-.hero .inline{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-#coden-main .btn,
-.cbtn {
-  padding:.72rem 1.1rem;
-  border-radius:999px;
-  font-weight:700;
-  box-shadow: var(--shadow-0);
-}
-#coden-main .btn-primary,
-.cbtn-primary {
-  background: var(--accent); border:1px solid var(--accent); color:#fff;
-}
-#coden-main .btn-primary:hover,
-.cbtn-primary:hover {
-  background: var(--accent-600); border-color: var(--accent-600);
-}
-#coden-main .text-link {
-  color:#0f172a; font-weight:700;
-  border-bottom: 2px solid transparent; text-decoration:none;
-}
-#coden-main .text-link:hover { color:var(--accent); border-color:var(--accent); }
-/* ===== THEME TWEAKS ===== */
-:root{
-  /* paleta suave */
-  --ink:#0e172a;
-  --muted:#556274;
-  --line:#e6edf5;
-  --bg:#ffffff;
-  --brand:#7c9cff;      /* celeste pastel */
-  --brand-600:#5c7ee6;  /* hover */
-  --chip:#eef3ff;
-}
-
-/* fondo del body con degradé sutil */
-body{
-  background:
-    radial-gradient(1200px 600px at -10% -10%, #eef3f9 12%, transparent 60%),
-    radial-gradient(1200px 600px at 110% 120%, #f6f3ff 10%, transparent 55%),
-    #ffffff;
-}
-
-/* ===== NAVBAR con color ===== */
+/* ===== NAVBAR con “colorcito” suave ===== */
 .navbar{
   position: sticky; top:0; z-index:50;
-  background: linear-gradient(180deg,#ffffffcc,#f6f9ffdd) !important;
+  backdrop-filter: saturate(160%) blur(8px);
+  background: linear-gradient(90deg, #ffffffee, #f3f6ffcc) !important;
   border-bottom:1px solid var(--line);
-  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-0);
 }
-.navbar .navbar-brand{ font-weight:700; letter-spacing:.2px; }
-.navbar .btn{ background:#fff !important; border-color:#e6edf5 !important; }
-
-/* ===== BOTONES unificados (claritos) ===== */
-.btn,
-.cbtn{
-  border-radius:999px !important;
-  padding:.75rem 1.2rem !important;
-  font-weight:800 !important;
-  box-shadow:0 2px 10px rgba(0,0,0,.06);
-  border:1px solid #e6edf5 !important;
-}
-.btn-primary,.cbtn-primary{
-  background:var(--brand) !important; border-color:var(--brand) !important; color:#fff !important;
-}
-.btn-primary:hover,.cbtn-primary:hover{
-  background:var(--brand-600) !important; border-color:var(--brand-600) !important;
-}
-.btn-outline-primary,.cbtn-ghost{
-  background:#fff !important; color:#0e172a !important; border-color:#e6edf5 !important;
-}
-.btn-outline-primary:hover,.cbtn-ghost:hover{
-  background:#fff !important; border-color:#d3dceb !important;
+.navbar-brand.brand{
+  font-weight:700; letter-spacing:.2px; color:#0f172a !important;
 }
 
-/* ===== HERO: título más fino ===== */
-.hero h1{
-  font-family:"Raleway",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  font-weight:700;                /* antes 800/900 */
-  letter-spacing:.1px;
+/* ===== Botones consistentes ===== */
+.btn, .cbtn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  padding:.75rem 1.2rem; border-radius:999px; font-weight:700; letter-spacing:.2px;
+  border:1px solid #e2e8f0; text-decoration:none; box-shadow:var(--shadow-0);
+  transition:.2s ease;
 }
+.btn:hover, .cbtn:hover{ transform:translateY(-1px); box-shadow:var(--shadow-1); }
 
-/* ===== Chips/“4 puntos” bajo el héroe (mismo look) ===== */
-.home-highlights .card{
-  border:1px solid var(--line);
-  border-radius:16px;
-  box-shadow:0 10px 22px rgba(15,23,42,.06);
+.btn-primary, .cbtn-primary{
+  background:var(--accent); border-color:var(--accent); color:#0f172a; /* texto oscuro, look clarito */
 }
-.home-highlights .card small{ color:var(--muted); }
+.btn-primary:hover, .cbtn-primary:hover{
+  background:var(--accent-600); border-color:var(--accent-600); color:#fff;
+}
+.btn-ghost, .cbtn-ghost{
+  background:#fff; color:#0f172a; border-color:#e2e8f0;
+}
+.btn-ghost:hover, .cbtn-ghost:hover{ background:#fff; border-color:#cbd5e1 }
 
-/* ===== SERVICIOS: imágenes menos transparentes ===== */
-.service-ill{ opacity:.22; }             /* antes .10 */
-.service-card:hover .service-ill{ opacity:.28; }
-.service-card{ border-color:var(--line); }
-.service-head h4{ font-weight:800; }
+/* ===== Iconito “píldora” reutilizable ===== */
+.icon-spot{
+  width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  background:#f1f5f9;border:1px solid var(--line);box-shadow:var(--shadow-0);
+}
+.icon-spot img{width:22px;height:22px;object-fit:contain;filter:brightness(0) saturate(100%) invert(35%) sepia(6%) saturate(800%) hue-rotate(180deg)}
 
-/* ===== “Productos destacados” ===== */
-.products-section{
-  background: #f7faff;
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-  padding:40px 0;
-}
-.product-grid{
-  display:grid; gap:18px;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-}
-.product-card{
-  background:#fff; border:1px solid var(--line); border-radius:16px;
-  overflow:hidden; display:flex; flex-direction:column; box-shadow:0 2px 10px rgba(0,0,0,.04);
-}
-.product-card .img{ aspect-ratio:4/3; background:#f2f5fb; display:grid; place-items:center; }
-.product-card .img img{ max-width:92%; max-height:92%; object-fit:contain; }
-.product-card .body{ padding:12px; }
-.product-card .title{ font-weight:700; margin:.2rem 0 .1rem; }
-.product-card .price{ color:var(--brand-600); font-weight:800; }
+/* ===== Footer ===== */
+footer{border-top:1px solid var(--line);padding:28px 0 40px;background:#fbfdff}
+.foot-grid{display:grid;gap:22px;grid-template-columns:1.2fr .8fr .8fr}
+.foot a{color:var(--muted);display:block;margin:.3rem 0}
+
+/* Utilidades */
+.text-link{color:#0f172a;font-weight:700;border-bottom:2px solid transparent}
+.text-link:hover{color:var(--accent-600);border-color:var(--accent-600)}
+.text-muted-ink{color:var(--muted)!important}
