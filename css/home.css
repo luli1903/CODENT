@@ -1,77 +1,82 @@
 /* ===== HOME (index) ===== */
 
-/* HERO con foto estética */
+/* ---------- HERO con foto estética ---------- */
+/* Asegurate que el archivo exista EXACTAMENTE con ese nombre: /img/hero/SillonPortada1.jpg */
 .hero{
   position:relative; display:flex; align-items:center; min-height:72vh;
   border-radius:0 0 18px 18px; box-shadow:var(--shadow-1);
   color:#fff;
-  background:
-    linear-gradient(180deg, rgba(10,17,30,.35), rgba(10,17,30,.45)),
-    url("/img/hero/SillonPortada1.jpg") center/cover no-repeat;
-}
 
+  /* Foto + overlay */
+  background-image:
+    linear-gradient(180deg, rgba(10,17,30,.35), rgba(10,17,30,.45)),
+    url("/img/hero/SillonPortada1.jpg");
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
 .hero h1{
   font-family:'Raleway', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  font-weight:800;
-  letter-spacing:.2px;
+  font-weight:800; letter-spacing:.2px;
   font-size: clamp(32px, 3.4vw, 46px);
-  line-height:1.1;
-  margin:.2rem 0 .6rem;
+  line-height:1.1; margin:.2rem 0 .6rem;
 }
-.hero p{ color:#334155 }
+.hero p{ color:#e5e7eb; }  /* texto claro sobre foto */
+.hero .inline{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
 
-/* Tarjetitas del hero a la derecha (si las usás) */
-/* Panel 2x2 dentro del héroe */
+/* Panel 2x2 (los 4 puntos) dentro del héroe — como en tu diseño original */
 .hero__card{
   background:#fff; border:1px solid var(--line); border-radius:20px;
   padding:18px; box-shadow:var(--shadow-1);
 }
-
 .hero-feats.grid{
   display:grid; gap:14px;
-  grid-template-columns: 1fr 1fr;  /* 2 columnas (como antes) */
+  grid-template-columns: 1fr 1fr; /* 2 columnas, 4 items */
 }
-
 .hero-feats .card{
   background:#fff; border:1px solid var(--line); border-radius:14px;
   padding:12px; box-shadow:var(--shadow-0);
 }
-
 .hero-feats .card__icon{
   width:42px; height:42px; border-radius:10px;
   display:grid; place-items:center;
   background:#f8fafc; border:1px solid var(--line);
   margin-bottom:6px;
 }
-
 .hero-feats .card__icon img{ width:22px; height:22px; object-fit:contain; }
-
 .hero-feats .card b{ display:block; margin:0 0 2px; }
 .hero-feats .card p.muted{ margin:0; color:var(--muted); }
 
-/* CTA inline */
-.inline{ display:flex; gap:12px; flex-wrap:wrap }
-
-/* PROMO */
+/* ---------- PROMO (franja de cuotas/medios de pago) ---------- */
 .promo{ background:#f8fafc; border-top:1px solid var(--line); border-bottom:1px solid var(--line) }
 .promo__wrap{ width:var(--container); margin-inline:auto }
 
-/* ABOUT */
+/* ---------- ABOUT / Empresa familiar ---------- */
 .section-about{ background: linear-gradient(180deg,#f7fbff 0%, #ffffff 100%) }
 .section-title{ font-weight:800; letter-spacing:.3px }
-.about-card{ background:#fff; border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow-0); transition: box-shadow .2s, transform .2s }
+
+.about-card{
+  background:#fff; border:1px solid var(--line); border-radius:18px;
+  box-shadow:var(--shadow-0); transition: box-shadow .2s, transform .2s;
+}
 .about-card:hover{ box-shadow:var(--shadow-1); transform: translateY(-2px) }
 
 .about-pillars{ display:flex; flex-wrap:wrap; gap:.75rem 1rem; margin-top:.5rem }
-.pillar{ background: rgba(14,165,233,.08); border-radius:10px; padding:.4rem .75rem; display:flex; align-items:center; gap:.5rem }
+.pillar{
+  background: rgba(14,165,233,.08);
+  border-radius:10px; padding:.4rem .75rem; display:flex; align-items:center; gap:.5rem;
+}
 
 .about-metrics{ margin-top:1.25rem; display:grid; grid-template-columns: repeat(4,1fr); gap:12px }
-.metric{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; text-align:center; box-shadow: var(--shadow-0); transition: transform .2s, box-shadow .2s }
+.metric{
+  background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px;
+  text-align:center; box-shadow: var(--shadow-0); transition: transform .2s, box-shadow .2s
+}
 .metric:hover{ transform: translateY(-3px); box-shadow: var(--shadow-1) }
 .metric__num{ font-weight:800; font-size:1.6rem; line-height:1; color:#0369a1 }
 .metric__label{ color:#475569; font-size:.92rem; margin-top:.25rem }
 
-/* ==== SERVICIOS (ícono al lado + imagen decorativa) ==== */
+/* ---------- SERVICIOS (3 tarjetas con icono al lado + imagen decorativa) ---------- */
 #servicios .container{ max-width:1200px }
 
 .service-card{
@@ -86,21 +91,20 @@
   box-shadow: var(--shadow-1);
   border-color: rgba(14,165,233,.28);
 }
-
 .service-body{ padding:1.25rem 1.25rem 1.75rem }
 
-/* Cabecera: icono + título */
+/* Cabecera: icono + título a la izquierda (no pegado a las esquinas) */
 .service-head{ display:flex; align-items:center; gap:.6rem; margin-bottom:.6rem }
 .service-head h4{ margin:0; font-weight:800; color:#0f172a }
 
-/* Icono MONO al lado del título */
+/* Icono monocromo al lado del título */
 .service-icon{
   width:22px; height:22px; object-fit:contain; flex-shrink:0;
   filter: brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(800%)
-          hue-rotate(160deg) brightness(95%) contrast(95%); /* gris azulado fino */
+          hue-rotate(160deg) brightness(95%) contrast(95%);
 }
 
-/* Imagen decorativa sutil */
+/* Imagen decorativa sutil en el borde inferior derecho */
 .service-ill{
   position:absolute; right:8px; bottom:8px;
   width:120px; height:auto; opacity:.10; pointer-events:none; user-select:none;
@@ -112,10 +116,14 @@
 .service-list{ margin:0; padding-left:1.2rem; color:#475569 }
 .service-list li{ margin-bottom:.35rem }
 
-/* CONTACTO */
+/* ---------- CONTACTO ---------- */
 .contact-card .form-group label{ font-weight:600 }
 .contact-card .btn{ border-radius:999px; padding:.6rem 1.2rem }
 
-/* RESPONSIVE */
-@media (max-width:991.98px){ .about-metrics{ grid-template-columns: repeat(2,1fr) } }
-@media (max-width:575.98px){ .about-metrics{ grid-template-columns: 1fr } }
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:991.98px){
+  .about-metrics{ grid-template-columns: repeat(2,1fr) }
+}
+@media (max-width:575.98px){
+  .about-metrics{ grid-template-columns: 1fr }
+}

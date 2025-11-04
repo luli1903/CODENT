@@ -1,4 +1,4 @@
-/* ===== GLOBAL (NO CORMORANT) ===== */
+/* ===== CODENT MAIN (estilos base globales) ===== */
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap');
 
 :root{
@@ -7,11 +7,8 @@
   --line:#e2e8f0;
   --bg:#ffffff;
   --card:#fbfbfe;
-
-  /* Acentos (puedo pasarte paleta lila si querés) */
-  --accent:#22c55e;      /* verde salvia */
+  --accent:#22c55e;       /* verde salvia */
   --accent-600:#16a34a;
-
   --font-sans:"Raleway","Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   --r-sm:10px; --r-md:14px; --r-lg:18px;
   --shadow-0:0 2px 12px rgba(0,0,0,.06);
@@ -27,7 +24,6 @@ body{
   color:var(--ink);
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
-  /* Fondo suave global */
   background:
     radial-gradient(1200px 600px at -10% -10%, #eef3f7 10%, transparent 60%),
     radial-gradient(1200px 600px at 110% 120%, #f4f0ff 8%, transparent 55%),
@@ -48,14 +44,13 @@ button{ font:inherit; cursor:pointer; }
   border-bottom:1px solid var(--line);
 }
 .navbar-brand.brand{
-  font-family: var(--font-sans);
-  font-weight:700;    /* antes 900 */
+  font-family:var(--font-sans);
+  font-weight:700;
   letter-spacing:.2px;
   color:#0f172a !important;
 }
 
-
-/* ===== BOTONES REUTILIZABLES ===== */
+/* ===== BOTONES ===== */
 .btn{
   border-radius:999px !important;
   padding:.75rem 1.2rem !important;
@@ -64,7 +59,7 @@ button{ font:inherit; cursor:pointer; }
   box-shadow: var(--shadow-0) !important;
 }
 .btn-primary{
-  background:#111827 !important;  /* dark elegante */
+  background:#111827 !important;
   border-color:#111827 !important;
   color:#fff !important;
 }
@@ -74,9 +69,21 @@ button{ font:inherit; cursor:pointer; }
   color:#111827 !important;
   border-color:#e2e8f0 !important;
 }
-.btn-outline-primary:hover{ background:#fff !important; border-color:#cbd5e1 !important; }
+.btn-outline-primary:hover{
+  background:#fff !important; border-color:#cbd5e1 !important;
+}
 
-/* ===== ICONO EN CAJITA (si lo usás en otras páginas) ===== */
+/* Enlaces tipo texto */
+.text-link{
+  font-weight:700;
+  border-bottom:2px solid transparent;
+  text-decoration:none;
+  color:#0f172a;
+  transition:.2s;
+}
+.text-link:hover{ color:var(--accent); border-color:var(--accent); }
+
+/* ===== ICONOS EN CAJITA ===== */
 .icon-spot{
   width:44px; height:44px; border-radius:12px;
   display:flex; align-items:center; justify-content:center;
@@ -101,7 +108,9 @@ footer{ border-top:1px solid var(--line); padding:28px 0 40px; background:#fbfdf
 .text-muted-ink{ color:var(--muted)!important; }
 .mb-1{ margin-bottom:.5rem!important; }
 .mt-1{ margin-top:.75rem!important; }
-/* Botones base más prolijos */
+
+/* ===== HERO / CTAs comunes ===== */
+.hero .inline{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
 #coden-main .btn,
 .cbtn {
   padding:.72rem 1.1rem;
@@ -109,7 +118,6 @@ footer{ border-top:1px solid var(--line); padding:28px 0 40px; background:#fbfdf
   font-weight:700;
   box-shadow: var(--shadow-0);
 }
-
 #coden-main .btn-primary,
 .cbtn-primary {
   background: var(--accent); border:1px solid var(--accent); color:#fff;
@@ -118,12 +126,8 @@ footer{ border-top:1px solid var(--line); padding:28px 0 40px; background:#fbfdf
 .cbtn-primary:hover {
   background: var(--accent-600); border-color: var(--accent-600);
 }
-
 #coden-main .text-link {
   color:#0f172a; font-weight:700;
   border-bottom: 2px solid transparent; text-decoration:none;
 }
 #coden-main .text-link:hover { color:var(--accent); border-color:var(--accent); }
-
-/* Alineación de CTAs en el héroe */
-.hero .inline { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
