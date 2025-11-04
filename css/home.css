@@ -2,16 +2,14 @@
 
 /* HERO con foto estética */
 .hero{
-  position: relative;
-  min-height: 62vh;
-  display: grid;
-  align-items: center;
-  padding: 56px 0 32px;
-  color: #0f172a;
+  position:relative; display:flex; align-items:center; min-height:72vh;
+  border-radius:0 0 18px 18px; box-shadow:var(--shadow-1);
+  color:#fff;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.80) 0%, rgba(255,255,255,.88) 45%, rgba(255,255,255,.94) 100%),
-    url("/img/hero/sofa-aesthetic.jpg") center/cover no-repeat;
+    linear-gradient(180deg, rgba(10,17,30,.35), rgba(10,17,30,.45)),
+    url("/img/hero/SillonPortada1.jpg") center/cover no-repeat;
 }
+
 .hero h1{
   font-family:'Raleway', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   font-weight:800;
@@ -23,8 +21,33 @@
 .hero p{ color:#334155 }
 
 /* Tarjetitas del hero a la derecha (si las usás) */
-.hero__card{ background:#fff; border:1px solid var(--line); border-radius:20px; padding:20px; box-shadow:var(--shadow-1) }
-.hero__card .card{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow:var(--shadow-0) }
+/* Panel 2x2 dentro del héroe */
+.hero__card{
+  background:#fff; border:1px solid var(--line); border-radius:20px;
+  padding:18px; box-shadow:var(--shadow-1);
+}
+
+.hero-feats.grid{
+  display:grid; gap:14px;
+  grid-template-columns: 1fr 1fr;  /* 2 columnas (como antes) */
+}
+
+.hero-feats .card{
+  background:#fff; border:1px solid var(--line); border-radius:14px;
+  padding:12px; box-shadow:var(--shadow-0);
+}
+
+.hero-feats .card__icon{
+  width:42px; height:42px; border-radius:10px;
+  display:grid; place-items:center;
+  background:#f8fafc; border:1px solid var(--line);
+  margin-bottom:6px;
+}
+
+.hero-feats .card__icon img{ width:22px; height:22px; object-fit:contain; }
+
+.hero-feats .card b{ display:block; margin:0 0 2px; }
+.hero-feats .card p.muted{ margin:0; color:var(--muted); }
 
 /* CTA inline */
 .inline{ display:flex; gap:12px; flex-wrap:wrap }

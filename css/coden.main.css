@@ -49,10 +49,11 @@ button{ font:inherit; cursor:pointer; }
 }
 .navbar-brand.brand{
   font-family: var(--font-sans);
-  font-weight:700;              /* más fino que 900 */
+  font-weight:700;    /* antes 900 */
   letter-spacing:.2px;
   color:#0f172a !important;
 }
+
 
 /* ===== BOTONES REUTILIZABLES ===== */
 .btn{
@@ -100,3 +101,29 @@ footer{ border-top:1px solid var(--line); padding:28px 0 40px; background:#fbfdf
 .text-muted-ink{ color:var(--muted)!important; }
 .mb-1{ margin-bottom:.5rem!important; }
 .mt-1{ margin-top:.75rem!important; }
+/* Botones base más prolijos */
+#coden-main .btn,
+.cbtn {
+  padding:.72rem 1.1rem;
+  border-radius:999px;
+  font-weight:700;
+  box-shadow: var(--shadow-0);
+}
+
+#coden-main .btn-primary,
+.cbtn-primary {
+  background: var(--accent); border:1px solid var(--accent); color:#fff;
+}
+#coden-main .btn-primary:hover,
+.cbtn-primary:hover {
+  background: var(--accent-600); border-color: var(--accent-600);
+}
+
+#coden-main .text-link {
+  color:#0f172a; font-weight:700;
+  border-bottom: 2px solid transparent; text-decoration:none;
+}
+#coden-main .text-link:hover { color:var(--accent); border-color:var(--accent); }
+
+/* Alineación de CTAs en el héroe */
+.hero .inline { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
