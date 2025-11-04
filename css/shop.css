@@ -1,14 +1,4 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Tienda | CODENT</title>
 
-  <link rel="icon" href="/img/favicon.ico"/>
-  <link rel="stylesheet" href="/css/style.css"/>
-
-  <style>
     :root{
       --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
       --bg:#fff; --card:#f8fafc; --accent:#0ea5e9;
@@ -64,73 +54,45 @@
 
     /* fuerza ocultamiento real cuando hidden está presente */
     .empty[hidden]{ display:none !important; }
-  </style>
-</head>
-<body id="shop">
-  <header class="shop-header">
-    <div class="container">
-      <h1>Productos</h1>
-      <p class="subtitle">Elegí una categoría o explorá todo.</p>
-    </div>
-  </header>
+/* ===== BOTONES DEL SUBNAV CON ÍCONOS ===== */
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: .5rem .9rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  transition: all .2s ease;
+}
 
-  <!-- ✅ ESTO VA FUERA DEL <style> -->
-  <section class="shop-subnav">
-    <div class="container subnav-row">
-      <a href="/index.html" class="btn nav-btn" aria-label="Volver al inicio">
-  <img src="/img/icon/turn-left.svg" alt="" class="icon"> Inicio
-</a>
+.nav-btn:hover {
+  background: var(--sky, #D1E5FF);
+  border-color: var(--sky-600, #96B1D9);
+  color: var(--brown, #5B4636);
+  transform: translateY(-1px);
+}
 
-<a href="/carrito.html" class="btn nav-btn" aria-label="Abrir carrito">
-  <img src="/img/icon/shopping-cart.svg" alt="" class="icon"> Ver carrito
-  <span id="cartBadge" class="badge">0</span>
-</a>
+.nav-btn .icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(22%) sepia(7%)
+          saturate(900%) hue-rotate(180deg);
+}
 
-    </div>
-  </section>
-
-  <section class="shop-filters">
-    <div class="container">
-      <nav id="catNav" aria-label="Categorías" class="chip-row">
-        <!-- chips se inyectan desde shop.js -->
-      </nav>
-    </div>
-  </section>
-
-  <main class="shop-main">
-    <div class="container">
-      <div id="productGrid" class="grid"></div>
-
-      <!-- estados -->
-      <!-- estados -->
-<div id="emptyState" class="empty" hidden>
-  <svg width="88" height="88" viewBox="0 0 24 24" aria-hidden="true">
-    <path fill="#94a3b8" d="M21 8v8.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 16.5V8l9-5z"/>
-    <path fill="#cbd5e1" d="M12 3v18h6.5A1.5 1.5 0 0 0 20 19.5V8z"/>
-    <path fill="#e2e8f0" d="M4 8h16l-8 4z"/>
-  </svg>
-  <p>No encontramos productos en esta categoría.</p>
-</div>
-
-
-      <div id="errorState" class="empty" hidden>
-        <!-- <img src="/img/error.svg" alt=""> -->
-        <p>Ocurrió un error al cargar la tienda. Reintentá más tarde.</p>
-      </div>
-    </div>
-  </main>
-
-  <!-- scripts -->
-  <script type="module" src="/js/cart.js"></script>
-  <script type="module" src="/js/shop.js"></script>
-  <script type="module" src="/js/cart-merge.js"></script>
-  <script type="module" src="/js/auth-modal.js"></script>
-
-  <!-- actualiza el badge al entrar -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      window.Cart?.updateCartBadge?.();
-    });
-  </script>
-</body>
-</html>
+.badge {
+  display: inline-block;
+  min-width: 1.25rem;
+  text-align: center;
+  padding: .1rem .35rem;
+  border-radius: 999px;
+  background: var(--sky-600, #96B1D9);
+  color: #fff;
+  font-size: .8rem;
+  margin-left: .35rem;
+}
