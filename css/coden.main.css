@@ -1,308 +1,53 @@
-/* ===== CODENT · BASE GLOBAL ===== */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&display=swap');
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Producto | CODENT</title>
 
-:root{
-  --ink:#0f172a;
-  --muted:#475569;
-  --line:#e2e8f0;
-  --bg:#ffffff;
-  --card:#fbfbfe;
+  <!-- Favicon -->
+  <link rel="icon" href="/img/favicon.ico" />
 
-  /* Acento clarito (coherente en botones y detalles) */
-  --accent:#7fb3ff;      /* azul pastel */
-  --accent-600:#5a98f2;  /* hover */
-  --accent-900:#3d7fe8;
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
 
-  --font-sans:"Raleway","Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  --r-sm:10px; --r-md:14px; --r-lg:18px;
-  --shadow-0:0 2px 12px rgba(0,0,0,.06);
-  --shadow-1:0 8px 22px rgba(0,0,0,.10);
-  --container:min(1200px,92vw);
-}
+  <!-- Estilos principales -->
+  <link rel="stylesheet" href="/css/style.css?v=102" />
+  <link rel="stylesheet" href="/css/coden.main.css?v=6" />
 
-/* Fondo global con degradé suave */
-html,body{ height:100%; margin:0; padding:0; }
-body{
-  font-family:var(--font-sans);
-  color:var(--ink);
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-  background:
-    radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
-    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 10%, transparent 58%),
-    linear-gradient(180deg, #ffffff 0%, #f8fafc 85%);
-}
+  <!-- Fuente para títulos -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&display=swap" rel="stylesheet" />
+</head>
 
-img{ max-width:100%; display:block; }
-a{ color:inherit; text-decoration:none; }
-ul{ list-style:none; margin:0; padding:0; }
-button{ font:inherit; cursor:pointer; }
-.container{ width:var(--container); margin-inline:auto; }
+<body>
+  <!-- 🔹 NAVBAR -->
+  <nav class="navbar navbar-light coden-nav">
+    <a class="navbar-brand font-weight-bold" href="/index.html">
+      <span class="brand-dot"></span> CODENT
+    </a>
+    <a href="/carrito.html" class="btn btn-outline-primary btn-sm d-flex align-items-center" aria-label="Carrito">
+      <img src="/img/icon/shopping-cart.svg" alt="Carrito" width="20" height="20" class="mr-1"/>
+      <span id="cartBadge" class="badge badge-primary ml-1">0</span>
+    </a>
+  </nav>
 
-/* ===== NAVBAR con colorcito + blur ===== */
-.navbar.coden-nav{
-  position: sticky; top:0; z-index:50;
-  backdrop-filter: saturate(160%) blur(8px);
-  background: linear-gradient(90deg, #ffffffee, #f3f6ffcc) !important;
-  border-bottom:1px solid var(--line);
-  box-shadow: var(--shadow-0);
-}
-.navbar-brand.brand{
-  font-weight:800;
-  letter-spacing:.2px;
-  color:#0f172a !important;
-}
+  <!-- 🔹 CONTENIDO -->
+  <main id="coden-main" class="py-5">
+    <div class="container coden-container" id="content">
+      <p class="text-muted text-center">Cargando…</p>
+    </div>
+  </main>
 
-/* ===== Botones unificados (claritos) ===== */
-.btn, .cbtn{
-  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-  padding:.75rem 1.2rem; border-radius:999px; font-weight:800; letter-spacing:.2px;
-  border:1px solid #e2e8f0; text-decoration:none; box-shadow:var(--shadow-0);
-  transition:.2s ease;
-}
-.btn:hover, .cbtn:hover{ transform:translateY(-1px); box-shadow:var(--shadow-1); }
+  <!-- JS Bootstrap (opcional) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-/* Primario clarito */
-.btn-primary, .cbtn-primary{
-  background:var(--accent) !important;
-  border-color:var(--accent) !important;
-  color:#0b1220 !important;
-}
-.btn-primary:hover, .cbtn-primary:hover{
-  background:var(--accent-600) !important;
-  border-color:var(--accent-600) !important;
-  color:#fff !important;
-}
-
-/* Variante ghost */
-.btn-outline-primary, .cbtn-ghost{
-  background:#fff !important; color:#0f172a !important; border-color:#e2e8f0 !important;
-}
-.btn-outline-primary:hover, .cbtn-ghost:hover{
-  background:#fff !important; border-color:#cbd5e1 !important;
-}
-
-/* Icono en “píldora” reutilizable */
-.icon-spot{
-  width:44px; height:44px; border-radius:12px;
-  display:flex; align-items:center; justify-content:center;
-  background:#f1f5f9; border:1px solid var(--line); box-shadow:var(--shadow-0);
-}
-.icon-spot img{
-  width:22px; height:22px; object-fit:contain;
-  filter:brightness(0) saturate(100%) invert(35%) sepia(6%) saturate(800%) hue-rotate(180deg);
-}
-
-/* ===== FOOTER • layout limpio y consistente ===== */
-footer{
-  border-top: 1px solid var(--line);
-  background: rgba(255,255,255,.88);
-  backdrop-filter: blur(4px);
-  padding: 44px 0 64px;
-}
-
-/* grilla de 3 columnas con aire */
-.foot-grid{
-  width: var(--container);
-  margin-inline: auto;
-  display: grid;
-  grid-template-columns: 1.1fr .9fr .9fr;
-  gap: 28px 48px;
-  align-items: start;
-}
-
-/* columna: separador sutil para las dos de la derecha */
-.foot:not(:first-child){
-  padding-left: 24px;
-  border-left: 1px solid var(--line);
-}
-
-/* títulos */
-.foot h4{
-  margin: .2rem 0 .8rem;
-  font-weight: 800;
-  color: var(--ink);
-  letter-spacing: .2px;
-  position: relative;
-}
-.foot h4::after{
-  content:"";
-  display:block;
-  width: 36px; height: 3px;
-  background: var(--sky-600);          /* tu celeste */
-  border-radius: 2px;
-  margin-top: 8px;
-}
-
-/* descripción de la marca */
-.foot p{
-  color: var(--muted);
-  max-width: 52ch;
-  margin: 0;
-}
-
-/* enlaces más ordenados y con buen hover */
-.foot a{
-  display: block;
-  padding: .28rem 0;
-  color: #334155;
-  text-decoration: none;
-  border-bottom: 1px dotted transparent;
-  transition: color .18s ease, border-color .18s ease;
-}
-.foot a:hover{
-  color: var(--ink);
-  border-color: var(--sky-600);
-}
-
-/* responsive: 2 columnas y la descripción ocupa todo el ancho */
-@media (max-width: 992px){
-  .foot-grid{
-    grid-template-columns: 1fr 1fr;
-    gap: 22px 26px;
-  }
-  .foot:first-child{
-    grid-column: 1 / -1;    /* la columna de texto ocupa todo el ancho */
-    border-left: none;
-    padding-left: 0;
-  }
-  .foot:not(:first-child){
-    border-left: none;       /* no bordes verticales en tablet */
-    padding-left: 0;
-  }
-}
-
-/* responsive: una sola columna apilada y aire entre bloques */
-@media (max-width: 576px){
-  .foot-grid{
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-}
-
-
-/* Utilidades */
-.text-link{ color:#0f172a; font-weight:800; border-bottom:2px solid transparent; }
-.text-link:hover{ color:var(--accent-600); border-color:var(--accent-600); }
-.text-muted-ink{ color:var(--muted)!important; }
-/* Base única para todos los botones */
-.btn, .cbtn, a.btn {
-  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-  padding:.78rem 1.2rem; border-radius:16px;       /* más cuadraditos */
-  font-weight:800; letter-spacing:.2px;
-  border:1px solid #e2e8f0; box-shadow:0 2px 12px rgba(0,0,0,.06);
-  transition:.18s ease;
-}
-
-/* Primario pastel (por defecto en el sitio) */
-.btn-primary, .cbtn-primary {
-  background:#7fb3ff; border-color:#7fb3ff; color:#0f172a;
-}
-.btn-primary:hover, .cbtn-primary:hover {
-  background:#5a98f2; border-color:#5a98f2; color:#fff;
-}
-
-/* Ghost */
-.btn-ghost, .cbtn-ghost, .btn-outline-primary {
-  background:#fff; color:#0f172a; border-color:#e2e8f0;
-}
-.btn-ghost:hover, .cbtn-ghost:hover, .btn-outline-primary:hover {
-  background:#fff; border-color:#cbd5e1;
-}
-
-/* En el HERO forzamos contraste (el primario se invierte automáticamente) */
-.hero .btn-primary { 
-  background:#111827; border-color:#111827; color:#fff;
-}
-.hero .btn-primary:hover {
-  filter:brightness(1.08);
-}
-
-/* Base */
-.btn, .cbtn, a.btn {
-  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-  padding:.78rem 1.2rem; border-radius:16px;
-  font-weight:800; letter-spacing:.2px;
-  border:1px solid #e2e8f0; box-shadow:0 2px 12px rgba(0,0,0,.06);
-  transition:.18s ease;
-}
-.btn:hover, .cbtn:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(0,0,0,.1); }
-
-/* Primario: celeste */
-.btn-primary, .cbtn-primary, .coden-btn {
-  background: var(--sky);
-  border-color: var(--sky);
-  color: #0f172a;
-}
-/* Hover primario: mocha */
-.btn-primary:hover, .cbtn-primary:hover, .coden-btn:hover {
-  background: var(--mocha);
-  border-color: var(--mocha);
-  color: #fff;
-}
-
-/* Ghost / secundario */
-.btn-ghost, .cbtn-ghost, .btn-outline-primary, .coden-btn--ghost {
-  background:#fff; color:#0f172a; border-color:#e2e8f0;
-}
-.btn-ghost:hover, .cbtn-ghost:hover, .btn-outline-primary:hover, .coden-btn--ghost:hover {
-  background:#fff; border-color:#cbd5e1;
-}
-/* Contenedor general del main (ya lo venías usando) */
-#coden-main {
-  background:
-    radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
-    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 10%, transparent 58%),
-    linear-gradient(180deg, #ffffff 0%, #f8fafc 85%);
-}
-
-/* Imagen del producto con marco suave */
-.coden-product__img{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:14px;
-  box-shadow: var(--shadow-0);
-  overflow:hidden;
-}
-.coden-product__img img{
-  width:100%;
-  height:auto;
-  object-fit:contain;
-}
-
-/* Título y precio */
-#content h2{
-  font-family: "Cormorant", serif;        /* la que cargaste en producto.html */
-  font-weight: 700;
-  letter-spacing:.2px;
-  margin-bottom:.25rem;
-  color: var(--ink);
-}
-.coden-price{
-  font-weight:800;
-  color:#0f172a;
-}
-
-/* Badges (24–72h, Garantía, etc.) */
-.coden-badges{ display:flex; gap:.4rem; flex-wrap:wrap; }
-.coden-badge{
-  display:inline-flex; align-items:center;
-  padding:.25rem .55rem; border-radius:999px;
-  font-size:.85rem; font-weight:700;
-  background:#f1f5f9; border:1px solid var(--line); color:#0f172a;
-}
-.coden-badge--ok{ background: var(--sky); border-color: var(--sky-600); }
-
-/* Cantidad + acciones */
-.coden-inline{ display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
-#qty.form-control{
-  max-width:120px; border-radius:12px; border:1px solid var(--line);
-}
-
-/* Texto secundario */
-#content p.text-muted{ color: var(--muted)!important; }
-
-/* Responsive: apila en mobile */
-@media (max-width: 767.98px){
-  #content .row > [class*="col-"] { margin-bottom: 1rem; }
-}
+  <!-- JS del sitio -->
+  <script type="module" src="/js/supabaseClient.js?v=102"></script>
+  <script type="module" src="/db.js?v=102"></script>
+  <script type="module" src="/js/cart.js?v=102"></script>
+  <script type="module" src="/js/producto.js?v=102"></script>
+  <script type="module" src="/navbar-auth.js" defer></script>
+</body>
+</html>
