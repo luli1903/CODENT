@@ -13,9 +13,8 @@
   <!-- Estilos -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
   <link rel="icon" href="/img/favicon.ico"/>
-  <link rel="stylesheet" href="/css/coden.main.css">
-  <link rel="stylesheet" href="/css/home.css">
-  <link rel="stylesheet" href="/css/style.css"><!-- legacy vacío, por compat -->
+<link rel="stylesheet" href="/css/coden.main.css">   <!-- base global -->
+<link rel="stylesheet" href="/css/home.css">         <!-- SOLO inicio -->
 </head>
 
 <body id="top">
@@ -176,17 +175,17 @@
     <!-- SERVICIOS -->
 <section id="servicios" class="py-5" aria-labelledby="services-title">
   <div class="container">
-    <h2 id="services-title" class="mb-5 text-center section-title">Servicios</h2>
+    <h2 id="services-title" class="mb-4 text-center"><strong>Servicios</strong></h2>
+    <div class="row services-grid">
 
-    <div class="row g-4 services-grid">
-
-      <!-- MANTENIMIENTO -->
-      <div class="col-md-4 d-flex">
+      <!-- 🔧 Mantenimiento -->
+      <div class="col-md-4 mb-3 d-flex">
         <article class="service-card w-100">
+          <img class="service-ill" src="/img/services/mantenimiento-illus.jpg" alt="" aria-hidden="true" onerror="this.style.display='none'">
           <div class="service-body">
             <div class="service-head">
-              <img class="service-icon" src="/img/icon/checked.svg" alt="Ícono mantenimiento">
-              <h4>Mantenimiento</h4>
+              <img class="service-icon" src="/img/icon/checked.svg" alt="Icono de mantenimiento">
+              <h4 class="mb-1">Mantenimiento</h4>
             </div>
             <p class="mb-2">Planes preventivos para consultorios y clínicas. Incluye:</p>
             <ul class="service-list">
@@ -195,17 +194,17 @@
               <li>Calibración y reporte técnico</li>
             </ul>
           </div>
-          <img class="service-ill" src="/img/services/mantenimiento.jpg" alt="Mantenimiento de equipos odontológicos" loading="lazy">
         </article>
       </div>
 
-      <!-- REPARACIONES -->
-      <div class="col-md-4 d-flex">
+      <!-- ⚙️ Reparaciones -->
+      <div class="col-md-4 mb-3 d-flex">
         <article class="service-card w-100">
+          <img class="service-ill" src="/img/services/reparaciones-illus.jpg" alt="" aria-hidden="true" onerror="this.style.display='none'">
           <div class="service-body">
             <div class="service-head">
-              <img class="service-icon" src="/img/icon/hammer.svg" alt="Ícono reparaciones">
-              <h4>Reparaciones</h4>
+              <img class="service-icon" src="/img/icon/hammer.svg" alt="Icono de reparaciones">
+              <h4 class="mb-1">Reparaciones</h4>
             </div>
             <p class="mb-2">Atendemos fallas, desgaste y roturas. Incluye:</p>
             <ul class="service-list">
@@ -214,17 +213,17 @@
               <li>Prueba funcional + garantía 6–12m</li>
             </ul>
           </div>
-          <img class="service-ill" src="/img/services/reparaciones.jpg" alt="Reparación de instrumental odontológico" loading="lazy">
         </article>
       </div>
 
-      <!-- EVALUACIONES -->
-      <div class="col-md-4 d-flex">
+      <!-- 📋 Evaluaciones -->
+      <div class="col-md-4 mb-3 d-flex">
         <article class="service-card w-100">
+          <img class="service-ill" src="/img/services/evaluaciones-illus.jpg" alt="" aria-hidden="true" onerror="this.style.display='none'">
           <div class="service-body">
             <div class="service-head">
-              <img class="service-icon" src="/img/icon/clipboard.svg" alt="Ícono evaluaciones">
-              <h4>Evaluaciones</h4>
+              <img class="service-icon" src="/img/icon/clipboard.svg" alt="Icono de evaluaciones">
+              <h4 class="mb-1">Evaluaciones</h4>
             </div>
             <p class="mb-2">Para habilitaciones e inspecciones. Incluye:</p>
             <ul class="service-list">
@@ -233,13 +232,13 @@
               <li>Informe para auditoría</li>
             </ul>
           </div>
-          <img class="service-ill" src="/img/services/evaluaciones.jpg" alt="Evaluaciones técnicas" loading="lazy">
         </article>
       </div>
 
     </div>
   </div>
 </section>
+
 
     <!-- DESTACADOS -->
     <section id="destacados" class="py-5" style="background:#f8fafc" aria-labelledby="featured-title">

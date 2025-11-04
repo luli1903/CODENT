@@ -1,5 +1,5 @@
 /* ===== GLOBAL (NO CORMORANT) ===== */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap');
 
 :root{
   --ink:#0f172a;
@@ -7,8 +7,11 @@
   --line:#e2e8f0;
   --bg:#ffffff;
   --card:#fbfbfe;
-  --accent:#22c55e; /* verde salvia */
+
+  /* Acentos (puedo pasarte paleta lila si querés) */
+  --accent:#22c55e;      /* verde salvia */
   --accent-600:#16a34a;
+
   --font-sans:"Raleway","Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   --r-sm:10px; --r-md:14px; --r-lg:18px;
   --shadow-0:0 2px 12px rgba(0,0,0,.06);
@@ -19,12 +22,12 @@
 *,*::before,*::after{ box-sizing:border-box; }
 html,body{ height:100%; margin:0; padding:0; }
 
-/* Fondo general con degradé muy leve */
 body{
   font-family:var(--font-sans);
   color:var(--ink);
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
+  /* Fondo suave global */
   background:
     radial-gradient(1200px 600px at -10% -10%, #eef3f7 10%, transparent 60%),
     radial-gradient(1200px 600px at 110% 120%, #f4f0ff 8%, transparent 55%),
@@ -46,33 +49,33 @@ button{ font:inherit; cursor:pointer; }
 }
 .navbar-brand.brand{
   font-family: var(--font-sans);
-  font-weight:700;
+  font-weight:700;              /* más fino que 900 */
   letter-spacing:.2px;
   color:#0f172a !important;
 }
 
-.text-link{
-  font-weight:800;
-  border-bottom:2px solid transparent;
-  color:#0f172a;
-  transition:.2s;
-}
-.text-link:hover{ color:var(--accent); border-color:var(--accent); }
-
 /* ===== BOTONES REUTILIZABLES ===== */
-.cbtn{
-  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-  padding:.9rem 1.4rem; border-radius:999px; font-weight:800; letter-spacing:.2px;
-  border:1px solid transparent; text-decoration:none;
-  box-shadow:var(--shadow-0); transition:.2s;
+.btn{
+  border-radius:999px !important;
+  padding:.75rem 1.2rem !important;
+  font-weight:800 !important;
+  border:1px solid #e2e8f0 !important;
+  box-shadow: var(--shadow-0) !important;
 }
-.cbtn:hover{ transform: translateY(-1px); box-shadow:var(--shadow-1); }
-.cbtn-primary{ background:var(--accent); border-color:var(--accent); color:#fff; }
-.cbtn-primary:hover{ background:var(--accent-600); border-color:var(--accent-600); }
-.cbtn-ghost{ background:#ffffff; color:#0f172a; border-color:#e2e8f0; }
-.cbtn-ghost:hover{ background:#fff; border-color:#cbd5e1; }
+.btn-primary{
+  background:#111827 !important;  /* dark elegante */
+  border-color:#111827 !important;
+  color:#fff !important;
+}
+.btn-primary:hover{ filter:brightness(1.08); }
+.btn-outline-primary{
+  background:#fff !important;
+  color:#111827 !important;
+  border-color:#e2e8f0 !important;
+}
+.btn-outline-primary:hover{ background:#fff !important; border-color:#cbd5e1 !important; }
 
-/* ===== ICONOS (base) ===== */
+/* ===== ICONO EN CAJITA (si lo usás en otras páginas) ===== */
 .icon-spot{
   width:44px; height:44px; border-radius:12px;
   display:flex; align-items:center; justify-content:center;
