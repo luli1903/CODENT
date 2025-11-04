@@ -1,21 +1,51 @@
 /* ===== SOLO HOME (index) ===== */
 
 /* HERO */
-.hero{
-  position:relative; overflow:hidden; min-height:72vh; display:flex; align-items:center;
-  color:#fff; border-radius:0 0 18px 18px; box-shadow:var(--shadow-1);
-  /* Fondo “aesthetic”: cambiá la imagen si querés */
-  background:
-    linear-gradient(180deg, rgba(15,23,42,.38), rgba(15,23,42,.38)),
-    url('/img/header-aesthetic.jpg') center/cover no-repeat;
+:root{
+  --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
+  --bg:#ffffff; --card:#f8fafc; --accent:#0ea5e9; --accent-600:#0284c7;
+  --font-sans:"Raleway","Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --r-sm:10px; --r-md:14px; --r-lg:18px;
+  --shadow-0:0 2px 12px rgba(0,0,0,.06);
+  --shadow-1:0 8px 22px rgba(0,0,0,.08);
+  --container:min(1200px,92vw);
 }
-.hero__grid{ display:grid; gap:1.5rem; align-items:center; grid-template-columns:1.05fr .95fr; }
-@media (max-width:992px){ .hero__grid{ grid-template-columns:1fr; } }
 
-.display-hero{
+*,*::before,*::after{ box-sizing:border-box; }
+html,body{ height:100%; margin:0; padding:0; }
+body{ font-family:var(--font-sans); color:var(--ink); background:var(--bg); line-height:1.6; -webkit-font-smoothing:antialiased; }
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; margin:0; padding:0; }
+button{ font:inherit; cursor:pointer; }
+.container{ width:var(--container); margin-inline:auto; }
+
+/* ===== NAVBAR ===== */
+.navbar{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,.88) !important;
+  border-bottom:1px solid var(--line);
+}
+.navbar-brand.brand{
   font-family: var(--font-sans);
-  font-weight:900; letter-spacing:.2px; font-size:clamp(2rem,4.5vw,3rem);
-  line-height:1.15; color:#fff; text-shadow:0 1px 18px rgba(0,0,0,.25);
+  font-weight:900; letter-spacing:.2px; color:#0f172a !important;
+}
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  border-radius: 0 0 18px 18px;
+  box-shadow: var(--shadow-1);
+
+  /* Fondo con imagen */
+  background:
+    linear-gradient(180deg, rgba(10,17,30,.35), rgba(10,17,30,.45)),
+    url("/img/hero/sofa-aesthetic.jpg") center/cover no-repeat;
+
+  color: #fff;
 }
 
 /* Tarjetas del hero */
@@ -46,17 +76,86 @@
 .metric__num{ font-weight:800; font-size:1.6rem; line-height:1; color:#0369a1; }
 .metric__label{ color:var(--muted); font-size:.92rem; margin-top:.25rem; }
 
-/* SERVICIOS */
-.service-card{ background:#fff; border:1px solid var(--line); border-radius:16px; transition: transform .2s, box-shadow .2s, border-color .2s; }
-.service-card:hover{ transform: translateY(-3px); box-shadow: var(--shadow-1); border-color: rgba(14,165,233,.35); }
-.service-list{ margin:0; padding-left:1.2rem; color:var(--muted); }
-.service-list li{ margin-bottom:.35rem; }
-
-/* Íconos en servicios (sin “badge” gris) */
-.service-card .icon-spot{
-  width:28px; height:28px; margin-bottom:.4rem; background:transparent; border:none; box-shadow:none; border-radius:8px;
+/* ==== SERVICIOS (nuevo diseño) ==== */
+.service-card {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow-0);
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.service-card .icon-spot img{ width:20px; height:20px; object-fit:contain; }
+
+.service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-1);
+  border-color: rgba(14,165,233,.35);
+}
+
+/* Contenedor del contenido */
+.service-body {
+  padding: 1.25rem 1.25rem 1.75rem;
+}
+
+/* Cabecera: ícono + título alineados */
+.service-head {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-bottom: .6rem;
+}
+
+.service-head h4 {
+  margin: 0;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+/* Ícono al lado del título */
+.service-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(0) saturate(100%)
+          invert(40%) sepia(94%) saturate(1900%)
+          hue-rotate(110deg) brightness(94%) contrast(101%);
+}
+
+/* Imagen decorativa */
+.service-ill {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 120px;
+  height: auto;
+  opacity: .08;
+  pointer-events: none;
+  user-select: none;
+  border-radius: 8px;
+  transform: rotate(-2deg);
+  transition: opacity .25s, transform .25s;
+}
+
+.service-card:hover .service-ill {
+  opacity: .14;
+  transform: rotate(-1deg) scale(1.02);
+}
+
+.service-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+}
+
+.service-list li {
+  margin-bottom: .35rem;
+}
+
 
 /* CONTACTO */
 .contact-card .form-group label{ font-weight:600; }
@@ -65,3 +164,33 @@
 /* RESPONSIVE */
 @media (max-width:991.98px){ .about-metrics{ grid-template-columns: repeat(2,1fr); } }
 @media (max-width:575.98px){ .about-metrics{ grid-template-columns: 1fr; } }
+/* Cabecera de cada servicio con ícono a la izquierda */
+.service-head{
+  display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem;
+}
+.service-head h4{
+  margin:0; font-weight:800;
+}
+/* Ícono inline (sin badge) */
+.service-icon{
+  width:22px; height:22px; object-fit:contain; flex-shrink:0;
+  filter: brightness(0) saturate(100%)
+          invert(40%) sepia(94%) saturate(1900%)
+          hue-rotate(110deg) brightness(94%) contrast(101%); /* verde */
+}
+
+/* Ilustración sutil en el borde inferior derecho */
+.service-card{
+  position:relative; overflow:hidden; background:#fff;
+}
+.service-ill{
+  position:absolute; right:8px; bottom:8px;
+  width:120px; height:auto; opacity:.09; pointer-events:none; user-select:none;
+  border-radius:8px; transform: rotate(-2deg);
+}
+.service-card:hover .service-ill{ opacity:.14; transform: rotate(-1deg) scale(1.02); transition:.25s; }
+/* Botones del héroe y CTA más finos */
+.cbtn, .hero .btn, .contact-card .btn {
+  padding: .75rem 1.2rem;
+  box-shadow: var(--shadow-0);
+}
