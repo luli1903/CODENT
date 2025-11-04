@@ -51,59 +51,65 @@
   <!-- ===================== CONTENIDO ===================== -->
   <main id="coden-main">
     <!-- HERO -->
-    <section class="hero" aria-labelledby="hero-title">
-  <div class="container hero__grid">
-    <!-- Columna izquierda: texto -->
-    <div class="hero__copy">
-      <div class="inline hero__chips">
-        <span class="chip">Reparación express</span>
-        <span class="chip">Garantía 6–12 meses</span>
-        <span class="chip">Envíos a todo el país</span>
-      </div>
+    <div class="row g-3 home-highlights">
 
-      <h1 id="hero-title" class="hero__title">
-        Equipos odontológicos confiables, servicio técnico que responde
-      </h1>
-
-      <p class="hero__lead">
-        Venta, mantenimiento y reparación de instrumental y equipos para
-        clínicas, consultorios y universidades.
-      </p>
-
-      <div class="inline hero__ctas">
-        <a class="btn btn-primary" href="/tienda.html">Ver tienda</a>
-        <a class="text-link" href="#servicios">Nuestros servicios</a>
-      </div>
-    </div>
-
-    <!-- Columna derecha: panel 2x2 -->
-    <div class="hero__card" role="img" aria-label="Servicios destacados">
-      <div class="hero-feats grid">
-        <div class="card">
-          <div class="card__icon"><img src="/img/icon/hammer.svg" alt="" width="22" height="22"></div>
-          <b>Reparaciones</b>
-          <p class="muted">Fallas, desgaste y roturas.</p>
-        </div>
-        <div class="card">
-          <div class="card__icon"><img src="/img/icon/odontologist.svg" alt="" width="22" height="22"></div>
-          <b>Instrumental</b>
-          <p class="muted">Turbinas y micromotores.</p>
-        </div>
-        <div class="card">
-          <div class="card__icon"><img src="/img/icon/clipboard.svg" alt="" width="22" height="22"></div>
-          <b>Evaluaciones</b>
-          <p class="muted">Seguridad y normativa.</p>
-        </div>
-        <div class="card">
-          <div class="card__icon"><img src="/img/icon/delivery-truck.svg" alt="" width="22" height="22"></div>
-          <b>Logística</b>
-          <p class="muted">24–72h según zona.</p>
-        </div>
+  <!-- Reparaciones -->
+  <div class="col-md-6">
+    <div class="card p-3 d-flex flex-row align-items-start gap-3">
+      <span class="icon-spot"><img src="/img/icon/hammer.svg" alt="Icono de reparaciones"></span>
+      <div>
+        <b>Reparaciones</b>
+        <small>
+          Atendemos fallas, desgastes y roturas con repuestos originales y diagnóstico técnico detallado.
+          Cada reparación se prueba en condiciones reales de trabajo y cuenta con garantía post-servicio.
+        </small>
       </div>
     </div>
   </div>
-</section>
 
+  <!-- Instrumental -->
+  <div class="col-md-6">
+    <div class="card p-3 d-flex flex-row align-items-start gap-3">
+      <span class="icon-spot"><img src="/img/icon/tool.svg" alt="Icono de instrumental"></span>
+      <div>
+        <b>Instrumental</b>
+        <small>
+          Mantenimiento y calibración de turbinas, micromotores, lámparas y equipos de alta precisión.
+          Optimizamos el rendimiento y prolongamos la vida útil de tu instrumental odontológico.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Evaluaciones -->
+  <div class="col-md-6">
+    <div class="card p-3 d-flex flex-row align-items-start gap-3">
+      <span class="icon-spot"><img src="/img/icon/clipboard.svg" alt="Icono de evaluaciones técnicas"></span>
+      <div>
+        <b>Evaluaciones</b>
+        <small>
+          Realizamos inspecciones técnicas y evaluaciones para habilitaciones, auditorías y controles de seguridad.
+          Emitimos informes completos bajo normativa vigente y recomendaciones de mejora preventiva.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logística -->
+  <div class="col-md-6">
+    <div class="card p-3 d-flex flex-row align-items-start gap-3">
+      <span class="icon-spot"><img src="/img/icon/truck.svg" alt="Icono de logística"></span>
+      <div>
+        <b>Logística</b>
+        <small>
+          Coordinamos retiros y entregas en toda la región con transporte seguro y seguimiento en tiempo real.
+          Los tiempos de respuesta varían entre 24 y 72 horas según zona y disponibilidad técnica.
+        </small>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 </div>
 
@@ -177,15 +183,27 @@
 
 
     <!-- DESTACADOS -->
-    <section id="destacados" class="py-5" style="background:#f8fafc" aria-labelledby="featured-title">
-      <div class="container">
-        <h2 id="featured-title" class="mb-4 text-center"><strong>Productos destacados</strong></h2>
-        <div id="home-featured" class="row"></div>
-        <div class="text-center mt-3">
-          <a href="/tienda.html" class="btn btn-primary btn-pill">Ver todos los productos</a>
-        </div>
-      </div>
-    </section>
+  <!-- PRODUCTOS DESTACADOS -->
+<section id="featured" class="products-section" aria-labelledby="featured-title">
+  <div class="container">
+    <h2 id="featured-title" class="text-center mb-4"><strong>Productos destacados</strong></h2>
+
+    <!-- Grid dinámico -->
+    <div id="featuredGrid" class="product-grid"></div>
+
+    <!-- Mensaje si no hay destacados -->
+    <div id="featuredEmpty" class="text-center text-muted" style="display:none;">
+      Aún no hay productos destacados.  
+      <a class="text-link" href="/tienda.html">Ver todos los productos</a>
+    </div>
+
+    <!-- Botón final -->
+    <div class="text-center mt-4">
+      <a class="btn btn-primary" href="/tienda.html">Ver todos los productos</a>
+    </div>
+  </div>
+</section>
+
 
     <!-- CONTACTO -->
     <section id="contacto" class="py-5" aria-labelledby="contact-title">
@@ -307,5 +325,7 @@
   <script type="module" src="/js/login-modal.js"></script>
   <script type="module" src="/js/cart-merge.js"></script>
   <script type="module" src="/js/auth-modal.js"></script>
+  <script type="module" src="/js/featured.js"></script>
+
 </body>
 </html>

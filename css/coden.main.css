@@ -131,3 +131,96 @@ footer{ border-top:1px solid var(--line); padding:28px 0 40px; background:#fbfdf
   border-bottom: 2px solid transparent; text-decoration:none;
 }
 #coden-main .text-link:hover { color:var(--accent); border-color:var(--accent); }
+/* ===== THEME TWEAKS ===== */
+:root{
+  /* paleta suave */
+  --ink:#0e172a;
+  --muted:#556274;
+  --line:#e6edf5;
+  --bg:#ffffff;
+  --brand:#7c9cff;      /* celeste pastel */
+  --brand-600:#5c7ee6;  /* hover */
+  --chip:#eef3ff;
+}
+
+/* fondo del body con degradé sutil */
+body{
+  background:
+    radial-gradient(1200px 600px at -10% -10%, #eef3f9 12%, transparent 60%),
+    radial-gradient(1200px 600px at 110% 120%, #f6f3ff 10%, transparent 55%),
+    #ffffff;
+}
+
+/* ===== NAVBAR con color ===== */
+.navbar{
+  position: sticky; top:0; z-index:50;
+  background: linear-gradient(180deg,#ffffffcc,#f6f9ffdd) !important;
+  border-bottom:1px solid var(--line);
+  backdrop-filter: blur(10px);
+}
+.navbar .navbar-brand{ font-weight:700; letter-spacing:.2px; }
+.navbar .btn{ background:#fff !important; border-color:#e6edf5 !important; }
+
+/* ===== BOTONES unificados (claritos) ===== */
+.btn,
+.cbtn{
+  border-radius:999px !important;
+  padding:.75rem 1.2rem !important;
+  font-weight:800 !important;
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+  border:1px solid #e6edf5 !important;
+}
+.btn-primary,.cbtn-primary{
+  background:var(--brand) !important; border-color:var(--brand) !important; color:#fff !important;
+}
+.btn-primary:hover,.cbtn-primary:hover{
+  background:var(--brand-600) !important; border-color:var(--brand-600) !important;
+}
+.btn-outline-primary,.cbtn-ghost{
+  background:#fff !important; color:#0e172a !important; border-color:#e6edf5 !important;
+}
+.btn-outline-primary:hover,.cbtn-ghost:hover{
+  background:#fff !important; border-color:#d3dceb !important;
+}
+
+/* ===== HERO: título más fino ===== */
+.hero h1{
+  font-family:"Raleway",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  font-weight:700;                /* antes 800/900 */
+  letter-spacing:.1px;
+}
+
+/* ===== Chips/“4 puntos” bajo el héroe (mismo look) ===== */
+.home-highlights .card{
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 10px 22px rgba(15,23,42,.06);
+}
+.home-highlights .card small{ color:var(--muted); }
+
+/* ===== SERVICIOS: imágenes menos transparentes ===== */
+.service-ill{ opacity:.22; }             /* antes .10 */
+.service-card:hover .service-ill{ opacity:.28; }
+.service-card{ border-color:var(--line); }
+.service-head h4{ font-weight:800; }
+
+/* ===== “Productos destacados” ===== */
+.products-section{
+  background: #f7faff;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:40px 0;
+}
+.product-grid{
+  display:grid; gap:18px;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+}
+.product-card{
+  background:#fff; border:1px solid var(--line); border-radius:16px;
+  overflow:hidden; display:flex; flex-direction:column; box-shadow:0 2px 10px rgba(0,0,0,.04);
+}
+.product-card .img{ aspect-ratio:4/3; background:#f2f5fb; display:grid; place-items:center; }
+.product-card .img img{ max-width:92%; max-height:92%; object-fit:contain; }
+.product-card .body{ padding:12px; }
+.product-card .title{ font-weight:700; margin:.2rem 0 .1rem; }
+.product-card .price{ color:var(--brand-600); font-weight:800; }
