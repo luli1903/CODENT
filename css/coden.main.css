@@ -8,9 +8,10 @@
   --bg:#ffffff;
   --card:#fbfbfe;
 
-  /* Acento suave (sin celeste chillón) */
-  --accent:#7fb3ff;         /* azul pastel */
-  --accent-600:#5a98f2;     /* un tono más fuerte para hover */
+  /* Acento clarito (coherente en botones y detalles) */
+  --accent:#7fb3ff;      /* azul pastel */
+  --accent-600:#5a98f2;  /* hover */
+  --accent-900:#3d7fe8;
 
   --font-sans:"Raleway","Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   --r-sm:10px; --r-md:14px; --r-lg:18px;
@@ -19,9 +20,8 @@
   --container:min(1200px,92vw);
 }
 
-/* Fondo global con degradé muy leve (no blanco liso) */
-html,body{height:100%;margin:0;padding:0}
-/* Fondo suave global */
+/* Fondo global con degradé suave */
+html,body{ height:100%; margin:0; padding:0; }
 body{
   font-family:var(--font-sans);
   color:var(--ink);
@@ -33,14 +33,14 @@ body{
     linear-gradient(180deg, #ffffff 0%, #f8fafc 85%);
 }
 
-img{max-width:100%;display:block}
-a{color:inherit;text-decoration:none}
-ul{list-style:none;margin:0;padding:0}
-button{font:inherit;cursor:pointer}
-.container{width:var(--container);margin-inline:auto}
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; margin:0; padding:0; }
+button{ font:inherit; cursor:pointer; }
+.container{ width:var(--container); margin-inline:auto; }
 
-/* ===== NAVBAR con “colorcito” suave ===== */
-.navbar{
+/* ===== NAVBAR con colorcito + blur ===== */
+.navbar.coden-nav{
   position: sticky; top:0; z-index:50;
   backdrop-filter: saturate(160%) blur(8px);
   background: linear-gradient(90deg, #ffffffee, #f3f6ffcc) !important;
@@ -48,60 +48,57 @@ button{font:inherit;cursor:pointer}
   box-shadow: var(--shadow-0);
 }
 .navbar-brand.brand{
-  font-weight:700; letter-spacing:.2px; color:#0f172a !important;
+  font-weight:800;
+  letter-spacing:.2px;
+  color:#0f172a !important;
 }
 
-/* ===== Botones consistentes ===== */
+/* ===== Botones unificados (claritos) ===== */
 .btn, .cbtn{
   display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-  padding:.75rem 1.2rem; border-radius:999px; font-weight:700; letter-spacing:.2px;
+  padding:.75rem 1.2rem; border-radius:999px; font-weight:800; letter-spacing:.2px;
   border:1px solid #e2e8f0; text-decoration:none; box-shadow:var(--shadow-0);
   transition:.2s ease;
 }
 .btn:hover, .cbtn:hover{ transform:translateY(-1px); box-shadow:var(--shadow-1); }
 
+/* Primario clarito */
 .btn-primary, .cbtn-primary{
-  background:var(--accent); border-color:var(--accent); color:#0f172a; /* texto oscuro, look clarito */
+  background:var(--accent) !important;
+  border-color:var(--accent) !important;
+  color:#0b1220 !important;
 }
 .btn-primary:hover, .cbtn-primary:hover{
-  background:var(--accent-600); border-color:var(--accent-600); color:#fff;
-}
-.btn-ghost, .cbtn-ghost{
-  background:#fff; color:#0f172a; border-color:#e2e8f0;
-}
-.btn-ghost:hover, .cbtn-ghost:hover{ background:#fff; border-color:#cbd5e1 }
-
-/* ===== Iconito “píldora” reutilizable ===== */
-.icon-spot{
-  width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
-  background:#f1f5f9;border:1px solid var(--line);box-shadow:var(--shadow-0);
-}
-.icon-spot img{width:22px;height:22px;object-fit:contain;filter:brightness(0) saturate(100%) invert(35%) sepia(6%) saturate(800%) hue-rotate(180deg)}
-
-/* ===== Footer ===== */
-footer{border-top:1px solid var(--line);padding:28px 0 40px;background:#fbfdff}
-.foot-grid{display:grid;gap:22px;grid-template-columns:1.2fr .8fr .8fr}
-.foot a{color:var(--muted);display:block;margin:.3rem 0}
-
-/* Utilidades */
-.text-link{color:#0f172a;font-weight:700;border-bottom:2px solid transparent}
-.text-link:hover{color:var(--accent-600);border-color:var(--accent-600)}
-.text-muted-ink{color:var(--muted)!important}
-/* Botones base */
-.btn{
-  border-radius:999px !important;
-  padding:.72rem 1.1rem !important;
-  font-weight:800 !important;
-  box-shadow:var(--shadow-0) !important;
-  border:1px solid #e2e8f0 !important;
-}
-.btn-primary{
-  background:#111827 !important;     /* oscuro elegante */
-  border-color:#111827 !important;
+  background:var(--accent-600) !important;
+  border-color:var(--accent-600) !important;
   color:#fff !important;
 }
-.btn-primary:hover{ filter:brightness(1.08); }
-.btn-outline-primary{
-  background:#fff !important; color:#111827 !important; border-color:#e2e8f0 !important;
+
+/* Variante ghost */
+.btn-outline-primary, .cbtn-ghost{
+  background:#fff !important; color:#0f172a !important; border-color:#e2e8f0 !important;
 }
-.btn-outline-primary:hover{ background:#fff !important; border-color:#cbd5e1 !important; }
+.btn-outline-primary:hover, .cbtn-ghost:hover{
+  background:#fff !important; border-color:#cbd5e1 !important;
+}
+
+/* Icono en “píldora” reutilizable */
+.icon-spot{
+  width:44px; height:44px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  background:#f1f5f9; border:1px solid var(--line); box-shadow:var(--shadow-0);
+}
+.icon-spot img{
+  width:22px; height:22px; object-fit:contain;
+  filter:brightness(0) saturate(100%) invert(35%) sepia(6%) saturate(800%) hue-rotate(180deg);
+}
+
+/* Footer */
+footer{ border-top:1px solid var(--line); padding:28px 0 40px; background:#fbfdff; }
+.foot-grid{ display:grid; gap:22px; grid-template-columns:1.2fr .8fr .8fr; }
+.foot a{ color:var(--muted); display:block; margin:.3rem 0; }
+
+/* Utilidades */
+.text-link{ color:#0f172a; font-weight:800; border-bottom:2px solid transparent; }
+.text-link:hover{ color:var(--accent-600); border-color:var(--accent-600); }
+.text-muted-ink{ color:var(--muted)!important; }
