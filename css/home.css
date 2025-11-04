@@ -73,19 +73,34 @@
 }
 
 /* ===== BOTONES UNIFICADOS ===== */
+/* ===== BOTONES UNIFICADOS (CELESTES con hover MARRÓN MOCHA) ===== */
+:root {
+  --sky: #D1E5FF;       /* celeste suave */
+  --sky-600: #96B1D9;   /* celeste más fuerte */
+  --mocha: #7B5E57;     /* marrón mocha */
+}
+
 .btn, .cbtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: .85rem 1.35rem;
+  padding: .85rem 1.4rem;
   border-radius: 14px;
   font-weight: 700;
   letter-spacing: .2px;
   border: 1px solid transparent;
-  transition: .2s ease;
+  transition: all .25s ease;
   box-shadow: var(--shadow-0);
+  background: var(--sky);
+  color: #0f172a;
 }
-.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-1); }
+.btn:hover, .cbtn:hover {
+  background: var(--mocha);
+  color: #fff;
+  border-color: var(--mocha);
+  box-shadow: var(--shadow-1);
+  transform: translateY(-1px);
+}
 
 .btn-primary {
   background: var(--sky) !important;
