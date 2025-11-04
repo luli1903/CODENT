@@ -93,10 +93,93 @@ button{ font:inherit; cursor:pointer; }
   filter:brightness(0) saturate(100%) invert(35%) sepia(6%) saturate(800%) hue-rotate(180deg);
 }
 
-/* Footer */
-footer{ border-top:1px solid var(--line); padding:28px 0 40px; background:#fbfdff; }
-.foot-grid{ display:grid; gap:22px; grid-template-columns:1.2fr .8fr .8fr; }
-.foot a{ color:var(--muted); display:block; margin:.3rem 0; }
+/* ===== FOOTER • layout limpio y consistente ===== */
+footer{
+  border-top: 1px solid var(--line);
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(4px);
+  padding: 44px 0 64px;
+}
+
+/* grilla de 3 columnas con aire */
+.foot-grid{
+  width: var(--container);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr .9fr;
+  gap: 28px 48px;
+  align-items: start;
+}
+
+/* columna: separador sutil para las dos de la derecha */
+.foot:not(:first-child){
+  padding-left: 24px;
+  border-left: 1px solid var(--line);
+}
+
+/* títulos */
+.foot h4{
+  margin: .2rem 0 .8rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: .2px;
+  position: relative;
+}
+.foot h4::after{
+  content:"";
+  display:block;
+  width: 36px; height: 3px;
+  background: var(--sky-600);          /* tu celeste */
+  border-radius: 2px;
+  margin-top: 8px;
+}
+
+/* descripción de la marca */
+.foot p{
+  color: var(--muted);
+  max-width: 52ch;
+  margin: 0;
+}
+
+/* enlaces más ordenados y con buen hover */
+.foot a{
+  display: block;
+  padding: .28rem 0;
+  color: #334155;
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+  transition: color .18s ease, border-color .18s ease;
+}
+.foot a:hover{
+  color: var(--ink);
+  border-color: var(--sky-600);
+}
+
+/* responsive: 2 columnas y la descripción ocupa todo el ancho */
+@media (max-width: 992px){
+  .foot-grid{
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 26px;
+  }
+  .foot:first-child{
+    grid-column: 1 / -1;    /* la columna de texto ocupa todo el ancho */
+    border-left: none;
+    padding-left: 0;
+  }
+  .foot:not(:first-child){
+    border-left: none;       /* no bordes verticales en tablet */
+    padding-left: 0;
+  }
+}
+
+/* responsive: una sola columna apilada y aire entre bloques */
+@media (max-width: 576px){
+  .foot-grid{
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
 
 /* Utilidades */
 .text-link{ color:#0f172a; font-weight:800; border-bottom:2px solid transparent; }
