@@ -1,7 +1,7 @@
 /* ===== HOME (index) ===== */
 
 body {
-    background-image: url("img/fondo.jpg"); /* Reemplaza con la ruta de tu imagen */
+    background-image: url("/img/fondo.jpg"); /* Reemplaza con la ruta de tu imagen */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
     background-size: cover; /* Asegura que la imagen cubra todo el fondo */
     background-position: center; /* Centra la imagen */
@@ -80,53 +80,46 @@ body {
 
 /* ===== BOTONES UNIFICADOS ===== */
 /* ===== BOTONES UNIFICADOS (CELESTES con hover MARRÓN MOCHA) ===== */
-:root {
-  --sky: #D1E5FF;       /* celeste suave */
-  --sky-600: #96B1D9;   /* celeste más fuerte */
-  --mocha: #7B5E57;     /* marrón mocha */
+/* === BOTONES UNIFICADOS (CELESTE → HOVER MOCHA) === */
+:root{
+  --sky:   #D1E5FF;   /* celeste suave */
+  --sky-600:#96B1D9;  /* celeste más fuerte */
+  --mocha: #7B5E57;   /* marrón mocha */
 }
 
-.btn, .cbtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: .85rem 1.4rem;
-  border-radius: 14px;
-  font-weight: 700;
-  letter-spacing: .2px;
-  border: 1px solid transparent;
-  transition: all .25s ease;
-  box-shadow: var(--shadow-0);
-  background: var(--sky);
-  color: #0f172a;
-}
-.btn:hover, .cbtn:hover {
-  background: var(--mocha);
-  color: #fff;
-  border-color: var(--mocha);
-  box-shadow: var(--shadow-1);
-  transform: translateY(-1px);
-}
-
-.btn-primary {
+.btn, .cbtn, 
+.btn-primary, .btn-outline-primary,
+.btn-secondary, .btn-light, button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: .85rem 1.35rem !important;
+  border-radius: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: .2px !important;
+  border: 1px solid transparent !important;
+  transition: all .25s ease !important;
+  box-shadow: var(--shadow-0) !important;
   background: var(--sky) !important;
   border-color: var(--sky) !important;
   color: #0f172a !important;
 }
-.btn-primary:hover {
-  background: var(--sky-600) !important;
-  border-color: var(--sky-600) !important;
+
+.btn:hover, .cbtn:hover,
+.btn-primary:hover, .btn-outline-primary:hover,
+.btn-secondary:hover, .btn-light:hover, button:hover {
+  background: var(--mocha) !important;
+  border-color: var(--mocha) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-1) !important;
 }
 
-.btn-ghost {
-  background: var(--sand) !important;
-  border-color: rgba(91, 70, 54, .18) !important;
-  color: var(--brown) !important;
+.btn:focus, .btn:active {
+  outline: none !important;
+  box-shadow: 0 0 0 0.25rem rgba(123,94,87,.25) !important; /* halo mocha */
 }
-.btn-ghost:hover {
-  background: var(--sand-600) !important;
-  border-color: rgba(91, 70, 54, .28) !important;
-}
+
 
 /* ===== CUADRADOS (4 ítems informativos) ===== */
 .hero-feats {
