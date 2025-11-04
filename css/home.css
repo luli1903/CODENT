@@ -177,3 +177,121 @@
     right: 16px;
   }
 }
+/* ===== HERO refinado ===== */
+
+/* Título principal — elegante y más grande */
+.hero-title {
+  font-family: "Sulphur Point", "Raleway", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(40px, 4.2vw, 58px);   /* más grande */
+  line-height: 1.1;
+  color: #ffffff;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.45);
+  max-width: 22ch;
+  margin-bottom: 1.2rem;
+  z-index: 2;
+  position: relative;
+}
+
+/* Mover la caja de 4 ítems un poco más abajo */
+.hero-feats {
+  position: absolute;
+  right: clamp(16px, 4vw, 48px);
+  bottom: clamp(32px, 6vw, 64px); /* más abajo */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  max-width: min(520px, 42vw);
+  z-index: 1;
+}
+
+/* Ítems internos */
+.hero-feats .feat {
+  display: flex;
+  gap: 12px;
+  align-items: center;  /* centrado vertical */
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: var(--shadow-0);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hero-feats .feat:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-1);
+}
+.hero-feats .feat b {
+  font-weight: 800;
+  display: block;
+  margin-bottom: 2px;
+}
+.hero-feats .feat small {
+  color: var(--muted);
+  display: block;
+  line-height: 1.48;
+}
+
+/* Iconos centrados y del mismo tamaño */
+.hero-feats .feat__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hero-feats .feat__icon img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+/* ===== BOTONES unificados ===== */
+.btn, .cbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .8rem 1.3rem;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  border: 1px solid transparent;
+  transition: .2s ease;
+  box-shadow: var(--shadow-0);
+}
+
+/* Mismo color para todos (azul profesional) */
+.btn-primary, .btn-ghost {
+  background: #1d4ed8;         /* azul profundo */
+  color: #fff;
+}
+.btn-primary:hover, .btn-ghost:hover {
+  background: #2563eb;         /* un tono más vivo */
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-1);
+}
+
+/* Ajuste responsive: que la caja baje en pantallas pequeñas */
+@media (max-width: 768px) {
+  .hero-feats {
+    grid-template-columns: 1fr;
+    left: 16px;
+    right: 16px;
+    max-width: unset;
+    bottom: 24px;
+  }
+  .hero-title {
+    font-size: clamp(32px, 7vw, 48px);
+    max-width: 90%;
+  }
+}
