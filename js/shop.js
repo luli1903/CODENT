@@ -126,3 +126,38 @@ function toggleStates({ loading=false, empty=false, error=false } = {}) {
   if (productGrid) productGrid.style.opacity = loading ? 0.5 : 1;
 }
 
+const qInput  = document.querySelector("#q");
+const orderSel= document.querySelector("#order");
+let lastItems = [];
+
+async function loadProducts(cat){
+  try{
+    toggleStates({ loading:true, empty:false, error:false });
+    const category = (cat && cat !== "todos") ? cat : undefined;
+    const items = await listProducts({ category });
+    lastItems = items;
+    renderGrid(applyClientFilters(items));
+    toggleStates({ empty: items.length === 0 });
+  }catch(err){
+    console.error("Error cargando productos:", err);
+    toggleStates({ error:true });
+  }finally{
+    toggleStates({ loading:false });
+  }
+}
+
+function applyClientFilters(items){
+  let a = [...items];
+  const q = (qInput?.value || "").trim().toLowerCase();
+  if(q) a = a.filter(p => (p.name||"").toLowerCase().includes(q));
+
+  switch (orderSel?.value){
+    case "price_asc":  a.sort((x,y)=>(x.price??0)-(y.price??0)); break;
+    case "price_desc": a.sort((x,y)=>(y.price??0)-(x.price??0)); break;
+    case "name_asc":   a.sort((x,y)=> (x.name||"").localeCompare(y.name||"")); break;
+  }
+  return a;
+}
+
+qInput?.addEventListener("input",  () => renderGrid(applyClientFilters(lastItems)));
+orderSel?.addEventListener("change", () => renderGrid(applyClientFilters(lastItems)));

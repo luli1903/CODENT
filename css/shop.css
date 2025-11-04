@@ -269,3 +269,33 @@ body {
   .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
   .card .body { padding: .7rem; }
 }
+/* --- Subnav enriquecido --- */
+.subnav-bar{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:1rem; padding:.7rem 0;
+}
+.subnav-left{display:flex; align-items:center; gap:.8rem}
+.crumb{color:var(--muted); font-weight:600}
+
+.subnav-right{display:flex; align-items:center; gap:.7rem}
+
+/* buscador pill */
+.input-wrap{
+  display:flex; align-items:center; gap:.45rem;
+  background:#fff; border:1px solid var(--line);
+  border-radius:999px; padding:.45rem .8rem; box-shadow:var(--shadow);
+}
+.input-wrap .icon{width:18px;height:18px;object-fit:contain}
+.input-wrap input{
+  border:0; outline:0; background:transparent; width:16rem;
+  font:inherit; color:var(--ink);
+}
+
+/* select pill */
+.select{
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  padding:.55rem .9rem; border-radius:999px; border:1px solid var(--line);
+  background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M4 6l4 4 4-4' fill='none' stroke='%23677' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right .6rem center/16px;
+  font-weight:700; color:var(--ink); box-shadow:var(--shadow);
+}
+.select:hover{border-color:var(--sky-600)}

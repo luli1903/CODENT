@@ -20,18 +20,35 @@
 
   <!-- ✅ ESTO VA FUERA DEL <style> -->
   <section class="shop-subnav">
-    <div class="container subnav-row">
-      <a href="/index.html" class="btn nav-btn" aria-label="Volver al inicio">
-  <img src="/img/icon/turn-left.svg" alt="" class="icon"> Inicio
-</a>
-
-<a href="/carrito.html" class="btn nav-btn" aria-label="Abrir carrito">
-  <img src="/img/icon/shopping-cart.svg" alt="" class="icon"> Ver carrito
-  <span id="cartBadge" class="badge">0</span>
-</a>
-
+  <div class="container subnav-bar">
+    <div class="subnav-left">
+      <a href="/index.html" class="nav-btn">
+        <img class="icon" src="/img/icon/turn-left.svg" alt=""> Inicio
+      </a>
+      <div class="crumb">Inicio / <strong>Tienda</strong></div>
     </div>
-  </section>
+
+    <div class="subnav-right">
+      <label class="input-wrap" aria-label="Buscar productos">
+        <img class="icon" src="/img/icon/search.svg" alt="">
+        <input id="q" type="search" placeholder="Buscar productos…">
+      </label>
+
+      <select id="order" class="select" aria-label="Ordenar productos">
+        <option value="relevance">Ordenar</option>
+        <option value="price_asc">Precio: menor a mayor</option>
+        <option value="price_desc">Precio: mayor a menor</option>
+        <option value="name_asc">Nombre A–Z</option>
+      </select>
+
+      <a href="/carrito.html" class="nav-btn">
+        <img class="icon" src="/img/icon/shopping-cart.svg" alt="">
+        Ver carrito <span id="cartBadge" class="badge">0</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 
   <section class="shop-filters">
     <div class="container">
