@@ -21,6 +21,7 @@
 
 /* Fondo global con degradé muy leve (no blanco liso) */
 html,body{height:100%;margin:0;padding:0}
+/* Fondo suave global */
 body{
   font-family:var(--font-sans);
   color:var(--ink);
@@ -28,9 +29,10 @@ body{
   -webkit-font-smoothing:antialiased;
   background:
     radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
-    radial-gradient(1200px 600px at 110% 120%, #f4f6ff 12%, transparent 55%),
-    #ffffff;
+    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 10%, transparent 58%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 85%);
 }
+
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 ul{list-style:none;margin:0;padding:0}
@@ -85,3 +87,21 @@ footer{border-top:1px solid var(--line);padding:28px 0 40px;background:#fbfdff}
 .text-link{color:#0f172a;font-weight:700;border-bottom:2px solid transparent}
 .text-link:hover{color:var(--accent-600);border-color:var(--accent-600)}
 .text-muted-ink{color:var(--muted)!important}
+/* Botones base */
+.btn{
+  border-radius:999px !important;
+  padding:.72rem 1.1rem !important;
+  font-weight:800 !important;
+  box-shadow:var(--shadow-0) !important;
+  border:1px solid #e2e8f0 !important;
+}
+.btn-primary{
+  background:#111827 !important;     /* oscuro elegante */
+  border-color:#111827 !important;
+  color:#fff !important;
+}
+.btn-primary:hover{ filter:brightness(1.08); }
+.btn-outline-primary{
+  background:#fff !important; color:#111827 !important; border-color:#e2e8f0 !important;
+}
+.btn-outline-primary:hover{ background:#fff !important; border-color:#cbd5e1 !important; }
