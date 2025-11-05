@@ -214,3 +214,54 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
 .btn-danger:hover {
   background: #dc2626;
 }
+/* ============================
+   Header Buttons (Inicio / Salir)
+============================ */
+.btn-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-group a,
+.btn-group button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.9rem;
+  font-weight: 700;
+  border-radius: 10px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .2s, transform .1s, color .2s;
+  border: 1px solid var(--line);
+}
+
+/* ====== “Inicio” celestito ====== */
+.btn-group a {
+  background: var(--sky);
+  color: var(--ink);
+  text-decoration: none;
+}
+.btn-group a:hover {
+  background: var(--mocha);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ====== “Salir” neutro con hover mocha ====== */
+.btn-group button {
+  background: #f1f5f9;
+  color: var(--ink);
+}
+.btn-group button:hover {
+  background: var(--mocha);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Opcional: efecto glass para integrarlo al header */
+.admin-header .btn-group a,
+.admin-header .btn-group button {
+  backdrop-filter: saturate(1.2) blur(2px);
+}
