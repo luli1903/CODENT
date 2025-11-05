@@ -1,183 +1,182 @@
 /* ==========================================
-   HOME · index.html (exacto para tu marcado)
-   Compatible con Bootstrap 4.5 y base.css
+   CODENT - INICIO (versión original restaurada)
    ========================================== */
 
-/* ---------- HERO ---------- */
-.hero{
+.hero {
   position: relative;
-  padding: clamp(70px, 9vw, 110px) 0 28px;
+  overflow: hidden;
+  background: transparent;
+  padding: 120px 0 80px;
+  text-align: center;
   color: #fff;
 }
 
-/* Fondo del hero (NO tapa clics)  */
-.hero::before{
-  content:"";
-  position:absolute; inset:0;
-  z-index: 0;                 /* fondo por debajo */
-  pointer-events: none;       /* no intercepta clics */
-  background:
-    /* velo MUY suave para legibilidad, sin “apagar” la foto */
-    linear-gradient(to bottom, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.08) 65%, rgba(0,0,0,0.12) 100%),
-    url('/img/hero/SillonPortada1.jpg') center/cover no-repeat;  /* ← CAMBIÁ ESTA RUTA */
+/* Imagen de fondo nítida (sin filtro gris) */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('/img/hero/TU-IMAGEN-AQUI.jpg') center/cover no-repeat; /* ← CAMBIÁ ESTA RUTA */
+  z-index: 0;
   opacity: 1;
 }
 
-.hero .container{
+/* Fondo suave translúcido detrás de los textos */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.15) 100%);
+  z-index: 0;
+}
+
+/* Contenedor */
+.hero .container {
   position: relative;
-  z-index: 1;                 /* por encima del fondo */
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Píldora CODENT */
-.hero-wordmark{
-  display:inline-block;
-  margin: 6px 0 12px;
-  padding:.5rem 1.15rem;
-  border-radius:999px;
-  background:rgba(255,255,255,.9);
-  border:1px solid rgba(255,255,255,.6);
-  color:#0b1222;
-  font-weight:800;
-  letter-spacing:.28rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,.08);
-}
-
-/* Eyebrow (línea chica) arriba del título — el <p class="mb-2"> que tenés */
-.hero p.mb-2{
-  color:#eef3ff!important;
-  text-shadow:0 12px 28px rgba(0,0,0,.28);
-  margin-bottom:.5rem!important;
-}
-
-/* Título grande centrado */
-.hero-title{
-  text-align:center;
-  font-size: clamp(2.1rem, 4.8vw, 3.8rem);
-  line-height: 1.12;
+/* Palabra grande CODENT */
+.hero-wordmark {
+  display: inline-block;
+  background: rgba(255,255,255,0.85);
+  color: #0f172a;
   font-weight: 800;
-  letter-spacing: .2px;
-  margin: 0 0 .7rem;
-  color:#0b1222;
-  /* glow oscuro + realce claro como tu captura */
-  text-shadow:
-    0 1px 0 rgba(255,255,255,.75),
-    0 14px 40px rgba(0,0,0,.25);
+  letter-spacing: 0.25rem;
+  font-size: 1.4rem;
+  border-radius: 50px;
+  padding: 0.5rem 1.4rem;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* Descripción bajo el título (tu <p class="mb-3">) */
-.hero .mb-3{
-  text-align:center;
-  color:#f3f7ff!important;
-  text-shadow:0 10px 26px rgba(0,0,0,.22);
+/* Subtexto superior */
+.hero p.mb-2 {
+  color: rgba(255,255,255,0.9);
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem !important;
 }
 
-/* Botonera debajo del título */
-.inline{
-  display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+/* Título principal */
+.hero-title {
+  font-family: 'Sulphur Point', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 4.8vw, 3.8rem);
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: 0 3px 14px rgba(0,0,0,0.35);
+  margin-bottom: 1rem;
 }
 
-/* Reforzamos botones del hero (hover mocha, click seguro) */
-.inline .btn{
-  border-radius:14px;
-  font-weight:800;
-  padding:.85rem 1.2rem;
-  position: relative; z-index: 1;   /* por si algún overlay externo aparece */
+/* Descripción */
+.hero .mb-3 {
+  color: rgba(255,255,255,0.92);
+  font-size: 1rem;
+  margin-bottom: 1.5rem !important;
 }
-.inline .btn-primary{
+
+/* Botones */
+.inline {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+}
+
+.inline .btn {
+  font-weight: 700;
+  border-radius: 14px;
+  padding: 0.8rem 1.4rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.inline .btn-primary {
   background: var(--sky);
   border-color: var(--sky);
   color: var(--ink);
 }
-.inline .btn-primary:hover,
-.inline .btn-primary:focus{
+
+.inline .btn-primary:hover {
   background: var(--mocha);
   border-color: var(--mocha);
-  color:#fff;
-}
-.inline .btn-ghost{
-  background:rgba(255,255,255,.9);
-  border:1px solid var(--line);
-  color:var(--ink);
-}
-.inline .btn-ghost:hover,
-.inline .btn-ghost:focus{
-  background:var(--mocha);
-  border-color:var(--mocha);
-  color:#fff;
+  color: #fff;
 }
 
-/* ---------- BLOQUES DE INFO (4 “feats”) ---------- */
-.hero-feats{
-  margin-top:18px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:16px;
-}
-.hero-feats .feat{
-  display:flex; gap:12px; align-items:flex-start;
-  background:rgba(255,255,255,.92);
-  border:1px solid rgba(255,255,255,.6);
-  border-radius:16px;
-  padding:14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.08);
-  backdrop-filter: blur(12px);
-}
-.feat__icon{
-  width:42px; height:42px; display:inline-grid; place-items:center;
-  background:#eaf2ff; border-radius:12px; border:1px solid var(--line);
-}
-.feat__icon img{ width:22px; height:22px; }
-.hero-feats b{ color:var(--ink); display:block; margin-bottom:2px; }
-.hero-feats small{ color:var(--muted); display:block; line-height:1.5; }
-
-/* ---------- SERVICIOS ---------- */
-.services-grid{ row-gap:1rem; }
-.service-card{
-  display:flex; flex-direction:column; overflow:hidden;
-  border-radius:16px; border:1px solid var(--line);
-  background:#fff;
-  box-shadow: 0 10px 30px rgba(0,0,0,.08);
-}
-.service-ill{ width:100%; height:160px; object-fit:cover; }
-.service-body{ padding:14px; }
-.service-head{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-.service-icon{ width:22px; height:22px; }
-.service-list{ padding-left:18px; margin:0; }
-.service-list li{ margin:.15rem 0; }
-
-/* ---------- PRODUCTOS DESTACADOS ---------- */
-.products-section{ padding:34px 0 10px; }
-.product-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:16px;
-}
-.product-grid > *{
-  background:#fff; border:1px solid var(--line); border-radius:14px;
-  box-shadow: 0 10px 28px rgba(0,0,0,.10);
-  overflow:hidden; transition:transform .12s ease, box-shadow .12s ease;
-}
-.product-grid > *:hover{ transform:translateY(-3px); box-shadow:0 16px 32px rgba(0,0,0,.12); }
-.product-grid img{ width:100%; height:180px; object-fit:cover; }
-.product-grid .p-info{ padding:12px; }
-.product-grid .p-title{ font-weight:800; margin:0 0 4px; }
-.product-grid .p-price{ color:var(--mocha); font-weight:800; }
-
-/* ---------- CONTACTO ---------- */
-.contact-card{ border-radius:16px !important; }
-.contact-card .form-control{
-  border-radius:12px; border-color:var(--line);
-}
-.contact-card .form-control:focus{
-  border-color:#b6d5ff; box-shadow:0 0 0 3px rgba(182,213,255,.35);
+.inline .btn-ghost {
+  background: var(--mocha);
+  color: #fff;
+  border: 1px solid var(--mocha);
 }
 
-/* ---------- FOOTER ---------- */
-footer .foot p{ margin:0; }
+.inline .btn-ghost:hover {
+  background: var(--sky);
+  color: var(--ink);
+}
 
-/* ---------- RESPONSIVE ---------- */
-@media (max-width:768px){
-  .service-ill{ height:130px; }
-  .hero{ padding-top:64px; }
-  .hero-title{ font-size: clamp(1.9rem, 6vw, 2.6rem); }
+/* Bloques de información (los 4 cuadros) */
+.hero-feats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+  text-align: left;
+}
+
+.feat {
+  display: flex;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 18px;
+  gap: 14px;
+  backdrop-filter: blur(10px);
+}
+
+.feat__icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: var(--sky);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.feat__icon img {
+  width: 22px;
+  height: 22px;
+}
+
+.feat b {
+  color: var(--ink);
+  display: block;
+  margin-bottom: 2px;
+  font-weight: 800;
+}
+
+.feat small {
+  color: var(--muted);
+  line-height: 1.5;
+  display: block;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .hero {
+    padding: 100px 0 60px;
+  }
+
+  .hero-title {
+    font-size: clamp(1.9rem, 6vw, 2.8rem);
+  }
+
+  .hero-feats {
+    margin-top: 30px;
+    gap: 14px;
+  }
 }
