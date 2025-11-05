@@ -1,234 +1,132 @@
-/* ============================================
-   CODENT · BASE GLOBAL
-   ============================================ */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&display=swap');
+/* ===========================================
+   💎 CODENT – Estilo Unificado (#coden-main)
+   =========================================== */
 
-:root{
-  --ink:#0f172a;
-  --muted:#475569;
-  --line:#e2e8f0;
-  --bg:#ffffff;
-  --card:#fbfbfe;
-  --accent:#7fb3ff;
-  --accent-600:#5a98f2;
-  --accent-900:#3d7fe8;
-  --mocha:#7B5E57;
-  --sky:#D1E5FF;
-  --sky-600:#96B1D9;
-
-  --font-sans:"Raleway","Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  --r-sm:10px; --r-md:14px; --r-lg:18px;
-  --shadow-0:0 2px 12px rgba(0,0,0,.06);
-  --shadow-1:0 8px 22px rgba(0,0,0,.10);
-  --container:min(1200px,92vw);
-
-  /* Imagen global opcional (usá .app-bg en <body> si querés aplicarla) */
-  --app-bg-img: url("/img/fondo.jpg");
+/* 🌅 Fondo global del main */
+#coden-main {
+  min-height: 100vh;
+  background: url("/img/fondo.jpg") center/cover no-repeat fixed;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 60px 0;
+  color: var(--ink);
+}
+@media (max-width: 1024px) {
+  #coden-main { background-attachment: scroll; }
 }
 
-/* ============================================
-   BASE Y FONDOS
-   ============================================ */
-html, body{height:100%; margin:0; padding:0;}
-body{
-  font-family:var(--font-sans);
-  color:var(--ink);
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
+/* 🧭 Contenedor general */
+#coden-main .container {
+  width: min(1120px, 92%);
+  margin-inline: auto;
 }
 
-/* Fondo por imagen (solo si el <body> tiene class="app-bg") */
-body.app-bg{
-  background-image: var(--app-bg-img);
-  background-position:center;
-  background-repeat:no-repeat;
-  background-size:cover;
-  background-attachment:fixed;
-}
-/* iOS fix */
-@media (max-width:1024px){
-  body.app-bg{background-attachment:scroll;}
-}
-
-/* Sticky footer (solo en páginas que lo necesiten) */
-body.sticky-footer{min-height:100vh; display:flex; flex-direction:column;}
-body.sticky-footer #coden-main{flex:1 0 auto;}
-body.sticky-footer footer{flex-shrink:0;}
-
-img{max-width:100%; display:block;}
-a{color:inherit; text-decoration:none;}
-button{font:inherit; cursor:pointer; border:none; background:none;}
-
-/* ============================================
-   NAVBAR
-   ============================================ */
-.navbar.coden-nav{
-  position:sticky; top:0; z-index:50;
-  backdrop-filter:saturate(160%) blur(8px);
-  background:linear-gradient(90deg,#ffffffee,#f3f6ffcc)!important;
-  border-bottom:1px solid var(--line);
-  box-shadow:var(--shadow-0);
-}
-.navbar-brand{font-weight:800; color:var(--ink)!important; letter-spacing:.2px;}
-
-/* ============================================
-   BOTONES
-   ============================================ */
-.btn, .cbtn, a.btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-  padding:.78rem 1.2rem;
-  border-radius:16px;
-  font-weight:800; letter-spacing:.2px;
-  border:1px solid #e2e8f0;
-  box-shadow:var(--shadow-0);
-  transition:.18s ease;
-}
-.btn:hover, .cbtn:hover{transform:translateY(-1px); box-shadow:var(--shadow-1);}
-
-/* Primario: celeste → hover mocha */
-.btn-primary, .cbtn-primary, .coden-btn{background:var(--accent); border-color:var(--accent); color:#0f172a;}
-.btn-primary:hover, .cbtn-primary:hover, .coden-btn:hover{background:var(--mocha); border-color:var(--mocha); color:#fff;}
-
-/* Ghost / Secundario */
-.btn-outline-primary, .btn-ghost, .cbtn-ghost, .coden-btn--ghost{background:#fff; color:#0f172a; border-color:#e2e8f0;}
-.btn-outline-primary:hover, .btn-ghost:hover, .cbtn-ghost:hover, .coden-btn--ghost:hover{background:#fff; border-color:#cbd5e1;}
-
-/* ============================================
-   DETALLE DE PRODUCTO
-   ============================================ */
-#coden-main{background:transparent;} /* el fondo lo maneja el body */
-
-.coden-product__img{
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.40);
-  backdrop-filter:blur(10px) saturate(160%);
-  -webkit-backdrop-filter:blur(10px) saturate(160%);
-  border-radius:22px;
-  box-shadow:0 8px 32px rgba(0,0,0,.08);
-  padding:10px; overflow:hidden; transition:all .25s ease;
-}
-.coden-product__img:hover{border-color:rgba(255,255,255,.60); box-shadow:0 12px 40px rgba(0,0,0,.12);}
-.coden-product__img img{width:100%; height:auto; object-fit:contain; border-radius:18px;}
-
-#content h2{font-family:"Cormorant",serif; font-weight:700; color:var(--ink); letter-spacing:.2px; margin-bottom:.4rem;}
-.coden-price{font-weight:800; color:var(--ink);}
-
-/* Badges */
-.coden-badges{display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.4rem;}
-.coden-badge{
-  display:inline-flex; align-items:center; padding:.25rem .6rem; border-radius:999px;
-  font-size:.85rem; font-weight:700; background:#f1f5f9; border:1px solid var(--line); color:var(--ink);
-}
-.coden-badge--ok{background:var(--sky); border-color:var(--sky-600);}
-
-/* Cantidad + acciones */
-.coden-inline{display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;}
-#qty.form-control{max-width:120px; border-radius:12px; border:1px solid var(--line);}
-#content p.text-muted{color:var(--muted)!important;}
-
-@media (max-width:767.98px){
-  #content .row > [class*="col-"]{margin-bottom:1rem;}
-}
-
-/* ============================================
-   FOOTER
-   ============================================ */
-footer{
-  border-top:1px solid var(--line);
-  background:rgba(255,255,255,.88);
-  backdrop-filter:blur(4px);
-  padding:44px 0 64px;
-}
-.foot-grid{
-  width:var(--container); margin-inline:auto;
-  display:grid; grid-template-columns:1.1fr .9fr .9fr; gap:28px 48px;
-}
-.foot:not(:first-child){padding-left:24px; border-left:1px solid var(--line);}
-.foot h4{margin:.2rem 0 .8rem; font-weight:800; color:var(--ink);}
-.foot h4::after{content:""; display:block; width:36px; height:3px; background:var(--accent); border-radius:2px; margin-top:8px;}
-.foot p{color:var(--muted); max-width:52ch; margin:0;}
-.foot a{display:block; padding:.28rem 0; color:#334155; transition:color .18s ease, border-color .18s ease;}
-.foot a:hover{color:var(--ink); border-color:var(--accent-600);}
-@media (max-width:992px){
-  .foot-grid{grid-template-columns:1fr 1fr; gap:22px 26px;}
-  .foot:first-child{grid-column:1/-1; border-left:none; padding-left:0;}
-  .foot:not(:first-child){border-left:none; padding-left:0;}
-}
-@media (max-width:576px){.foot-grid{grid-template-columns:1fr; gap:18px;}}
-
-/* ============================================
-   CARRITO (page--cart)
-   ============================================ */
-.page--cart #coden-main{
-  min-height:100vh;
-  background:
-    linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.85)),
-    url("/img/fondo.jpg") center/cover no-repeat fixed;
-}
-@media (max-width:1024px){
-  .page--cart #coden-main{background-attachment:scroll;}
-}
-
-.page--cart .container{max-width:1120px;}
-.page--cart .card{
-  border:1px solid rgba(226,232,240,.9);
-  border-radius:18px;
-  box-shadow:0 8px 22px rgba(0,0,0,.06);
-  backdrop-filter:blur(4px);
-  background:rgba(255,255,255,.88);
-}
-.page--cart .form-control{border-radius:12px; border:1px solid var(--line);}
-.page--cart .list-group-item{border:1px solid var(--line);}
-
-.page--cart #btn-pagar{
-  border-radius:16px; font-weight:800; letter-spacing:.2px;
-  padding:1rem 1.2rem; box-shadow:0 8px 22px rgba(15,23,42,.12);
-}
-.page--cart h5{font-weight:800; letter-spacing:.2px;}
-
-/* Ítems del carrito (cuando existan) */
-.page--cart #cartItems .coden-product__img{
-  background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden;
-}
-.page--cart #cartItems .coden-product__img img{width:100%; height:100%; object-fit:cover;}
-.page--cart #cartItems .coden-product__title{font-weight:700;}
-/* ===== PATCH: Carrito (fondo + título + color de botones) ===== */
-
-/* 1) Color de marca (celeste exacto). Cambiá solo estas 2 líneas si querés otro tono */
-:root{
-  --accent:    #66B3FF;   /* celeste principal de botones */
-  --accent-600:#4D97F2;   /* hover/active */
-}
-
-/* 2) Fondo del carrito: menos opaco para que la imagen se vea más */
-.page--cart #coden-main{
-  background:
-    /* bajamos la opacidad del velo blanco */
-    linear-gradient(to bottom, rgba(255,255,255,.60), rgba(255,255,255,.65)),
-    url("/img/fondo.jpg") center/cover no-repeat fixed;
-}
-@media (max-width:1024px){
-  .page--cart #coden-main{ background-attachment: scroll; }
-}
-
-/* 3) Título “Tu carrito”: centrado y con Raleway bien fuerte */
-.page--cart .page-title{
+/* 🩵 Título principal */
+#coden-main h2,
+#coden-main .page-title {
   text-align: center;
-  font-family: var(--font-sans);     /* Raleway */
+  font-family: var(--font-sans);
   font-weight: 800;
-  letter-spacing: .3px;
-  font-size: clamp(1.9rem, 2.6vw, 2.6rem);
-  margin-bottom: 1.2rem;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: var(--ink);
+  margin-bottom: 2rem;
+  letter-spacing: 0.3px;
 }
 
-/* Botón pagar: usa el nuevo celeste y hover, por si algún override lo pisaba */
-.page--cart #btn-pagar.btn-primary{
-  background: var(--accent) !important;
-  border-color: var(--accent) !important;
-  color: #0f172a !important;
+/* 💠 Tarjetas glassy */
+#coden-main .card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+  transition: all 0.25s ease;
 }
-.page--cart #btn-pagar.btn-primary:hover{
-  background: var(--accent-600) !important;
-  border-color: var(--accent-600) !important;
-  color: #fff !important;
+#coden-main .card:hover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* ✏️ Inputs */
+#coden-main .form-control {
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  transition: border-color 0.2s ease;
+}
+#coden-main .form-control:focus {
+  border-color: var(--mocha);
+  box-shadow: 0 0 0 2px rgba(123, 94, 87, 0.2);
+}
+
+/* 📦 Listas y totales */
+#coden-main .list-group-item {
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+/* 🟤 Botón principal (mocha) */
+#coden-main .btn-primary,
+#btn-pagar {
+  background: var(--mocha);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+  transition: all 0.25s ease;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+#coden-main .btn-primary:hover,
+#btn-pagar:hover {
+  background: #60463f;
+  transform: translateY(-1px);
+}
+
+/* 🩵 Botón secundario (sky) */
+#coden-main .btn-secondary {
+  background: var(--sky);
+  color: var(--ink);
+  border: 1px solid var(--sky);
+  border-radius: 18px;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+#coden-main .btn-secondary:hover {
+  background: #c7defc;
+}
+
+/* 🧾 Subtítulos dentro de secciones */
+#coden-main h5 {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  color: var(--ink);
+}
+
+/* 🖼️ Imágenes del carrito */
+#coden-main .coden-product__img {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+#coden-main .coden-product__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  #coden-main h2 { font-size: 1.9rem; margin-top: 0.5rem; }
+  #coden-main .card { border-radius: 16px; }
+  #btn-pagar { font-size: 1rem; }
 }
