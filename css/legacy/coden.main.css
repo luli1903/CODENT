@@ -360,3 +360,19 @@ form.contact-card,
 .col-lg-8 .contact-card {
   border-radius: 18px !important;
 }
+/* Mejora de nitidez para las imágenes dentro de las tarjetas de servicio */
+.service-card img,
+.card-servicio img,
+.card img {
+  opacity: 0.85;                     /* antes debía estar en 0.5 o menos */
+  filter: brightness(1.05) contrast(1.05);
+  transition: filter .25s ease, opacity .25s ease;
+}
+
+/* un pequeño “brillo” al pasar el mouse, mantiene el look profesional */
+.service-card:hover img,
+.card-servicio:hover img,
+.card:hover img {
+  opacity: 1;
+  filter: brightness(1.15) contrast(1.1);
+}
