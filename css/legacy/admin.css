@@ -316,3 +316,16 @@ body.admin::before,
   content: none !important;
   background: none !important;
 }
+/* ===== FIX FONDO ADMIN — pegar AL FINAL de admin.css ===== */
+html body.admin{
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.35) 70%),
+    linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.55)),
+    url("/img/fondo.jpg") !important;
+  background-position: center, center, center !important;
+  background-size: cover, cover, cover !important;
+  background-repeat: no-repeat, no-repeat, no-repeat !important;
+  background-attachment: fixed, fixed, fixed !important;
+}
+body.admin::before,
+.container.admin-max::before { content:none !important; background:none !important; }
