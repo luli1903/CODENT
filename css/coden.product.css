@@ -108,3 +108,47 @@
 .product-page .btn-ghost:hover{
   background:#fff; border-color:#cbd5e1;
 }
+/* ===== PATCH PRODUCT ===== */
+
+/* Asegura el ancho tipo "container" (igual que en el resto del sitio) */
+.coden-container{
+  width: var(--container, min(1200px,92vw));
+  margin-inline: auto;
+}
+
+/* Fuerza el degradé en esta página por si algo lo pisa */
+.product-page #coden-main{
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
+    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 10%, transparent 58%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 85%) !important; /* <- importante */
+}
+
+/* La grilla no debe estirarse raro */
+.product-page .product-grid{
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 24px 36px;
+  align-items: start;
+}
+
+/* Limita el tamaño de la imagen y evita que “explote” */
+.product-page .coden-product__img{
+  max-width: 640px;           /* límite horizontal */
+  margin: 0;                  /* sin márgenes extra */
+}
+.product-page .coden-product__img img{
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 520px;          /* límite vertical */
+  object-fit: contain;
+}
+
+/* En móviles: un poco más chico */
+@media (max-width: 992px){
+  .product-page .product-grid{ grid-template-columns: 1fr; }
+  .product-page .coden-product__img{ max-width: 100%; }
+  .product-page .coden-product__img img{ max-height: 360px; }
+}
