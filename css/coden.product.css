@@ -113,3 +113,33 @@ body{
 .cd-btn--ghost:hover{
   background:#fff;
 }
+/* ==== Overrides de la página de producto (fondo uniforme) ==== */
+.product-page #coden-main,
+.product-page .coden-container{
+  background: transparent !important;
+}
+
+/* Mata cualquier “tarjeta” alrededor de la imagen */
+.product-page .coden-product__img{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+}
+
+/* Por si algún contenedor intermedio traía fondo */
+.product-page #content .row > [class*="col-"],
+.product-page #content .col-md-6.text-center,
+.product-page #content .col-md-6.text-center > div{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Input cantidad más sutil sobre fondo con imagen (opcional) */
+.product-page #qty.form-control{
+  background: rgba(255,255,255,.65);
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(226,232,240,.8);
+}
