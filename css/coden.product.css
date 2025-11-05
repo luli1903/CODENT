@@ -293,3 +293,21 @@ footer::before {
   footer { padding: 26px 0 38px; }
   footer::before { top: -32px; height: 32px; }
 }
+/* === Mantener el footer pegado al fondo === */
+
+/* Estructura vertical para toda la página */
+html, body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* El contenido principal crece para empujar el footer al fondo */
+#coden-main {
+  flex: 1 0 auto;
+}
+
+/* El footer queda siempre abajo */
+footer {
+  flex-shrink: 0;
+}
