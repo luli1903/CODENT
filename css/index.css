@@ -1,51 +1,20 @@
-.hero {
-  text-align: center;
-  padding: 5rem 1rem 3rem;
-  color: #fff;
-}
-.hero h1 {
-  font-size: 2.4rem;
-  font-weight: 800;
-  line-height: 1.2;
-}
-.hero .hero-boxes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2.5rem;
-}
-.hero .card {
-  background: rgba(255,255,255,0.65);
-  color: var(--ink);
-  font-size: 0.95rem;
-}
+/* ==========================================
+   HOME – CODENT
+   ========================================== */
 
-.servicios {
-  padding: 4rem 2rem;
-  text-align: center;
+.hero{padding:clamp(60px,8vw,100px) 0 30px;text-align:center}
+.hero-sub{color:#f7fafc;text-shadow:0 2px 14px rgba(0,0,0,.25)}
+.hero .grid{
+  margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px
 }
-.servicios h2 {
-  margin-bottom: 2rem;
-}
-.servicios .cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-}
+.hero .card{background:rgba(255,255,255,.66)}
 
-.contacto {
-  text-align: center;
-  padding: 4rem 1rem;
-}
-.contacto form {
-  width: min(500px, 92%);
-  margin: auto;
-}
-.contacto input, .contacto textarea {
-  width: 100%;
-  border-radius: var(--radius);
-  border: 1px solid #ddd;
-  padding: 0.8em;
-  margin: 0.4em 0;
-  font-family: inherit;
-}
+.seccion{padding:56px 0}
+.seccion .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.seccion h2{text-align:center;margin-bottom:18px}
+
+.destacados-vacio{text-align:center;color:var(--muted);margin:22px 0}
+
+.contacto{padding:40px 0;text-align:center}
+.contacto form{width:min(520px,92%);margin-inline:auto}
+.contacto input,.contacto textarea{border:1px solid var(--line);border-radius:var(--r);padding:.8rem;margin:.4rem 0}

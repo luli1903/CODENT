@@ -1,32 +1,17 @@
-.cuenta-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+/* ==========================================
+   CUENTA (modal)
+   ========================================== */
+
+.modal{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.4);z-index:1000
 }
-.cuenta-content {
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(14px);
-  border-radius: var(--radius);
-  padding: 2rem;
-  width: min(400px, 90%);
-  box-shadow: var(--shadow);
+.modal .box{
+  width:min(420px,92%);background:rgba(255,255,255,.86);
+  border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(12px);
+  border-radius:18px;box-shadow:var(--shadow);padding:18px
 }
-.cuenta-content input {
-  width: 100%;
-  padding: 0.7em;
-  margin-top: 0.4em;
-  border-radius: var(--radius);
-  border: 1px solid #ccc;
-}
-.cuenta-tabs {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 1rem;
-}
-.cuenta-tabs button {
-  flex: 1;
-}
+.tabs{display:flex;gap:8px;margin-bottom:10px}
+.tabs .btn{flex:1}
+.modal input{margin-top:6px}
+.modal .hint{color:var(--muted);font-size:.9rem;margin:6px 0 10px}
