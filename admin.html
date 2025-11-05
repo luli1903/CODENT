@@ -8,7 +8,8 @@
 
   <link rel="icon" href="/img/favicon.ico" />
   <link rel="stylesheet" href="/css/legacy/legacy.bundle.css">
-  <link rel="stylesheet" href="/css/legacy/admin.css">
+  <!-- admin.css debe ir DESPUÉS del legacy -->
+  <link rel="stylesheet" href="/css/admin.css?v=3">
 
   <!-- Evitar "flash": ocultar CRUD hasta validar sesión/rol -->
   <style>body.auth-wait #crudSection { display: none !important; }</style>
@@ -38,11 +39,11 @@
     </div>
   </header>
 
-  <main class="container" id="admin-panel">
+  <!-- usar admin-max para que apliquen los estilos del contenedor -->
+  <main class="container admin-max">
     <section id="crudSection" aria-labelledby="crudTitle">
       <h2 id="crudTitle">Productos</h2>
 
-      <!-- Usa tu clase .admin-form -->
       <form id="productForm" class="admin-form" onsubmit="return false" novalidate>
         <input type="hidden" id="prodId" />
 
@@ -50,7 +51,6 @@
           <input type="text" id="name" placeholder="Nombre" required />
         </label>
 
-        <!-- util .grid-2 para precio/stock -->
         <div class="grid-2">
           <input type="number" step="0.01" min="0" id="price" placeholder="Precio" required inputmode="decimal"/>
           <input type="number" min="0" id="stock" placeholder="Stock" required inputmode="numeric"/>
@@ -73,7 +73,6 @@
         <label for="imageFile">Imagen (opcional)</label>
         <input type="file" id="imageFile" accept="image/*" />
 
-        <!-- usa tu clase .form-actions -->
         <div class="form-actions">
           <button type="submit" class="btn btn-primary">Guardar</button>
           <button type="button" id="btnReset" class="btn btn-ghost">Nuevo</button>
@@ -82,7 +81,6 @@
 
       <hr />
 
-      <!-- usa tu clase .product-grid -->
       <div id="adminList" class="product-grid"></div>
     </section>
   </main>
