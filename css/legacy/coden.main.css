@@ -274,3 +274,37 @@ footer{
   margin-top: .4rem;
   border-radius: 12px;
 }
+/* Efecto brillo sutil en el texto principal */
+.hero-title {
+  font-weight: 900;
+  font-size: clamp(28px, 4vw, 52px);
+  color: #fff;
+  letter-spacing: .2px;
+  text-shadow:
+    0 0 6px rgba(255,255,255,0.25),
+    0 0 14px rgba(255,255,255,0.15);
+}
+
+.hero .hero-title,
+h1.hero-title {
+  font-weight: 900 !important;
+  font-size: clamp(28px, 4vw, 52px) !important;
+  color: #fff !important;
+  letter-spacing: .2px !important;
+
+  /* brillo sutil fijo */
+  text-shadow:
+    0 0 6px rgba(255,255,255,0.25),
+    0 0 14px rgba(255,255,255,0.15) !important;
+
+  /* 🔹 reset limpio (sin error de validación) */
+  background: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+/* seguridad: que quede sobre cualquier overlay */
+.hero { position: relative; }
+.hero .hero-title { position: relative; z-index: 2; }
+.hero::before { pointer-events: none; }
