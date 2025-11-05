@@ -1,20 +1,141 @@
 /* ==========================================
-   HOME – CODENT
+   HOME · para el index.html provisto
+   Requiere base.css y Bootstrap cargados antes
    ========================================== */
 
-.hero{padding:clamp(60px,8vw,100px) 0 30px;text-align:center}
-.hero-sub{color:#f7fafc;text-shadow:0 2px 14px rgba(0,0,0,.25)}
-.hero .grid{
-  margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px
+/* ---------- HERO ---------- */
+.hero{
+  position: relative;
+  padding: clamp(64px,9vw,110px) 0 22px;
+  color:#fff;
 }
-.hero .card{background:rgba(255,255,255,.66)}
 
-.seccion{padding:56px 0}
-.seccion .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
-.seccion h2{text-align:center;margin-bottom:18px}
+/* Imagen de fondo del hero: clara (sin filtro oscuro) */
+.hero::before{
+  content:"";
+  position:absolute; inset:0; z-index:0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.00) 0%, rgba(0,0,0,.10) 60%, rgba(0,0,0,.12) 100%),
+    url('/img/hero/portada-equipo.jpg') center/cover no-repeat; /* <-- si tu imagen es otra, cambiá el path aquí */
+  opacity:1;
+}
+.hero .container{ position:relative; z-index:1; }
 
-.destacados-vacio{text-align:center;color:var(--muted);margin:22px 0}
+/* “CODENT” en píldora */
+.hero-wordmark{
+  display:inline-block;
+  margin: 6px 0 10px;
+  padding:.45rem 1.1rem;
+  border-radius:999px;
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(255,255,255,.6);
+  color:#0b1222;
+  font-weight:800;
+  letter-spacing:.28rem;
+  box-shadow: var(--shadow);
+}
 
-.contacto{padding:40px 0;text-align:center}
-.contacto form{width:min(520px,92%);margin-inline:auto}
-.contacto input,.contacto textarea{border:1px solid var(--line);border-radius:var(--r);padding:.8rem;margin:.4rem 0}
+/* Subtexto arriba del H1 */
+.hero p.mb-2{
+  color:#eaf2ff;
+  text-shadow:0 12px 28px rgba(0,0,0,.28);
+  margin-bottom:.5rem !important;
+}
+
+/* Título grande */
+.hero-title{
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: .2px;
+  margin: 0 0 .7rem;
+  text-shadow:
+    0 1px 0 rgba(0,0,0,.08),
+    0 14px 40px rgba(0,0,0,.25);
+}
+
+/* Descripción */
+.hero .mb-3{
+  color:#eaf2ff;
+  text-shadow:0 10px 26px rgba(0,0,0,.22);
+}
+
+/* Botones del hero (inline) – mantienen hover mocha */
+.inline{ display:flex; gap:10px; flex-wrap:wrap; }
+
+/* ---------- Bloques de features (4) ---------- */
+.hero-feats{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;
+}
+.hero-feats .feat{
+  display:flex; gap:12px; align-items:flex-start;
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:16px;
+  padding:14px;
+  box-shadow:var(--shadow);
+  backdrop-filter: blur(12px);
+}
+.feat__icon{
+  width:42px; height:42px; display:inline-grid; place-items:center;
+  background:#eaf2ff; border-radius:12px; border:1px solid var(--line);
+}
+.feat__icon img{ width:22px; height:22px; }
+.hero-feats b{ color:var(--ink); display:block; margin-bottom:2px; }
+.hero-feats small{ color:var(--muted); display:block; line-height:1.5; }
+
+/* ---------- SERVICIOS ---------- */
+.services-grid{ row-gap:1rem; }
+.service-card{
+  display:flex; flex-direction:column; overflow:hidden;
+  border-radius:16px; border:1px solid var(--line);
+  background:#fff;
+  box-shadow: var(--shadow);
+}
+.service-ill{ width:100%; height:160px; object-fit:cover; }
+.service-body{ padding:14px; }
+.service-head{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.service-icon{ width:22px; height:22px; }
+
+/* Lista con bullets prolijos */
+.service-list{ padding-left:18px; margin:0; }
+.service-list li{ margin:.15rem 0; }
+
+/* ---------- PRODUCTOS DESTACADOS ---------- */
+.products-section{ padding:34px 0 10px; }
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:16px;
+}
+.product-grid > *{
+  background:#fff; border:1px solid var(--line); border-radius:14px;
+  box-shadow: var(--shadow); overflow:hidden; transition:transform .12s ease, box-shadow .12s ease;
+}
+.product-grid > *:hover{ transform:translateY(-3px); box-shadow:0 14px 26px rgba(0,0,0,.12); }
+.product-grid img{ width:100%; height:180px; object-fit:cover; }
+.product-grid .p-info{ padding:12px; }
+.product-grid .p-title{ font-weight:800; margin:0 0 4px; }
+.product-grid .p-price{ color:var(--mocha); font-weight:800; }
+
+/* ---------- CONTACTO ---------- */
+.contact-card{ border-radius:16px !important; }
+.contact-card .form-control{
+  border-radius:12px; border-color:var(--line);
+}
+.contact-card .form-control:focus{
+  border-color:#b6d5ff; box-shadow:0 0 0 3px rgba(182,213,255,.35);
+}
+
+/* ---------- FOOTER ---------- */
+footer .foot p{ margin:0; }
+
+/* ---------- Responsivo ---------- */
+@media (max-width:768px){
+  .service-ill{ height:130px; }
+  .hero{ padding-top:64px; }
+  .hero-title{ font-size: clamp(1.9rem, 6vw, 2.6rem); }
+}
