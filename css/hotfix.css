@@ -1,0 +1,111 @@
+/* ====== HOTFIX DE ESPECIFICIDAD (carga último) ====== */
+
+/* --- TIENDA --- */
+body#shop .shop-main .grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  gap: 1rem !important;
+}
+
+/* Bootstrap redefine .card; reescribimos con más peso */
+body#shop .shop-main .card {
+  background: #fff !important;
+  border: 1px solid var(--line, #e2e8f0) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: var(--shadow, 0 8px 22px rgba(0,0,0,.06)) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body#shop .shop-main .card .thumb {
+  aspect-ratio: 4/3;
+  background: var(--card, #f8fafc);
+  display: block;
+  object-fit: cover;
+  width: 100%;
+  border: 0;
+}
+
+body#shop .shop-main .card .body {
+  padding: .8rem .9rem !important;
+  display: grid !important;
+  gap: .35rem !important;
+}
+
+body#shop .shop-main .card .name {
+  font-weight: 800 !important;
+  color: var(--ink, #0f172a) !important;
+  font-size: 1rem !important;
+  line-height: 1.25 !important;
+}
+
+body#shop .shop-main .card .meta {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-top: .3rem !important;
+}
+
+body#shop .shop-main .card .price {
+  font-weight: 800 !important;
+  color: var(--ink, #0f172a);
+}
+
+/* navbar/subnav que podían quedar debajo por z-index */
+.shop-subnav { position: sticky; top: 56px; z-index: 30 !important; }
+.shop-filters { position: sticky; top: 96px; z-index: 20 !important; }
+
+/* --- BOTONES coherentes con tu paleta (celeste -> hover mocha) --- */
+body#shop .btn,
+body#shop .card .cta .btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
+  border: 1px solid var(--line, #e2e8f0) !important;
+  border-radius: 12px !important;
+  padding: .55rem .9rem !important;
+  background: var(--sky, #D1E5FF) !important;
+  color: var(--ink, #0f172a) !important;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease !important;
+}
+body#shop .btn:hover,
+body#shop .card .cta .btn:hover {
+  background: var(--mocha, #7B5E57) !important;
+  border-color: var(--mocha, #7B5E57) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+/* --- PRODUCTO (detalle) --- */
+body.product-page .product-grid,
+body.product-page #coden-main .product-grid {
+  display: grid !important;
+  grid-template-columns: minmax(280px, 1.1fr) minmax(280px, .9fr) !important;
+  gap: 24px 36px !important;
+  align-items: start !important;
+}
+@media (max-width: 992px){
+  body.product-page .product-grid,
+  body.product-page #coden-main .product-grid { grid-template-columns: 1fr !important; }
+}
+
+body.product-page .coden-product__img {
+  background: rgba(255,255,255,.12) !important;
+  border: 1px solid rgba(255,255,255,.4) !important;
+  border-radius: 22px !important;
+  padding: 10px !important;
+  overflow: hidden !important;
+}
+
+body.product-page .info-card {
+  background: rgba(255,255,255,.96) !important;
+  border: 1px solid rgba(226,232,240,.9) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,.06) !important;
+  padding: 22px 24px !important;
+}
+
+body.product-page h2 { font-family: "Cormorant", serif !important; font-weight: 700 !important; color: var(--ink,#0f172a) !important; }
+
+/* --- CONTENEDORES --- */
+.container,
+.coden-container { width: min(1200px, 92%) !important; margin-inline: auto !important; }
