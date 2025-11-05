@@ -121,16 +121,20 @@ function readShipAddress(){
 }
 function hydrateCheckout(){
   const data = loadCheckout();
-  ['nombre','apellido','email'].forEach(id=>{
-    if(data[id]) $('#'+id)?.value = data[id];
-  });
+
+  const setVal = (id, v) => {
+    const el = document.getElementById(id);   // o $('#'+id)
+    if (el != null && v != null) el.value = v;
+  };
+
+  ['nombre','apellido','email'].forEach(id => setVal(id, data[id]));
+
   [
     'ship_name','ship_surname','ship_email','ship_phone','ship_zip','ship_state','ship_city',
     'ship_street','ship_number','ship_floor','ship_refs'
-  ].forEach(id=>{
-    if(data[id]) $('#'+id)?.value = data[id];
-  });
+  ].forEach(id => setVal(id, data[id]));
 }
+
 function storeCheckout(){
   const obj = {
     nombre:  $('#nombre')?.value || '',
