@@ -1,223 +1,37 @@
-/* ===== PRODUCT PAGE ===== */
+/* ===========================================================
+   CODENT · PRODUCT PAGE
+   =========================================================== */
 
-/* Fondo continuo (sin “bloques” blancos) */
-.product-page #coden-main{
-  background:
-    radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
-    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 10%, transparent 58%),
-    linear-gradient(180deg, #ffffff 0%, #f8fafc 85%);
-}
-
-/* Layout base del detalle: dos columnas en desktop, stack en mobile */
-.product-page .product-grid{
-  display: grid;
-  grid-template-columns: minmax(280px, 1.1fr) minmax(280px, .9fr);
-  gap: 24px 36px;
-  align-items: start;
-}
-@media (max-width: 992px){
-  .product-page .product-grid{
-    grid-template-columns: 1fr;
-  }
-}
-
-/* === Imagen con efecto glass sutil (sin mancha blanca sólida) === */
-.product-page .coden-product__img{
-  background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.40);
-  backdrop-filter: blur(10px) saturate(160%);
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
-  border-radius: 22px;
-  box-shadow: 0 8px 32px rgba(0,0,0,.08);
-  padding: 10px;
-  overflow: hidden;
-  transition: all .25s ease;
-}
-.product-page .coden-product__img:hover{
-  border-color: rgba(255,255,255,.60);
-  box-shadow: 0 12px 40px rgba(0,0,0,.12);
-}
-.product-page .coden-product__img img{
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 18px;
-}
-
-/* === Tarjeta blanca adaptativa para el panel de información === */
-.product-page .info-card{
-  background: rgba(255,255,255, .96); /* blanco casi sólido */
-  border: 1px solid rgba(226,232,240,.9);
-  border-radius: 20px;
-  box-shadow: 0 8px 22px rgba(0,0,0,.06);
-  padding: 18px 20px;
-}
-@media (min-width: 993px){
-  .product-page .info-card{
-    padding: 22px 24px;
-  }
-}
-
-/* Título y texto */
-.product-page h2{
-  font-family: "Cormorant", serif;
-  font-weight: 700;
-  letter-spacing: .2px;
-  margin: 0 0 .35rem;
-  color: var(--ink, #0f172a);
-}
-.product-page .text-muted{
-  color: var(--muted, #475569) !important;
-}
-
-/* Badges */
-.product-page .coden-badges{ display:flex; gap:.45rem; flex-wrap:wrap; margin-bottom:.35rem; }
-.product-page .coden-badge{
-  display:inline-flex; align-items:center;
-  padding:.28rem .6rem; border-radius:999px;
-  font-size:.85rem; font-weight:700;
-  background:#f1f5f9; border:1px solid var(--line, #e2e8f0); color:#0f172a;
-}
-.product-page .coden-badge--ok{ background: var(--sky, #D1E5FF); border-color: var(--sky-600, #96B1D9); }
-
-/* Precio */
-.product-page .coden-price{ font-weight:800; color:#0f172a; }
-
-/* Cantidad */
-.product-page #qty.form-control{
-  max-width: 120px;
-  border-radius: 12px;
-  border: 1px solid var(--line, #e2e8f0);
-  background: rgba(255,255,255,.9);
-  transition: .2s;
-}
-.product-page #qty.form-control:focus{
-  box-shadow: 0 0 0 2px rgba(90,152,242,.25);
-  outline: none;
-}
-
-/* Área de acciones */
-.product-page .coden-inline{
-  display:flex; flex-wrap:wrap; gap:.6rem; align-items:center;
-}
-
-/* Usamos tus botones globales (celeste + hover mocha) */
-.product-page .btn-ghost{
-  background:#fff; border-color:#e2e8f0; color:#0f172a;
-}
-.product-page .btn-ghost:hover{
-  background:#fff; border-color:#cbd5e1;
-}
-/* ===== PATCH PRODUCT ===== */
-
-/* Asegura el ancho tipo "container" (igual que en el resto del sitio) */
-.coden-container{
-  width: var(--container, min(1200px,92vw));
-  margin-inline: auto;
-}
-
-/* Fuerza el degradé en esta página por si algo lo pisa */
-.product-page #coden-main{
-  min-height: 100vh;
-  background:
-    radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
-    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 10%, transparent 58%),
-    linear-gradient(180deg, #ffffff 0%, #f8fafc 85%) !important; /* <- importante */
-}
-
-/* La grilla no debe estirarse raro */
-.product-page .product-grid{
-  display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap: 24px 36px;
-  align-items: start;
-}
-
-/* Limita el tamaño de la imagen y evita que “explote” */
-.product-page .coden-product__img{
-  max-width: 640px;           /* límite horizontal */
-  margin: 0;                  /* sin márgenes extra */
-}
-.product-page .coden-product__img img{
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 520px;          /* límite vertical */
-  object-fit: contain;
-}
-
-/* En móviles: un poco más chico */
-@media (max-width: 992px){
-  .product-page .product-grid{ grid-template-columns: 1fr; }
-  .product-page .coden-product__img{ max-width: 100%; }
-  .product-page .coden-product__img img{ max-height: 360px; }
-}
-/* ===== Fix final: fondo degradado uniforme ===== */
-
+/* === Fondo con la misma imagen que la tienda === */
 body.product-page,
 .product-page #coden-main {
   min-height: 100vh;
   background: 
-    radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
-    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 10%, transparent 58%),
-    linear-gradient(180deg, #ffffff 0%, #f8fafc 85%) !important;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-/* ========= PRODUCT PAGE — Overrides de fondo (ganan siempre) ========= */
-
-/* 1) Limpieza de fondos que puedan venir de Bootstrap o de tus bases */
-html.product-page, 
-body.product-page {
-  background: none !important;            /* borra cualquier color previo */
+    url("/img/bg-soft.jpg") center center / cover no-repeat fixed;
+  background-color: #f8fafc; /* fallback */
 }
 
-/* 2) Aplica el degradé tanto al body como al wrapper principal */
-body.product-page,
-.product-page #coden-main {
-  min-height: 100vh;
-  background:
-    radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
-    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 10%, transparent 58%),
-    linear-gradient(180deg, #ffffff 0%, #f8fafc 85%) !important;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-/* 3) Evita que algún wrapper te vuelva a pintar blanco */
-.product-page .coden-container,
-.product-page .container,
-.product-page main,
-.product-page #content {
-  background: transparent !important;
-}
-
-/* 4) Mantiene tu layout actual (por si algo se reseteó) */
-.product-page .product-grid{
+/* === Layout base: dos columnas en desktop, stack en mobile === */
+.product-page .product-grid {
   display: grid;
   grid-template-columns: minmax(280px, 1.1fr) minmax(280px, .9fr);
   gap: 24px 36px;
   align-items: start;
+  width: var(--container, min(1200px,92vw));
+  margin-inline: auto;
+  padding-block: 2rem 4rem;
 }
 @media (max-width: 992px){
-  .product-page .product-grid{ grid-template-columns: 1fr; }
+  .product-page .product-grid {
+    grid-template-columns: 1fr;
+    padding-block: 1.5rem 3rem;
+  }
 }
 
-/* 5) Tarjeta info (vidrio) adaptativa */
-.product-page .info-card{
-  background: rgba(255,255,255, .96);
-  border: 1px solid rgba(226,232,240,.9);
-  border-radius: 20px;
-  box-shadow: 0 8px 22px rgba(0,0,0,.06);
-  padding: 22px 24px;
-}
-
-/* 6) Imagen con borde de vidrio (sin “rectángulo blanco”) + límites */
-.product-page .coden-product__img{
+/* === Imagen del producto con borde “vidrio” === */
+.product-page .coden-product__img {
   background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.40);
+  border: 1px solid rgba(255,255,255,.4);
   backdrop-filter: blur(10px) saturate(160%);
   -webkit-backdrop-filter: blur(10px) saturate(160%);
   border-radius: 22px;
@@ -225,8 +39,14 @@ body.product-page,
   padding: 10px;
   overflow: hidden;
   max-width: 640px;
+  margin-inline: auto;
+  transition: all .25s ease;
 }
-.product-page .coden-product__img img{
+.product-page .coden-product__img:hover {
+  border-color: rgba(255,255,255,.6);
+  box-shadow: 0 12px 40px rgba(0,0,0,.12);
+}
+.product-page .coden-product__img img {
   width: 100%;
   height: auto;
   max-height: 520px;
@@ -234,33 +54,163 @@ body.product-page,
   border-radius: 18px;
 }
 @media (max-width: 992px){
-  .product-page .coden-product__img{ max-width: 100%; }
-  .product-page .coden-product__img img{ max-height: 360px; }
+  .product-page .coden-product__img img { max-height: 360px; }
 }
 
-/* 7) Tipos y badges */
-.product-page h2{
+/* === Panel de información (fondo blanco adaptativo) === */
+.product-page .info-card {
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(226,232,240,.9);
+  border-radius: 20px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.06);
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* === Título y descripción === */
+.product-page h2 {
   font-family: "Cormorant", serif;
   font-weight: 700;
-  letter-spacing:.2px;
-  margin: 0 0 .35rem;
+  letter-spacing: .2px;
+  margin: 0 0 .4rem;
   color: var(--ink, #0f172a);
 }
-.product-page .text-muted{ color: var(--muted, #475569)!important; }
-.product-page .coden-badges{ display:flex; gap:.45rem; flex-wrap:wrap; margin-bottom:.35rem; }
-.product-page .coden-badge{
-  display:inline-flex; align-items:center;
-  padding:.28rem .6rem; border-radius:999px;
-  font-size:.85rem; font-weight:700;
-  background:#f1f5f9; border:1px solid var(--line, #e2e8f0); color:#0f172a;
+.product-page .text-muted {
+  color: var(--muted, #475569) !important;
+  line-height: 1.6;
 }
-.product-page .coden-badge--ok{ background: var(--sky, #D1E5FF); border-color: var(--sky-600, #96B1D9); }
 
-/* 8) Inputs y botones (manteniendo tu estética) */
-.product-page #qty.form-control{
-  max-width: 120px; border-radius: 12px; border: 1px solid var(--line, #e2e8f0);
-  background: rgba(255,255,255,.9);
+/* === Badges (24–72h, garantía, etc.) === */
+.product-page .coden-badges {
+  display: flex;
+  gap: .45rem;
+  flex-wrap: wrap;
+  margin-bottom: .4rem;
 }
-.product-page .coden-inline{ display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; }
-.product-page .btn-ghost{ background:#fff; border-color:#e2e8f0; color:#0f172a; }
-.product-page .btn-ghost:hover{ background:#fff; border-color:#cbd5e1; }
+.product-page .coden-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: .28rem .6rem;
+  border-radius: 999px;
+  font-size: .85rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  border: 1px solid var(--line, #e2e8f0);
+  color: #0f172a;
+}
+.product-page .coden-badge--ok {
+  background: var(--sky, #D1E5FF);
+  border-color: var(--sky-600, #96B1D9);
+}
+
+/* === Precio === */
+.product-page .coden-price {
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+/* === Cantidad === */
+.product-page #qty.form-control {
+  max-width: 120px;
+  border-radius: 12px;
+  border: 1px solid var(--line, #e2e8f0);
+  background: rgba(255,255,255,.9);
+  transition: .2s;
+}
+.product-page #qty.form-control:focus {
+  box-shadow: 0 0 0 2px rgba(90,152,242,.25);
+  outline: none;
+}
+
+/* === Área de acciones === */
+.product-page .coden-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: center;
+  margin-top: .5rem;
+}
+
+/* === Botones (mantienen estética global) === */
+.product-page .btn-primary {
+  background: var(--accent,#7fb3ff);
+  border-color: var(--accent,#7fb3ff);
+  color: #0f172a;
+  font-weight: 800;
+  padding: .6rem 1.2rem;
+  border-radius: 14px;
+  transition: all .18s ease;
+}
+.product-page .btn-primary:hover {
+  background: var(--accent-600,#5a98f2);
+  border-color: var(--accent-600,#5a98f2);
+  color: #fff;
+}
+.product-page .btn-ghost {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  border-radius: 14px;
+  font-weight: 800;
+  padding: .6rem 1.2rem;
+  transition: all .18s ease;
+}
+.product-page .btn-ghost:hover {
+  border-color: #cbd5e1;
+}
+
+/* === Responsivo: stack === */
+@media (max-width: 768px) {
+  .product-page .product-grid {
+    gap: 20px;
+  }
+  .product-page .info-card {
+    padding: 18px 20px;
+  }
+}
+
+/* === Footer reutilizable (si lo agregás debajo) === */
+footer {
+  border-top: 1px solid var(--line, #e2e8f0);
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(6px);
+  padding: 44px 0 64px;
+}
+.foot-grid {
+  width: var(--container, min(1200px,92vw));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr .9fr;
+  gap: 28px 48px;
+  align-items: start;
+}
+.foot h4 {
+  font-weight: 800;
+  margin: .2rem 0 .8rem;
+  color: var(--ink);
+}
+.foot p {
+  color: var(--muted);
+  max-width: 52ch;
+  margin: 0;
+}
+.foot a {
+  display: block;
+  padding: .25rem 0;
+  color: #334155;
+  text-decoration: none;
+  transition: color .18s ease;
+}
+.foot a:hover {
+  color: var(--ink);
+}
+@media (max-width: 768px) {
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .foot:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 576px) {
+  .foot-grid { grid-template-columns: 1fr; }
+}
