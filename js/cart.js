@@ -2,6 +2,17 @@
 import { supabase } from "/js/supabaseClient.js";
 
 const CART_KEY = "coden_cart";
+const CHECKOUT_KEY = "coden_checkout";
+
+/* =======================
+   Utils
+======================= */
+const $ = (q, c=document) => c.querySelector(q);
+const $$ = (q, c=document) => Array.from(c.querySelectorAll(q));
+const debounce = (fn, ms=250) => {
+  let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms); };
+};
+const emailOk = (s="") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s).trim());
 
 /* =======================
    Storage simple
@@ -15,8 +26,8 @@ export function setCart(cart){
   updateCartBadge();
 }
 export function updateCartBadge(){
-  const badge=document.getElementById("cartBadge"); if(!badge) return;
-  const count=getCart().reduce((a,i)=>a+Number(i.qty||0),0);
+  const badge = $("#cartBadge"); if(!badge) return;
+  const count = getCart().reduce((a,i)=>a+Number(i.qty||0),0);
   badge.textContent = count;
   badge.setAttribute('aria-live','polite');
   badge.setAttribute('aria-label', `Carrito: ${count} producto${count===1?'':'s'}`);
@@ -51,7 +62,8 @@ export async function addToCart(productId, qty = 1){
       snap = {
         name: p.name || "Producto",
         price: Number(p.price || 0),
-        image_url: p.image_url || ""
+        image_url: p.image_url || "/img/placeholder.png",
+        weight_kg: Number(p.weight_kg || 0)
       };
     }
   } catch (_) {}
@@ -82,120 +94,68 @@ export async function cartTotal(){
 }
 
 /* =======================
-   Render carrito.html
+   Persistencia de checkout
 ======================= */
-export async function renderCartPage(){
-  const list=document.getElementById("cartItems");
-  const totalEl=document.getElementById("cartTotal");
-  if(!list||!totalEl) return;
-
-  const cart=getCart(); list.innerHTML="";
-  if(!cart.length){
-    list.innerHTML='<p class="text-muted mb-0">Tu carrito está vacío.</p>';
-    totalEl.textContent="$0";
-    updateCartBadge();
-    return;
-  }
-
-  const ids   = cart.map(i => i.id);
-  const prods = await fetchByIds(ids);
-  const map   = new Map(prods.map(p => [String(p.id), p]));
-
-  let total = 0;
-
-  cart.forEach(item => {
-    const p = map.get(String(item.id));
-    const name  = (p?.name ?? item.name ?? "Producto");
-    const price = Number(p?.price ?? item.price ?? 0);
-    const img   = (p?.image_url ?? item.image_url ?? "");
-    const qty   = Number(item.qty || 1);
-    const sub   = price * qty;
-
-    total += sub;
-
-    const row = document.createElement("div");
-    row.className = "coden-product";
-    row.style.cssText = "display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:10px;margin-bottom:10px";
-
-    const safeName = String(name).replace(/"/g,"&quot;");
-
-    row.innerHTML = `
-      <div class="coden-product__img" style="width:72px; height:54px; border-radius:12px; overflow:hidden">
-        <img src="${img}" alt="${safeName}">
-      </div>
-      <div>
-        <div class="coden-product__title">${name}</div>
-        <div class="coden-badges" style="margin-top:4px">
-          <span class="coden-badge">Unidad</span>
-          <span class="coden-badge coden-badge--ok">$ ${price.toLocaleString("es-AR")}</span>
-        </div>
-      </div>
-      <div style="display:flex; align-items:center; gap:8px">
-        <input type="number" min="1" value="${qty}" class="form-control form-control-sm" style="width:82px">
-        <button class="coden-btn coden-btn--ghost" style="padding:.45rem .8rem">Eliminar</button>
-      </div>
-    `;
-
-    const qtyInput = row.querySelector("input");
-    const delBtn   = row.querySelector("button");
-
-    qtyInput.addEventListener("change", async ()=>{
-      const q = Math.max(1, parseInt(qtyInput.value)||1);
-      setQty(item.id, q);
-      const t = await cartTotal();
-      totalEl.textContent = "$" + t.toLocaleString("es-AR");
-      await renderTotalsBox(); // refresca resumen (incluye envío)
-    });
-
-    delBtn.addEventListener("click", async ()=>{
-      removeFromCart(item.id);
-      await renderCartPage();
-      await renderTotalsBox();
-    });
-
-    list.appendChild(row);
-  });
-
-  totalEl.textContent="$"+total.toLocaleString("es-AR");
-  updateCartBadge();
+function loadCheckout(){
+  try{ return JSON.parse(localStorage.getItem(CHECKOUT_KEY)) || {}; }
+  catch{ return {}; }
 }
-
-/* =======================
-   Toast global (opcional)
-======================= */
-window.toastCoden = (msg)=>{
-  let t = document.getElementById("toast");
-  if(!t){
-    t = document.createElement("div");
-    t.id = "toast";
-    t.style.cssText = "position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#052c47;color:#fff;padding:.6rem 1rem;border-radius:12px;font-weight:700;opacity:0;transition:opacity .2s;z-index:1080";
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  t.style.opacity = "1";
-  setTimeout(()=>t.style.opacity="0", 1400);
-};
-
-/* =======================
-   Envío real (dirección + costo)
-======================= */
+function saveCheckout(obj){
+  localStorage.setItem(CHECKOUT_KEY, JSON.stringify(obj||{}));
+}
 function readShipAddress(){
-  return {
-    // acepta ambos conjuntos de campos (contacto y envío)
-    name:    document.getElementById('ship_name')?.value || document.getElementById('nombre')?.value || '',
-    surname: document.getElementById('ship_surname')?.value || document.getElementById('apellido')?.value || '',
-    email:   document.getElementById('ship_email')?.value || document.getElementById('email')?.value || '',
-    phone:   document.getElementById('ship_phone')?.value || document.getElementById('telefono')?.value || '',
-    zip:     document.getElementById('ship_zip')?.value || '',
-    state:   document.getElementById('ship_state')?.value || '',
-    city:    document.getElementById('ship_city')?.value || '',
-    street:  document.getElementById('ship_street')?.value || '',
-    number:  document.getElementById('ship_number')?.value || '',
-    floor:   document.getElementById('ship_floor')?.value || '',
-    refs:    document.getElementById('ship_refs')?.value || '',
+  const o = {
+    name:    $('#ship_name')?.value || $('#nombre')?.value || '',
+    surname: $('#ship_surname')?.value || $('#apellido')?.value || '',
+    email:   $('#ship_email')?.value || $('#email')?.value || '',
+    phone:   $('#ship_phone')?.value || '',
+    zip:     $('#ship_zip')?.value || '',
+    state:   $('#ship_state')?.value || '',
+    city:    $('#ship_city')?.value || '',
+    street:  $('#ship_street')?.value || '',
+    number:  $('#ship_number')?.value || '',
+    floor:   $('#ship_floor')?.value || '',
+    refs:    $('#ship_refs')?.value || ''
   };
+  return o;
+}
+function hydrateCheckout(){
+  const data = loadCheckout();
+  ['nombre','apellido','email'].forEach(id=>{
+    if(data[id]) $('#'+id)?.value = data[id];
+  });
+  [
+    'ship_name','ship_surname','ship_email','ship_phone','ship_zip','ship_state','ship_city',
+    'ship_street','ship_number','ship_floor','ship_refs'
+  ].forEach(id=>{
+    if(data[id]) $('#'+id)?.value = data[id];
+  });
+}
+function storeCheckout(){
+  const obj = {
+    nombre:  $('#nombre')?.value || '',
+    apellido:$('#apellido')?.value || '',
+    email:   $('#email')?.value || ''
+  };
+  Object.assign(obj, {
+    ship_name:$('#ship_name')?.value || '',
+    ship_surname:$('#ship_surname')?.value || '',
+    ship_email:$('#ship_email')?.value || '',
+    ship_phone:$('#ship_phone')?.value || '',
+    ship_zip:$('#ship_zip')?.value || '',
+    ship_state:$('#ship_state')?.value || '',
+    ship_city:$('#ship_city')?.value || '',
+    ship_street:$('#ship_street')?.value || '',
+    ship_number:$('#ship_number')?.value || '',
+    ship_floor:$('#ship_floor')?.value || '',
+    ship_refs:$('#ship_refs')?.value || ''
+  });
+  saveCheckout(obj);
 }
 
+/* =======================
+   Envío
+======================= */
 function isHome(){ return document.querySelector('input[name="shipping_method"]:checked')?.value === 'home'; }
 
 function calculateShipping(cart, addr){
@@ -229,7 +189,7 @@ function calculateShipping(cart, addr){
 }
 
 /* =======================
-   Resumen de totales
+   Totales
 ======================= */
 async function computeTotals() {
   const cart = getCart();
@@ -251,46 +211,147 @@ async function computeTotals() {
 
 export async function renderTotalsBox() {
   const { subtotal, shipping, total } = await computeTotals();
-  const elSubtotal = document.querySelector('#subtotal');
-  const elEnvio    = document.querySelector('#envio');
-  const elTotal    = document.querySelector('#total');
-  const note       = document.getElementById('ship_calc_msg');
+  const elSubtotal = $('#subtotal');
+  const elEnvio    = $('#envio');
+  const elTotal    = $('#total');
+  const note       = $('#ship_calc_msg');
 
   if (elSubtotal) elSubtotal.textContent = "$ " + subtotal.toLocaleString("es-AR");
   if (elEnvio)    elEnvio.textContent    = shipping.cost == null ? "—" : (shipping.cost ? "$ " + shipping.cost.toLocaleString("es-AR") : "Sin costo");
   if (elTotal)    elTotal.textContent    = "$ " + total.toLocaleString("es-AR");
+
   if (note) {
     const addr = readShipAddress();
     note.textContent = isHome()
       ? (shipping.cost == null ? (shipping.error || "Completá los datos para calcular el envío.") : `Destino: ${addr.city}, ${addr.state} (${addr.zip}).`)
       : "Retiro en Mar del Plata, Buenos Aires.";
   }
+
+  togglePayButton();
 }
 
 /* =======================
-   Pago MP (redirect clásico)
+   Render carrito.html
+======================= */
+export async function renderCartPage(){
+  const list = $('#cartItems');
+  const totalEl = $('#cartTotal');
+  if(!list||!totalEl) return;
+
+  const cart = getCart(); list.innerHTML="";
+  if(!cart.length){
+    list.innerHTML='<p class="text-muted mb-0">Tu carrito está vacío.</p>';
+    totalEl.textContent="$0";
+    updateCartBadge();
+    togglePayButton();
+    return;
+  }
+
+  const ids   = cart.map(i => i.id);
+  const prods = await fetchByIds(ids);
+  const map   = new Map(prods.map(p => [String(p.id), p]));
+
+  let total = 0;
+
+  cart.forEach(item => {
+    const p = map.get(String(item.id));
+    const name  = (p?.name ?? item.name ?? "Producto");
+    const price = Number(p?.price ?? item.price ?? 0);
+    const img   = (p?.image_url ?? item.image_url ?? "/img/placeholder.png");
+    const qty   = Number(item.qty || 1);
+    const sub   = price * qty;
+
+    total += sub;
+
+    const row = document.createElement("div");
+    row.className = "coden-product";
+    row.style.cssText = "display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:10px;margin-bottom:10px";
+
+    const safeName = String(name).replace(/"/g,"&quot;");
+
+    row.innerHTML = `
+      <div class="coden-product__img" style="width:72px; height:54px">
+        <img src="${img}" alt="${safeName}">
+      </div>
+      <div>
+        <div class="coden-product__title">${name}</div>
+        <div class="coden-badges" style="margin-top:4px">
+          <span class="coden-badge">Unidad</span>
+          <span class="coden-badge coden-badge--ok">$ ${price.toLocaleString("es-AR")}</span>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px">
+        <input type="number" min="1" value="${qty}" class="form-control form-control-sm" style="width:82px">
+        <button class="btn btn-outline-primary btn-sm">Eliminar</button>
+      </div>
+    `;
+
+    const qtyInput = row.querySelector("input");
+    const delBtn   = row.querySelector("button");
+
+    qtyInput.addEventListener("change", async ()=>{
+      const q = Math.max(1, parseInt(qtyInput.value)||1);
+      setQty(item.id, q);
+      const t = await cartTotal();
+      totalEl.textContent = "$" + t.toLocaleString("es-AR");
+      await renderTotalsBox();
+    });
+
+    delBtn.addEventListener("click", async ()=>{
+      removeFromCart(item.id);
+      await renderCartPage();
+      await renderTotalsBox();
+    });
+
+    list.appendChild(row);
+  });
+
+  totalEl.textContent="$"+total.toLocaleString("es-AR");
+  updateCartBadge();
+  togglePayButton();
+}
+
+/* =======================
+   Toast global (opcional)
+======================= */
+window.toastCoden = (msg)=>{
+  let t = $("#toast");
+  if(!t){
+    t = document.createElement("div");
+    t.id = "toast";
+    t.style.cssText = "position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#052c47;color:#fff;padding:.6rem 1rem;border-radius:12px;font-weight:700;opacity:0;transition:opacity .2s;z-index:1080";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = "1";
+  setTimeout(()=>t.style.opacity="0", 1400);
+};
+
+/* =======================
+   Pago MP (redirect)
 ======================= */
 function getCustomerFromForm() {
-  // primero intentamos leer los campos del bloque de envío; si no, usamos los de contacto
   const email =
-    document.querySelector('#ship_email')?.value?.trim() ||
-    document.querySelector('#email')?.value?.trim() || '';
-
+    $('#ship_email')?.value?.trim() ||
+    $('#email')?.value?.trim() || '';
   const name =
-    document.querySelector('#ship_name')?.value?.trim() ||
-    document.querySelector('#nombre')?.value?.trim() || '';
-
+    $('#ship_name')?.value?.trim() ||
+    $('#nombre')?.value?.trim() || '';
   const surname =
-    document.querySelector('#ship_surname')?.value?.trim() ||
-    document.querySelector('#apellido')?.value?.trim() || '';
-
+    $('#ship_surname')?.value?.trim() ||
+    $('#apellido')?.value?.trim() || '';
   const phone =
-    document.querySelector('#ship_phone')?.value?.trim() ||
-    document.querySelector('#telefono')?.value?.trim() || '';
-
+    $('#ship_phone')?.value?.trim() || '';
   return { name, surname, email, phone };
 }
 
+function togglePayButton(){
+  const btn = $('#btn-pagar'); if(!btn) return;
+  const hasItems = getCart().length > 0;
+  const mail = $('#ship_email')?.value || $('#email')?.value || '';
+  const ok = hasItems && emailOk(mail);
+  btn.disabled = !ok;
+}
 
 export async function payWithMercadoPago() {
   try {
@@ -298,7 +359,7 @@ export async function payWithMercadoPago() {
     if (!cart.length) { alert("Tu carrito está vacío."); return; }
 
     const customer = getCustomerFromForm();
-    if (!customer.email) { alert("Ingresá un email válido."); return; }
+    if (!emailOk(customer.email)) { alert("Ingresá un email válido."); return; }
 
     const addr = readShipAddress();
     const shipping = calculateShipping(cart, addr);
@@ -307,9 +368,14 @@ export async function payWithMercadoPago() {
       return;
     }
 
-    // Armamos payload para el serverless
     const payload = {
-      cart: cart.map(i => ({ id: i.id, title: i.name || "Producto", unit_price: Number(i.price || 0), quantity: Number(i.qty || 1), weight_kg: Number(i.weight_kg || 0) })),
+      cart: cart.map(i => ({
+        id: i.id,
+        title: i.name || "Producto",
+        unit_price: Number(i.price || 0),
+        quantity: Number(i.qty || 1),
+        weight_kg: Number(i.weight_kg || 0)
+      })),
       customer,
       shipping: {
         method: shipping.method,
@@ -320,11 +386,10 @@ export async function payWithMercadoPago() {
     };
 
     const res = await fetch('/.netlify/functions/create-preference', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(payload)
-});
-
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
     const data = await res.json();
     if (!res.ok) {
@@ -348,33 +413,38 @@ export async function payWithMercadoPago() {
 ======================= */
 function wireCartEvents() {
   // radios de envío (pickup/home)
-  document.querySelectorAll('input[name="shipping_method"]').forEach(el => {
+  $$('input[name="shipping_method"]').forEach(el => {
     el.addEventListener('change', () => { 
-      const box = document.getElementById('shippingAddress');
+      const box = $('#shippingAddress');
       if (box) box.style.display = isHome() ? '' : 'none';
       renderTotalsBox().catch(console.error);
+      togglePayButton();
     });
   });
 
-  // inputs de dirección
-  [
+  // inputs que recalculan + guardan
+  const watchIds = [
+    'nombre','apellido','email',
     'ship_zip','ship_state','ship_city','ship_street','ship_number','ship_floor',
-    'ship_phone','ship_email','ship_name','ship_surname'
-  ].forEach(id => {
-    document.getElementById(id)?.addEventListener('input', () => {
-      renderTotalsBox().catch(console.error);
-    });
-  });
+    'ship_phone','ship_email','ship_name','ship_surname','ship_refs'
+  ];
+  const onInput = debounce(()=>{
+    storeCheckout();
+    renderTotalsBox().catch(console.error);
+    togglePayButton();
+  }, 200);
+  watchIds.forEach(id => { $('#'+id)?.addEventListener('input', onInput); });
 
-  document.getElementById('btn-pagar')?.addEventListener('click', payWithMercadoPago);
+  $('#btn-pagar')?.addEventListener('click', payWithMercadoPago);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('cartItems')) {
+  if ($('#cartItems')) {
+    hydrateCheckout();
     renderCartPage().catch(console.error);
     renderTotalsBox().catch(console.error);
     wireCartEvents();
-    const box = document.getElementById('shippingAddress');
+    const box = $('#shippingAddress');
     if (box) box.style.display = isHome() ? '' : 'none';
   }
 });

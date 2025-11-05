@@ -270,3 +270,53 @@ footer {
 @media (max-width:576px){
   .foot-grid { grid-template-columns:1fr; gap:18px; }
 }
+/* ======= Fondo global con imagen ======= */
+.has-bg,
+.has-bg #coden-main {
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.78) 0%, rgba(255,255,255,.82) 100%),
+    url("/img/bg/coden-soft.jpg") center/cover no-repeat fixed;
+}
+
+/* ======= Carrito ======= */
+.cart-page .page-title{
+  font-family:"Cormorant",serif;
+  letter-spacing:.2px;
+  color:var(--ink);
+}
+
+.cart-card{
+  background: rgba(255,255,255,.92);
+  border:1px solid rgba(226,232,240,.9);
+  border-radius:20px;
+  box-shadow: var(--shadow-0);
+}
+
+.ship-note{
+  font-size:.9rem;
+  color:#64748b;
+  margin-top:-6px;
+  margin-bottom:12px;
+}
+
+#cartItems .coden-product__img{
+  background: #fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+}
+#cartItems .coden-product__title{
+  font-weight:700;
+}
+
+.pay-btn{
+  position: sticky;
+  bottom: 10px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.12);
+}
+
+/* accesibilidad de botones deshabilitados */
+.pay-btn:disabled{
+  opacity:.6; cursor:not-allowed;
+}
