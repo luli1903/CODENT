@@ -276,3 +276,20 @@ body.admin{
   background-repeat: no-repeat, no-repeat, no-repeat !important;
   background-attachment: fixed, fixed, fixed !important;
 }
+/* ===== Fondo forzado en body (gana a legacy) ===== */
+html, body { height: 100%; background: transparent !important; }
+
+body.admin {
+  /* NO otro background arriba */
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.4) 70%, rgba(255,255,255,.35)),
+    linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.55)),
+    url("/img/fondo.jpg") !important;     /* <= tu ruta */
+  background-position: center, center, center !important;
+  background-size: cover, cover, cover !important;
+  background-repeat: no-repeat, no-repeat, no-repeat !important;
+  background-attachment: fixed, fixed, fixed !important;
+}
+
+/* IMPORTANTE: nada debe cubrir todo el viewport en blanco */
+.container.admin-max::before { content: none !important; }    /* quita el velo blanco extra */
