@@ -1,0 +1,24 @@
+.tienda-header {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(12px);
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
+  margin: 2rem auto;
+  width: min(1200px, 94%);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+}
+.tienda-header input {
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+  padding: 0.5em 1em;
+  width: 250px;
+}
+.productos-grid {
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}

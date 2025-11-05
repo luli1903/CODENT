@@ -1,0 +1,51 @@
+.hero {
+  text-align: center;
+  padding: 5rem 1rem 3rem;
+  color: #fff;
+}
+.hero h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.hero .hero-boxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+.hero .card {
+  background: rgba(255,255,255,0.65);
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.servicios {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.servicios h2 {
+  margin-bottom: 2rem;
+}
+.servicios .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.contacto {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+.contacto form {
+  width: min(500px, 92%);
+  margin: auto;
+}
+.contacto input, .contacto textarea {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid #ddd;
+  padding: 0.8em;
+  margin: 0.4em 0;
+  font-family: inherit;
+}

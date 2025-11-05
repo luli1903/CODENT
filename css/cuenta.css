@@ -1,0 +1,32 @@
+.cuenta-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.cuenta-content {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(14px);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: min(400px, 90%);
+  box-shadow: var(--shadow);
+}
+.cuenta-content input {
+  width: 100%;
+  padding: 0.7em;
+  margin-top: 0.4em;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+}
+.cuenta-tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+.cuenta-tabs button {
+  flex: 1;
+}

@@ -1,0 +1,28 @@
+.carrito {
+  width: min(800px, 92%);
+  margin: 4rem auto;
+}
+.carrito h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+.carrito .card {
+  background: rgba(255,255,255,0.75);
+  padding: 1.5rem;
+}
+.carrito input {
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+  padding: 0.6em;
+  width: 100%;
+}
+.carrito .total {
+  font-weight: 700;
+  text-align: right;
+  margin-top: 1rem;
+}
+.carrito button {
+  width: 100%;
+  font-size: 1rem;
+}

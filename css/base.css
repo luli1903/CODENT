@@ -1,0 +1,48 @@
+:root {
+  --mocha: #7B5E57;
+  --sky: #D1E5FF;
+  --ink: #0f172a;
+  --muted: #475569;
+  --bg: #ffffff;
+  --card: rgba(255,255,255,0.7);
+  --radius: 14px;
+  --shadow: 0 8px 22px rgba(0,0,0,0.06);
+  --font-main: 'Poppins', system-ui;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--ink);
+  background: url('/img/bg-nacarado.webp') no-repeat center/cover fixed;
+  backdrop-filter: blur(12px);
+  margin: 0;
+  min-height: 100vh;
+}
+
+h1, h2, h3 {
+  font-weight: 800;
+  color: var(--ink);
+}
+
+button, .btn {
+  background: var(--sky);
+  color: var(--ink);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.7em 1.3em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+button:hover, .btn:hover {
+  background: var(--mocha);
+  color: white;
+}
+
+.card {
+  background: var(--card);
+  backdrop-filter: blur(14px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+}

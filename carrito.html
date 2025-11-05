@@ -5,24 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carrito - CODENT</title>
 
-  <!-- Bootstrap + estilos base -->
+  <!-- Bootstrap + base -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="icon" href="/img/favicon.ico">
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/coden.main.css?v=3">
+  <link rel="icon" href="img/favicon.ico">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/carrito.css">
+
 </head>
 
+<!-- NOTA: solo esta página usa page--cart para aislar estilos -->
 <body class="page--cart">
 
-  <!-- NAVBAR -->
+  <!-- NAVBAR (blanco, igual al resto del sitio) -->
   <nav class="navbar navbar-light coden-nav sticky-top">
     <a class="navbar-brand font-weight-bold" href="index.html">
       <span class="brand-dot"></span> CODENT
     </a>
+
     <div class="ml-auto d-flex align-items-center">
+      <!-- Botón Carrito (ghost sky) -->
       <a href="carrito.html" class="btn btn-outline-primary btn-sm mr-2" aria-label="Carrito">
         🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
       </a>
+      <!-- Botón Seguir comprando (mocha sólido) -->
       <a href="tienda.html" class="btn btn-primary btn-sm">Seguir comprando</a>
     </div>
   </nav>
@@ -30,11 +35,15 @@
   <!-- CONTENIDO -->
   <div id="coden-main">
     <div class="container py-4">
-      <h2 class="mb-3" style="font-family:'Cormorant',serif"><strong>Tu carrito</strong></h2>
 
-      <!-- Items -->
+      <!-- Título (centrado, estética inicio) -->
+      <h1 class="page-title mb-3">Tu carrito</h1>
+      <p class="text-muted text-center mb-4" style="font-weight:600">
+        Total productos: <strong id="cartTotal">$0</strong>
+      </p>
+
+      <!-- Items renderizados por JS (si querés los mantenemos invisibles cuando no haya items) -->
       <div id="cartItems" class="mb-3"></div>
-      <p class="mb-4">Total productos: <strong id="cartTotal">$0</strong></p>
 
       <!-- Datos de contacto -->
       <div class="card p-3 mb-3">
@@ -42,16 +51,16 @@
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="nombre">Nombre</label>
-            <input id="nombre" class="form-control" required autocomplete="name">
+            <input id="nombre" class="form-control" required autocomplete="name" placeholder="Ej: Lucía">
           </div>
           <div class="form-group col-md-6">
             <label for="apellido">Apellido</label>
-            <input id="apellido" class="form-control" autocomplete="family-name">
+            <input id="apellido" class="form-control" autocomplete="family-name" placeholder="Ej: Codega">
           </div>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input id="email" type="email" class="form-control" required autocomplete="email">
+          <input id="email" type="email" class="form-control" required autocomplete="email" placeholder="tu@email.com">
         </div>
       </div>
 
@@ -68,29 +77,29 @@
         </div>
       </div>
 
-      <!-- Dirección de envío -->
+      <!-- Dirección de envío (solo si envío a domicilio) -->
       <div id="shippingAddress" class="card p-3 mb-3" style="display:none">
         <h5 class="mb-2">Dirección de envío</h5>
         <div class="form-row">
           <div class="form-group col-md-6">
             <label>Nombre</label>
-            <input id="ship_name" class="form-control" autocomplete="name">
+            <input id="ship_name" class="form-control" autocomplete="name" placeholder="Nombre">
           </div>
           <div class="form-group col-md-6">
             <label>Apellido</label>
-            <input id="ship_surname" class="form-control" autocomplete="family-name">
+            <input id="ship_surname" class="form-control" autocomplete="family-name" placeholder="Apellido">
           </div>
           <div class="form-group col-md-6">
             <label>Email</label>
-            <input id="ship_email" type="email" class="form-control" autocomplete="email">
+            <input id="ship_email" type="email" class="form-control" autocomplete="email" placeholder="Correo de contacto">
           </div>
           <div class="form-group col-md-6">
             <label>Teléfono</label>
-            <input id="ship_phone" type="tel" class="form-control" autocomplete="tel">
+            <input id="ship_phone" type="tel" class="form-control" autocomplete="tel" placeholder="Ej: 223 555 5555">
           </div>
           <div class="form-group col-md-4">
             <label>Código Postal</label>
-            <input id="ship_zip" class="form-control" inputmode="numeric" maxlength="10" autocomplete="postal-code">
+            <input id="ship_zip" class="form-control" inputmode="numeric" maxlength="10" autocomplete="postal-code" placeholder="Ej: 7600">
           </div>
           <div class="form-group col-md-4">
             <label>Provincia</label>
@@ -108,23 +117,23 @@
           </div>
           <div class="form-group col-md-4">
             <label>Ciudad / Localidad</label>
-            <input id="ship_city" class="form-control" autocomplete="address-level2">
+            <input id="ship_city" class="form-control" autocomplete="address-level2" placeholder="Ciudad">
           </div>
           <div class="form-group col-md-6">
             <label>Calle</label>
-            <input id="ship_street" class="form-control" autocomplete="address-line1">
+            <input id="ship_street" class="form-control" autocomplete="address-line1" placeholder="Calle">
           </div>
           <div class="form-group col-md-3">
             <label>Número</label>
-            <input id="ship_number" class="form-control" inputmode="numeric">
+            <input id="ship_number" class="form-control" inputmode="numeric" placeholder="Altura">
           </div>
           <div class="form-group col-md-3">
             <label>Piso/Depto (opcional)</label>
-            <input id="ship_floor" class="form-control">
+            <input id="ship_floor" class="form-control" placeholder="Piso, dpto">
           </div>
           <div class="form-group col-12">
             <label>Referencias (opcional)</label>
-            <input id="ship_refs" class="form-control">
+            <input id="ship_refs" class="form-control" placeholder="Entre calles, timbre, etc.">
           </div>
         </div>
       </div>
@@ -141,17 +150,17 @@
           <span>Total</span> <strong id="total">$ 0</strong>
         </li>
       </ul>
-      <div id="ship_calc_msg" style="font-size:.9rem;color:#64748b;margin-top:-6px; margin-bottom:12px"></div>
+      <div id="ship_calc_msg" class="ship-note"></div>
 
-      <!-- CTA pago -->
+      <!-- CTA pago (mocha sólido) -->
       <button id="btn-pagar" class="btn btn-primary btn-lg btn-block">Pagar con Mercado Pago</button>
     </div>
   </div>
 
-  <!-- JS principal -->
+  <!-- Scripts -->
   <script type="module" src="/js/cart.js"></script>
 
-  <!-- Limpieza de URL tras pago -->
+  <!-- Limpia query mp=success y vacía carrito -->
   <script>
     (function(){
       const mp = new URL(location.href).searchParams.get('mp');
@@ -168,32 +177,13 @@
         } catch (e) { console.error(e); }
       }
     })();
-  </script>
 
-  <!-- Fallback para mostrar envío si el módulo no cargó -->
-  <script>
-    (function () {
-      function toggleShip() {
-        const radio = document.querySelector('input[name="shipping_method"]:checked');
-        const box = document.getElementById('shippingAddress');
-        if (!box || !radio) return;
-        box.style.display = (radio.value === 'home') ? '' : 'none';
-        window.Pay?.renderTotalsBox?.();
-      }
-      document.addEventListener('change', e => {
-        if (e.target && e.target.name === 'shipping_method') toggleShip();
-      });
-      document.addEventListener('DOMContentLoaded', toggleShip);
-    })();
-  </script>
-
-  <!-- Autenticación / Navbar -->
-  <script type="module" src="/js/auth-modal.js"></script>
-  <script>
     document.addEventListener('DOMContentLoaded', () => {
       window.Cart?.updateCartBadge?.();
     });
   </script>
+
+  <script type="module" src="/js/auth-modal.js"></script>
   <script type="module" src="/navbar-auth.js" defer></script>
 </body>
 </html>
