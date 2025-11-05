@@ -23,7 +23,7 @@
   --container:min(1200px,92vw);
 
   /* 👉 Imagen de fondo global (ajustá la ruta) */
-  --app-bg-img: url("/img/bg/codent-soft.jpg");
+  --app-bg-img: url("/img//fondo.jpg");
 }
 
 /* ============================================
