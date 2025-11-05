@@ -155,3 +155,27 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
   font-size: 0.95rem;         /* opcional: letra más proporcionada */
   min-height: unset;          /* evita que herede altura fija */
 }
+/* === Compactar select (categoría) === */
+.admin-form select {
+  appearance: none;            /* quita estilo nativo del sistema */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.45rem 2rem 0.45rem 0.75rem; /* más compacto y deja espacio para la flecha */
+  line-height: 1.2;
+  font-size: 0.95rem;
+  height: 42px;                /* fija la altura visual */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%230f172a' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 14px;
+  cursor: pointer;
+}
+
+.admin-form select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(14,165,233,.15);
+  outline: none;
+}
