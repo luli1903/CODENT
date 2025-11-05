@@ -1,0 +1,89 @@
+/* ===== Variables que ya usamos en tienda/home (por si algún build las pisa) ===== */
+:root{
+  --ink:#0f172a;
+  --muted:#475569;
+  --line:#e2e8f0;
+
+  /* Celeste + mocha que pediste */
+  --sky:#D1E5FF;
+  --sky-600:#96B1D9;
+  --mocha:#7B5E57;
+}
+
+/* ===== Fondo igual al que definiste (fondo.jpg) ===== */
+body{
+  background-image:url("/img/fondo.jpg");
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  font-family:"Raleway", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color:var(--ink);
+}
+
+/* Contenedor principal coherente con el resto del sitio */
+.coden-container{ width:min(1200px,92vw); margin-inline:auto; }
+
+/* Navbar sutil como en home */
+.navbar.coden-nav{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter:saturate(160%) blur(8px);
+  background:linear-gradient(90deg,#ffffffee,#f3f6ffcc) !important;
+  border-bottom:1px solid var(--line);
+}
+
+/* ===== Título del producto: misma tipografía del home ===== */
+#content h2{
+  font-family:"Sulphur Point","Raleway",system-ui,sans-serif;
+  font-weight:700; letter-spacing:.2px; margin-bottom:.25rem; color:var(--ink);
+}
+
+/* Texto secundario */
+#content p.text-muted{ color:var(--muted)!important; }
+
+/* Imagen con marco suave (mismo look) */
+.coden-product__img{
+  background:#fff; border:1px solid var(--line);
+  border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.06);
+  overflow:hidden;
+}
+.coden-product__img img{ width:100%; height:auto; object-fit:contain; }
+
+/* Badges (24–72h, Garantía…) */
+.coden-badges{ display:flex; gap:.4rem; flex-wrap:wrap; }
+.coden-badge{
+  display:inline-flex; align-items:center;
+  padding:.25rem .6rem; border-radius:999px;
+  font-size:.85rem; font-weight:700;
+  background:#f1f5f9; border:1px solid var(--line); color:var(--ink);
+}
+.coden-badge--ok{ background:var(--sky); border-color:var(--sky-600); }
+
+/* Precio */
+.coden-price{ font-weight:800; color:#0f172a; }
+
+/* Cantidad + acciones */
+#qty.form-control{ max-width:120px; border-radius:12px; border:1px solid var(--line); }
+.coden-inline{ display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
+
+/* ===== Botones EXACTAMENTE como los usamos (celeste -> hover mocha) ===== */
+.cd-btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:.78rem 1.2rem; border-radius:16px; font-weight:800; letter-spacing:.2px;
+  border:1px solid var(--sky); background:var(--sky); color:#0f172a;
+  box-shadow:0 2px 12px rgba(0,0,0,.06); transition:.18s ease;
+}
+.cd-btn:hover{ background:var(--mocha); border-color:var(--mocha); color:#fff; transform:translateY(-1px); }
+
+.cd-btn--ghost{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:.78rem 1.2rem; border-radius:16px; font-weight:800; letter-spacing:.2px;
+  border:1px solid #e2e8f0; background:#fff; color:#0f172a;
+  box-shadow:0 2px 12px rgba(0,0,0,.06); transition:.18s ease;
+}
+.cd-btn--ghost:hover{ border-color:#cbd5e1; transform:translateY(-1px); }
+
+/* Responsive */
+@media (max-width: 767.98px){
+  #content .row > [class*="col-"]{ margin-bottom:1rem; }
+}

@@ -2,52 +2,56 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Producto | CODENT</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Producto - CODENT</title>
 
-  <!-- Favicon -->
-  <link rel="icon" href="/img/favicon.ico" />
-
-  <!-- Bootstrap -->
+  <!-- Bootstrap (dejamos por compatibilidad) -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
 
-  <!-- Estilos principales -->
-  <link rel="stylesheet" href="/css/style.css?v=102" />
-  <link rel="stylesheet" href="/css/coden.main.css?v=6" />
+  <link rel="icon" href="/img/favicon.ico"/>
 
-  <!-- Fuente para títulos -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&display=swap" rel="stylesheet" />
+  <!-- Estilos base del sitio -->
+  <link rel="stylesheet" href="/css/style.css?v=102"/>
+  <link rel="stylesheet" href="/css/coden.main.css?v=102"/>
+
+  <!-- Overrides específicos del producto (SE CARGA DESPUÉS para ganar especificidad) -->
+  <link rel="stylesheet" href="/css/coden.product.css?v=103"/>
+
+  <!-- Fuentes usadas en el sitio -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&family=Sulphur+Point:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <!-- 🔹 NAVBAR -->
+  <!-- NAVBAR (no tocamos estructura; solo ícono y badge) -->
   <nav class="navbar navbar-light coden-nav">
     <a class="navbar-brand font-weight-bold" href="/index.html">
       <span class="brand-dot"></span> CODENT
     </a>
+
     <a href="/carrito.html" class="btn btn-outline-primary btn-sm d-flex align-items-center" aria-label="Carrito">
       <img src="/img/icon/shopping-cart.svg" alt="Carrito" width="20" height="20" class="mr-1"/>
       <span id="cartBadge" class="badge badge-primary ml-1">0</span>
     </a>
   </nav>
 
-  <!-- 🔹 CONTENIDO -->
-  <main id="coden-main" class="py-5">
-    <div class="container coden-container" id="content">
-      <p class="text-muted text-center">Cargando…</p>
+  <!-- CONTENIDO -->
+  <div id="coden-main">
+    <div class="coden-container py-4" id="content">
+      <p class="text-muted">Cargando…</p>
     </div>
-  </main>
+  </div>
 
-  <!-- JS Bootstrap (opcional) -->
+  <!-- Libs (si usás componentes JS de Bootstrap) -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  <!-- JS del sitio -->
+  <!-- Módulos del sitio (orden correcto) -->
   <script type="module" src="/js/supabaseClient.js?v=102"></script>
   <script type="module" src="/db.js?v=102"></script>
   <script type="module" src="/js/cart.js?v=102"></script>
-  <script type="module" src="/js/producto.js?v=102"></script>
+  <script type="module" src="/js/producto.js?v=103"></script>
   <script type="module" src="/navbar-auth.js" defer></script>
 </body>
 </html>

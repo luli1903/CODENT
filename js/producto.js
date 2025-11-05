@@ -33,34 +33,36 @@ async function init() {
     const img = p.image_url || "";
 
     root.innerHTML = `
-  <div class="row align-items-start">
-    <div class="col-md-6 text-center mb-3">
-      <div class="coden-product__img" style="max-width:520px;margin:0 auto;border-radius:14px;overflow:hidden">
-        <img src="${img}" alt="${name}" style="width:100%;height:auto;object-fit:contain">
-      </div>
-    </div>
-    <div class="col-md-6">
-      <h2 class="mb-1" style="font-family:'Cormorant',serif">${name}</h2>
-      <div class="coden-badges mb-2">
-        <span class="coden-badge">24–72h</span>
-        <span class="coden-badge coden-badge--ok">Garantía 12m</span>
-      </div>
-      <p class="text-muted">${desc}</p>
-      <div class="h4 coden-price mb-3">$ ${price}</div>
+      <div class="row align-items-start">
+        <div class="col-lg-6 text-center mb-3">
+          <div class="coden-product__img" style="max-width:520px;margin:0 auto">
+            <img src="${img}" alt="${name}">
+          </div>
+        </div>
 
-      <div class="d-flex align-items-center my-3">
-        <label class="mr-2 mb-0">Cantidad:</label>
-        <input id="qty" type="number" min="1" value="1" class="form-control" style="width:110px">
-      </div>
+        <div class="col-lg-6">
+          <h2 class="mb-1">${name}</h2>
 
-      <div class="coden-inline">
-        <button id="addBtn" class="btn btn-primary">Agregar al carrito</button>
-        <a href="tienda.html" class="btn btn-ghost">Volver a la tienda</a>
-      </div>
-    </div>
-  </div>
-`;
+          <div class="coden-badges mb-2">
+            <span class="coden-badge">24–72h</span>
+            <span class="coden-badge coden-badge--ok">Garantía 12m</span>
+          </div>
 
+          <p class="text-muted">${desc}</p>
+          <div class="h4 coden-price mb-3">$ ${price}</div>
+
+          <div class="d-flex align-items-center my-3">
+            <label class="mr-2 mb-0">Cantidad:</label>
+            <input id="qty" type="number" min="1" value="1" class="form-control" style="width:110px">
+          </div>
+
+          <div class="coden-inline">
+            <button id="addBtn" class="cd-btn">Agregar al carrito</button>
+            <a href="/tienda.html" class="cd-btn--ghost">Volver a la tienda</a>
+          </div>
+        </div>
+      </div>
+    `;
 
     $("#addBtn")?.addEventListener("click", async () => {
       const q = Math.max(1, parseInt($("#qty").value) || 1);
