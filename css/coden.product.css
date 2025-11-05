@@ -152,3 +152,16 @@
   .product-page .coden-product__img{ max-width: 100%; }
   .product-page .coden-product__img img{ max-height: 360px; }
 }
+/* ===== Fix final: fondo degradado uniforme ===== */
+
+body.product-page,
+.product-page #coden-main {
+  min-height: 100vh;
+  background: 
+    radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
+    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 10%, transparent 58%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 85%) !important;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
