@@ -87,3 +87,29 @@ body{
 @media (max-width: 767.98px){
   #content .row > [class*="col-"]{ margin-bottom:1rem; }
 }
+/* === Modo sin marco (fondo uniforme) === */
+.coden-container{ background: transparent; }
+
+.coden-product__img{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  overflow: visible;     /* por si había clipping */
+}
+
+/* Opcional: inputs más sutiles sobre fondo con imagen */
+#qty.form-control{
+  background: rgba(255,255,255,.65);
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(226,232,240,.8);
+}
+
+/* Botones: que no dibujen “placa” blanca rara */
+.cd-btn--ghost{
+  background: rgba(255,255,255,.75);
+  border-color: rgba(226,232,240,.9);
+}
+.cd-btn--ghost:hover{
+  background:#fff;
+}
