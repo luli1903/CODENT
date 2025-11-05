@@ -192,3 +192,43 @@ footer{
 }
 .page--cart #cartItems .coden-product__img img{width:100%; height:100%; object-fit:cover;}
 .page--cart #cartItems .coden-product__title{font-weight:700;}
+/* ===== PATCH: Carrito (fondo + título + color de botones) ===== */
+
+/* 1) Color de marca (celeste exacto). Cambiá solo estas 2 líneas si querés otro tono */
+:root{
+  --accent:    #66B3FF;   /* celeste principal de botones */
+  --accent-600:#4D97F2;   /* hover/active */
+}
+
+/* 2) Fondo del carrito: menos opaco para que la imagen se vea más */
+.page--cart #coden-main{
+  background:
+    /* bajamos la opacidad del velo blanco */
+    linear-gradient(to bottom, rgba(255,255,255,.60), rgba(255,255,255,.65)),
+    url("/img/fondo.jpg") center/cover no-repeat fixed;
+}
+@media (max-width:1024px){
+  .page--cart #coden-main{ background-attachment: scroll; }
+}
+
+/* 3) Título “Tu carrito”: centrado y con Raleway bien fuerte */
+.page--cart .page-title{
+  text-align: center;
+  font-family: var(--font-sans);     /* Raleway */
+  font-weight: 800;
+  letter-spacing: .3px;
+  font-size: clamp(1.9rem, 2.6vw, 2.6rem);
+  margin-bottom: 1.2rem;
+}
+
+/* Botón pagar: usa el nuevo celeste y hover, por si algún override lo pisaba */
+.page--cart #btn-pagar.btn-primary{
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #0f172a !important;
+}
+.page--cart #btn-pagar.btn-primary:hover{
+  background: var(--accent-600) !important;
+  border-color: var(--accent-600) !important;
+  color: #fff !important;
+}
