@@ -214,3 +214,27 @@ footer {
 @media (max-width: 576px) {
   .foot-grid { grid-template-columns: 1fr; }
 }
+/* ===== Ajuste visual final del espaciado ===== */
+
+/* Reducimos los márgenes y alturas del bloque principal */
+body.product-page,
+.product-page #coden-main {
+  min-height: auto; /* que crezca solo lo necesario */
+}
+
+/* Achicamos el padding del grid principal */
+.product-page .product-grid {
+  padding-block: 2rem 2.5rem; /* antes 2rem 4rem */
+}
+
+/* En pantallas grandes, centramos mejor visualmente */
+@media (min-width: 993px) {
+  .product-page .product-grid {
+    align-items: center;
+  }
+}
+
+/* Un poco menos de “aire” debajo del footer */
+footer {
+  padding: 28px 0 42px;
+}
