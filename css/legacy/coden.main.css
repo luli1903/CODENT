@@ -376,3 +376,14 @@ form.contact-card,
   opacity: 1;
   filter: brightness(1.15) contrast(1.1);
 }
+/* Fondo del sitio (todas las páginas que no sean admin) */
+body:not(.admin) {
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.45) 70%, rgba(255,255,255,.35)),
+    linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.55)),
+    url("/img/fondo.jpg");
+  background-position: center, center, center;
+  background-size: cover, cover, cover;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed, fixed, fixed;
+}
