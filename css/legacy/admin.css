@@ -265,3 +265,14 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
 .admin-header .btn-group button {
   backdrop-filter: saturate(1.2) blur(2px);
 }
+/* Fondo aplicado directo al body (capas + fixed) */
+body.admin{
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.4) 70%, rgba(255,255,255,.35)),
+    linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.55)),
+    url("/img/fondo.jpg") !important;
+  background-position: center, center, center !important;
+  background-size: cover, cover, cover !important;
+  background-repeat: no-repeat, no-repeat, no-repeat !important;
+  background-attachment: fixed, fixed, fixed !important;
+}
