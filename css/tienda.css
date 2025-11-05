@@ -1,152 +1,177 @@
-/* ================================
-   Página Tienda - CODENT
-   ================================ */
-.page-tienda {
-  padding: 3rem 0 5rem;
-  font-family: 'Poppins', system-ui, sans-serif;
+/* ==========================================
+   TIENDA (HTML provisto)
+   Solo carga base.css + tienda.css
+   ========================================== */
+
+/* Padding general de la página */
+#shop {}
+
+/* ---------- Header superior ---------- */
+.shop-header {
+  padding: 28px 0 8px;
+}
+.shop-header .container h1 {
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+.shop-header .container .subtitle {
+  color: var(--muted);
+  margin: 0;
 }
 
-/* --- Encabezado --- */
-.tienda-header {
+/* ---------- Subnav (breadcrumb + buscador + orden + carrito) ---------- */
+.shop-subnav {
+  margin: 8px 0 14px;
+}
+.subnav-bar {
   width: min(1200px, 94%);
-  margin: 0 auto 1.5rem;
+  margin-inline: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   flex-wrap: wrap;
-  gap: 1rem;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+
+  background: rgba(255,255,255,.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.6);
   border-radius: 14px;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  padding: 12px 16px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.06);
 }
 
-.tienda-header h1 {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--ink);
-}
+.subnav-left,
+.subnav-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-/* --- Breadcrumb --- */
-.breadcrumb {
-  display: flex;
+.crumb { color: var(--muted); font-weight: 600; }
+
+/* Botón estilo chip (volver / ver carrito) */
+.nav-btn {
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  color: var(--muted);
-  font-size: 0.95rem;
-}
-
-.breadcrumb a {
-  color: var(--mocha);
+  gap: 8px;
+  padding: .55rem .9rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.8);
+  border: 1px solid var(--line);
   text-decoration: none;
+  color: var(--ink);
+  font-weight: 700;
+  transition: background .2s ease, color .2s ease, transform .06s ease;
 }
+.nav-btn:hover { background: var(--sky); }
+.nav-btn:active { transform: translateY(1px); }
 
-.breadcrumb a:hover {
-  text-decoration: underline;
-}
+/* Íconos (corrige los SVG gigantes) */
+.icon { width: 22px; height: 22px; display: inline-block; object-fit: contain; }
 
-/* --- Barra de controles --- */
-.controls {
-  display: flex;
+/* Buscador */
+.input-wrap {
+  display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.controls input {
-  border-radius: 14px;
+  gap: 8px;
+  padding: 6px 10px;
   border: 1px solid var(--line);
-  padding: 0.6rem 1rem;
-  width: 240px;
-  background: rgba(255, 255, 255, 0.85);
-}
-
-.controls select {
   border-radius: 14px;
-  border: 1px solid var(--line);
-  padding: 0.6rem 1rem;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255,255,255,.85);
+}
+.input-wrap input[type="search"] {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  width: min(340px, 50vw);
+  font-family: inherit;
   color: var(--ink);
 }
 
-/* --- Botón carrito --- */
-.btn-cart {
+/* Select de orden */
+.select {
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.85);
+  padding: .6rem .9rem;
+  font-family: inherit;
+  color: var(--ink);
+}
+
+/* Badge del carrito */
+.badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: .82rem;
+  font-weight: 800;
+  background: var(--sky);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+/* ---------- Fila de categorías (chips) ---------- */
+.shop-filters { margin: 6px 0 4px; }
+.chip-row {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.6rem 1rem;
-  border-radius: 14px;
-  background: var(--sky);
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 0;
+}
+/* si tu JS inyecta .chip ó .btn-chip, estilalos así */
+.chip-row .chip,
+.chip-row .btn-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: .5rem .9rem;
+  background: rgba(255,255,255,.85);
+  border: 1px solid var(--line);
+  border-radius: 999px;
   font-weight: 700;
-  border: none;
   cursor: pointer;
-  transition: 0.2s ease;
+  text-decoration: none; color: var(--ink);
 }
+.chip-row .chip:hover,
+.chip-row .btn-chip:hover { background: var(--sky); }
 
-.btn-cart:hover {
-  background: var(--mocha);
-  color: #fff;
-}
+/* ---------- Grid de productos ---------- */
+.shop-main { padding: 8px 0 40px; }
+.shop-main .container { width: min(1200px, 94%); margin-inline: auto; }
 
-/* --- Grid de productos --- */
-.productos-grid {
+.grid {
   display: grid;
-  width: min(1200px, 94%);
-  margin-inline: auto;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
 }
 
-.product-card {
-  background: rgba(255, 255, 255, 0.8);
+/* Tarjeta de producto — reglas seguras para cualquier markup que inyecte tu JS */
+.grid > * {
+  background: rgba(255,255,255,.78);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255,255,255,.6);
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 22px rgba(0,0,0,.06);
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform .15s ease, box-shadow .15s ease;
 }
+.grid > *:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.08); }
 
-.product-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-}
+/* Imágenes de producto dentro de la tarjeta (si existen) */
+.grid > * img { width: 100%; height: 190px; object-fit: cover; display: block; }
 
-.product-card img {
-  width: 100%;
-  height: 190px;
-  object-fit: cover;
-}
+/* Bloque de info genérico dentro de la tarjeta */
+.grid > * .info { padding: 14px; }
+.grid > * .title { font-weight: 800; margin: 0 0 6px; }
+.grid > * .price { color: var(--mocha); font-weight: 800; }
 
-.product-card .info {
-  padding: 1rem;
-}
-
-.product-card .title {
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin-bottom: 0.3rem;
-}
-
-.product-card .price {
-  color: var(--mocha);
-  font-weight: 800;
-  font-size: 1rem;
-}
-
-/* --- Estado: sin productos --- */
+/* ---------- Estados vacíos / error ---------- */
 .empty {
   text-align: center;
   color: var(--muted);
-  padding: 4rem 1rem;
+  padding: 40px 10px;
 }
+.empty svg { width: 120px; height: 120px; display: block; margin: 6px auto 10px; }
 
-.empty img {
-  width: 150px;
-  opacity: 0.85;
-  margin-bottom: 1rem;
+/* ---------- Responsivo ---------- */
+@media (max-width: 720px) {
+  .input-wrap input[type="search"] { width: 54vw; }
 }
