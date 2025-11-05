@@ -122,3 +122,57 @@
   align-items: center;
   gap: 8px;
 }
+/* Navbar blanca + sombra (solo en carrito) */
+.page--cart .navbar.coden-nav{
+  background:#fff !important;
+  border-bottom:1px solid var(--line, #e2e8f0);
+  box-shadow: 0 6px 18px rgba(0,0,0,.05);
+}
+
+/* Botones del navbar coherentes (ya venimos usando sky/mocha) */
+.page--cart .navbar .btn{
+  border-radius: 999px;
+  font-weight: 800;
+}
+/* Título estilo home */
+.page--cart .page-title{
+  text-align:center;
+  font-weight: 900;
+  letter-spacing: .2px;
+  font-size: clamp(26px, 4.2vw, 44px);
+  color: var(--ink, #0f172a);
+  margin: 26px 0 10px;
+}
+/* Cards redondeadas */
+.page--cart .card{
+  border-radius: 14px;
+  border-color: var(--line, #e2e8f0);
+}
+
+/* Resumen con esquinas suaves */
+.page--cart .list-group{
+  border-radius: 14px;
+}
+.page--cart .list-group-item{
+  border-color: var(--line, #e2e8f0);
+}
+.page--cart .list-group-item:first-child{
+  border-top-left-radius: 14px; border-top-right-radius: 14px;
+}
+.page--cart .list-group-item:last-child{
+  border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;
+}
+/* Fondo del carrito con la misma estética del inicio */
+.page--cart {
+  background: url("/img/fondo.jpg") center/cover no-repeat fixed;
+  /* Si querés que quede más suave o con un filtro blanco translúcido: */
+  background-attachment: fixed;
+}
+
+.page--cart::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.8); /* capa suave para legibilidad */
+  z-index: -1;
+}
