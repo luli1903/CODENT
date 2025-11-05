@@ -277,9 +277,6 @@ body.admin{
   background-attachment: fixed, fixed, fixed !important;
 }
 
-/* ===== Fondo forzado en body (gana a legacy) ===== */
-html, body { height: 100%; background: transparent !important; }
-
 body.admin {
   /* NO otro background arriba */
   background-image:
@@ -313,4 +310,9 @@ html, body {
 
 body.admin {
   background: url("/img/fondo.jpg") center/cover no-repeat fixed !important;
+}
+body.admin::before,
+.container.admin-max::before {
+  content: none !important;
+  background: none !important;
 }
