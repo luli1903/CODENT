@@ -148,3 +148,10 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
       url("/img/fondo.jpg") center/cover no-repeat fixed;
   }
 }
+/* ===== Ajuste del select de categoría ===== */
+.admin-form select#category {
+  padding: 0.45rem 0.75rem;   /* antes era .65rem .8rem → más chico */
+  line-height: 1.2;           /* achica la altura interior */
+  font-size: 0.95rem;         /* opcional: letra más proporcionada */
+  min-height: unset;          /* evita que herede altura fija */
+}
