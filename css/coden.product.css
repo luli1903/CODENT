@@ -1,145 +1,110 @@
-/* ===== Variables que ya usamos en tienda/home (por si algún build las pisa) ===== */
-:root{
-  --ink:#0f172a;
-  --muted:#475569;
-  --line:#e2e8f0;
+/* ===== PRODUCT PAGE ===== */
 
-  /* Celeste + mocha que pediste */
-  --sky:#D1E5FF;
-  --sky-600:#96B1D9;
-  --mocha:#7B5E57;
+/* Fondo continuo (sin “bloques” blancos) */
+.product-page #coden-main{
+  background:
+    radial-gradient(1200px 600px at -10% -10%, #eef3f7 12%, transparent 60%),
+    radial-gradient(1200px 600px at 110% 120%, #f4f0ff 10%, transparent 58%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 85%);
 }
 
-/* ===== Fondo igual al que definiste (fondo.jpg) ===== */
-body{
-  background-image:url("/img/fondo.jpg");
-  background-repeat:no-repeat;
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
-  font-family:"Raleway", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color:var(--ink);
+/* Layout base del detalle: dos columnas en desktop, stack en mobile */
+.product-page .product-grid{
+  display: grid;
+  grid-template-columns: minmax(280px, 1.1fr) minmax(280px, .9fr);
+  gap: 24px 36px;
+  align-items: start;
+}
+@media (max-width: 992px){
+  .product-page .product-grid{
+    grid-template-columns: 1fr;
+  }
 }
 
-/* Contenedor principal coherente con el resto del sitio */
-.coden-container{ width:min(1200px,92vw); margin-inline:auto; }
-
-/* Navbar sutil como en home */
-.navbar.coden-nav{
-  position:sticky; top:0; z-index:50;
-  backdrop-filter:saturate(160%) blur(8px);
-  background:linear-gradient(90deg,#ffffffee,#f3f6ffcc) !important;
-  border-bottom:1px solid var(--line);
+/* === Imagen con efecto glass sutil (sin mancha blanca sólida) === */
+.product-page .coden-product__img{
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.40);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.08);
+  padding: 10px;
+  overflow: hidden;
+  transition: all .25s ease;
+}
+.product-page .coden-product__img:hover{
+  border-color: rgba(255,255,255,.60);
+  box-shadow: 0 12px 40px rgba(0,0,0,.12);
+}
+.product-page .coden-product__img img{
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 18px;
 }
 
-/* ===== Título del producto: misma tipografía del home ===== */
-#content h2{
-  font-family:"Sulphur Point","Raleway",system-ui,sans-serif;
-  font-weight:700; letter-spacing:.2px; margin-bottom:.25rem; color:var(--ink);
+/* === Tarjeta blanca adaptativa para el panel de información === */
+.product-page .info-card{
+  background: rgba(255,255,255, .96); /* blanco casi sólido */
+  border: 1px solid rgba(226,232,240,.9);
+  border-radius: 20px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.06);
+  padding: 18px 20px;
+}
+@media (min-width: 993px){
+  .product-page .info-card{
+    padding: 22px 24px;
+  }
 }
 
-/* Texto secundario */
-#content p.text-muted{ color:var(--muted)!important; }
-
-/* Imagen con marco suave (mismo look) */
-.coden-product__img{
-  background:#fff; border:1px solid var(--line);
-  border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.06);
-  overflow:hidden;
+/* Título y texto */
+.product-page h2{
+  font-family: "Cormorant", serif;
+  font-weight: 700;
+  letter-spacing: .2px;
+  margin: 0 0 .35rem;
+  color: var(--ink, #0f172a);
 }
-.coden-product__img img{ width:100%; height:auto; object-fit:contain; }
+.product-page .text-muted{
+  color: var(--muted, #475569) !important;
+}
 
-/* Badges (24–72h, Garantía…) */
-.coden-badges{ display:flex; gap:.4rem; flex-wrap:wrap; }
-.coden-badge{
+/* Badges */
+.product-page .coden-badges{ display:flex; gap:.45rem; flex-wrap:wrap; margin-bottom:.35rem; }
+.product-page .coden-badge{
   display:inline-flex; align-items:center;
-  padding:.25rem .6rem; border-radius:999px;
+  padding:.28rem .6rem; border-radius:999px;
   font-size:.85rem; font-weight:700;
-  background:#f1f5f9; border:1px solid var(--line); color:var(--ink);
+  background:#f1f5f9; border:1px solid var(--line, #e2e8f0); color:#0f172a;
 }
-.coden-badge--ok{ background:var(--sky); border-color:var(--sky-600); }
+.product-page .coden-badge--ok{ background: var(--sky, #D1E5FF); border-color: var(--sky-600, #96B1D9); }
 
 /* Precio */
-.coden-price{ font-weight:800; color:#0f172a; }
+.product-page .coden-price{ font-weight:800; color:#0f172a; }
 
-/* Cantidad + acciones */
-#qty.form-control{ max-width:120px; border-radius:12px; border:1px solid var(--line); }
-.coden-inline{ display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
-
-/* ===== Botones EXACTAMENTE como los usamos (celeste -> hover mocha) ===== */
-.cd-btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  padding:.78rem 1.2rem; border-radius:16px; font-weight:800; letter-spacing:.2px;
-  border:1px solid var(--sky); background:var(--sky); color:#0f172a;
-  box-shadow:0 2px 12px rgba(0,0,0,.06); transition:.18s ease;
-}
-.cd-btn:hover{ background:var(--mocha); border-color:var(--mocha); color:#fff; transform:translateY(-1px); }
-
-.cd-btn--ghost{
-  display:inline-flex; align-items:center; justify-content:center;
-  padding:.78rem 1.2rem; border-radius:16px; font-weight:800; letter-spacing:.2px;
-  border:1px solid #e2e8f0; background:#fff; color:#0f172a;
-  box-shadow:0 2px 12px rgba(0,0,0,.06); transition:.18s ease;
-}
-.cd-btn--ghost:hover{ border-color:#cbd5e1; transform:translateY(-1px); }
-
-/* Responsive */
-@media (max-width: 767.98px){
-  #content .row > [class*="col-"]{ margin-bottom:1rem; }
-}
-/* === Modo sin marco (fondo uniforme) === */
-.coden-container{ background: transparent; }
-
-.coden-product__img{
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  overflow: visible;     /* por si había clipping */
-}
-
-/* Opcional: inputs más sutiles sobre fondo con imagen */
-#qty.form-control{
-  background: rgba(255,255,255,.65);
-  backdrop-filter: blur(3px);
-  border: 1px solid rgba(226,232,240,.8);
-}
-
-/* Botones: que no dibujen “placa” blanca rara */
-.cd-btn--ghost{
-  background: rgba(255,255,255,.75);
-  border-color: rgba(226,232,240,.9);
-}
-.cd-btn--ghost:hover{
-  background:#fff;
-}
-/* ==== Overrides de la página de producto (fondo uniforme) ==== */
-.product-page #coden-main,
-.product-page .coden-container{
-  background: transparent !important;
-}
-
-/* Mata cualquier “tarjeta” alrededor de la imagen */
-.product-page .coden-product__img{
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  overflow: visible !important;
-}
-
-/* Por si algún contenedor intermedio traía fondo */
-.product-page #content .row > [class*="col-"],
-.product-page #content .col-md-6.text-center,
-.product-page #content .col-md-6.text-center > div{
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Input cantidad más sutil sobre fondo con imagen (opcional) */
+/* Cantidad */
 .product-page #qty.form-control{
-  background: rgba(255,255,255,.65);
-  backdrop-filter: blur(3px);
-  border: 1px solid rgba(226,232,240,.8);
+  max-width: 120px;
+  border-radius: 12px;
+  border: 1px solid var(--line, #e2e8f0);
+  background: rgba(255,255,255,.9);
+  transition: .2s;
+}
+.product-page #qty.form-control:focus{
+  box-shadow: 0 0 0 2px rgba(90,152,242,.25);
+  outline: none;
+}
+
+/* Área de acciones */
+.product-page .coden-inline{
+  display:flex; flex-wrap:wrap; gap:.6rem; align-items:center;
+}
+
+/* Usamos tus botones globales (celeste + hover mocha) */
+.product-page .btn-ghost{
+  background:#fff; border-color:#e2e8f0; color:#0f172a;
+}
+.product-page .btn-ghost:hover{
+  background:#fff; border-color:#cbd5e1;
 }
