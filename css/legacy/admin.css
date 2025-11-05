@@ -276,6 +276,7 @@ body.admin{
   background-repeat: no-repeat, no-repeat, no-repeat !important;
   background-attachment: fixed, fixed, fixed !important;
 }
+
 /* ===== Fondo forzado en body (gana a legacy) ===== */
 html, body { height: 100%; background: transparent !important; }
 
@@ -293,3 +294,23 @@ body.admin {
 
 /* IMPORTANTE: nada debe cubrir todo el viewport en blanco */
 .container.admin-max::before { content: none !important; }    /* quita el velo blanco extra */
+/* === FIX FINAL: elimina cualquier velo que tape el fondo === */
+body.admin::before {
+  content: none !important;
+  background: none !important;
+}
+
+.container.admin-max::before {
+  content: none !important;
+  background: none !important;
+}
+
+/* Asegura que el fondo se vea sí o sí */
+html, body {
+  background: transparent !important;
+  height: 100%;
+}
+
+body.admin {
+  background: url("/img/fondo.jpg") center/cover no-repeat fixed !important;
+}
