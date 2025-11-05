@@ -238,3 +238,58 @@ body.product-page,
 footer {
   padding: 28px 0 42px;
 }
+/* === Suavizar transición producto → footer (sin corte) === */
+
+/* un toque menos de aire al final del detalle */
+.product-page #coden-main { padding-bottom: 18px; }
+.product-page .product-grid { padding-block: 1.75rem 2rem; }
+
+/* Footer tipo vidrio + fade superior para unir con el fondo */
+footer {
+  position: relative;
+  border-top: 1px solid rgba(255,255,255,.60);
+  background: rgba(255,255,255,.58);           /* translucidez */
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  padding: 34px 0 46px;                        /* un poco menos que antes */
+  box-shadow: 0 1px 0 rgba(2,6,23,.03) inset,
+              0 -12px 28px rgba(2,6,23,.05) inset; /* sutil relieve interno */
+}
+
+/* Fade superior que se “fusiona” con el degradé del detalle */
+footer::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  top: -42px;             /* sube sobre el contenido anterior */
+  height: 42px;
+  pointer-events: none;
+  /* de transparente a blanco translúcido */
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0) 0%,
+    rgba(248,250,252,.30) 55%,
+    rgba(255,255,255,.65) 100%
+  );
+}
+
+/* Fallback si el navegador no soporta backdrop-filter */
+@supports not ((backdrop-filter: blur(1px))) {
+  footer {
+    background: #fffffff2;
+  }
+  footer::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(255,255,255,0) 0%,
+      rgba(248,250,252,.60) 60%,
+      rgba(255,255,255,.95) 100%
+    );
+  }
+}
+
+/* (Opcional) En mobile, un poquito más compacto */
+@media (max-width: 640px) {
+  footer { padding: 26px 0 38px; }
+  footer::before { top: -32px; height: 32px; }
+}
