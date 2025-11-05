@@ -1,0 +1,56 @@
+/* /css/cart.step1.css
+   Patch mínimo y encapsulado a la página del carrito
+   (sólo aplica cuando <body class="page--cart">) */
+
+:root {
+  /* fallbacks si no existen en tu theme */
+  --sky:   var(--accent, #D1E5FF);
+  --mocha: #7B5E57;
+  --ink:   #0f172a;
+}
+
+/* ============ Botones principales ============ */
+.page--cart .btn-primary {
+  background-color: var(--sky) !important;
+  border-color: var(--sky) !important;
+  color: #0b2239 !important;
+  font-weight: 800;
+  border-radius: 12px;
+}
+.page--cart .btn-primary:hover,
+.page--cart .btn-primary:focus {
+  background-color: var(--mocha) !important;
+  border-color: var(--mocha) !important;
+  color: #fff !important;
+}
+
+/* ============ Botón “ghost” (outline) del carrito ============ */
+.page--cart .btn-outline-primary {
+  color: var(--ink) !important;
+  background-color: #fff !important;
+  border-color: var(--sky) !important;
+  font-weight: 800;
+  border-radius: 12px;
+}
+.page--cart .btn-outline-primary:hover,
+.page--cart .btn-outline-primary:focus {
+  background-color: var(--mocha) !important;
+  border-color: var(--mocha) !important;
+  color: #fff !important;
+}
+
+/* ============ Badge del carrito (navbar) ============ */
+.page--cart .badge-primary {
+  background-color: var(--sky) !important;
+  color: #0b2239 !important;
+}
+
+/* Opcional: estados deshabilitados coherentes (e.g., “Pagar” deshabilitado) */
+.page--cart .btn-primary.disabled,
+.page--cart .btn-primary:disabled {
+  background-color: color-mix(in srgb, var(--sky) 60%, #fff) !important;
+  border-color:    color-mix(in srgb, var(--sky) 60%, #fff) !important;
+  color: #7b8a9a !important;
+  opacity: 1 !important; /* evita gris de Bootstrap */
+  cursor: not-allowed;
+}
