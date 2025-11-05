@@ -179,3 +179,38 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
   box-shadow: 0 0 0 3px rgba(14,165,233,.15);
   outline: none;
 }
+/* ===== Botones CODENT reforzados ===== */
+.btn-primary {
+  background: var(--sky);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-weight: 800;
+  transition: background .2s, transform .1s;
+}
+.btn-primary:hover {
+  background: var(--mocha);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: var(--sky);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-weight: 800;
+  transition: background .2s, transform .1s;
+}
+.btn-ghost:hover {
+  background: var(--mocha);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background: #ef4444;
+  border: 1px solid #dc2626;
+  color: #fff;
+}
+.btn-danger:hover {
+  background: #dc2626;
+}
