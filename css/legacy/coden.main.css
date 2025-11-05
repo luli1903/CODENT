@@ -343,3 +343,20 @@ h1.hero-title {
   border-radius: 12px;
   font-weight: 800;
 }
+/* Fuerza bordes redondeados en el formulario de contacto */
+form.contact-card,
+.contact-card {
+  border-radius: 18px !important;      /* esquinas suaves */
+  overflow: hidden;                    /* recorta esquinas internas */
+}
+
+/* Redondea también los bordes internos (bootstrap .border) */
+.contact-card.border,
+.contact-card.rounded {
+  border-radius: 18px !important;
+}
+
+/* Asegura que el contenedor .col no le ponga un overflow */
+.col-lg-8 .contact-card {
+  border-radius: 18px !important;
+}
