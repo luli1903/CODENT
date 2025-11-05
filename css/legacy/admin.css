@@ -203,3 +203,20 @@
     font-size: 1.1rem;
   }
 }
+/* Utilidades que faltaban en tu admin.css */
+#admin-panel{
+  display:flex;
+  flex-direction:column;
+  gap:2rem;
+  padding:1rem 0 4rem;
+}
+
+.grid-2{
+  display:grid;
+  gap:1rem;
+  grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+}
+
+.help-text{ color:#64748b; font-size:.85rem }
+
+/* Ya tenías .form-actions: la usamos tal cual */

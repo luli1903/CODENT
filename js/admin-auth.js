@@ -1,86 +1,201 @@
-// /js/admin-auth.js
-import { supabase } from '/js/supabaseClient.js';
+// /js/admin.js
+import { supabase } from "/js/supabaseClient.js";
 
+// ========= HELPERS =========
 const $ = (id) => document.getElementById(id);
-const form  = $('loginForm');
-const email = $('loginEmail');
-const pass  = $('loginPassword');
-const msg   = $('loginMsg');
-const btn   = form?.querySelector('button[type="submit"]');
-const linkReset = $('linkReset');
+const form = $("productForm");
+const list = $("adminList");
+const btnReset = $("btnReset");
+const toastDelay = 3500;
 
-function busy(on, text = 'Ingresar') {
-  if (!btn) return;
-  btn.disabled = on;
-  btn.textContent = on ? 'Ingresando…' : text;
+// ========= TOASTS =========
+function showToast(message, type = "success") {
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), toastDelay);
 }
-function showMsg(text, color = 'red') {
-  if (!msg) return;
-  msg.style.display = text ? 'block' : 'none';
-  msg.style.color = color;
-  msg.textContent = text || '';
-}
-function closeModal() {
-  const modal = document.getElementById('loginModal');
-  if (!modal) return;
-  if (window.jQuery?.fn?.modal) {
-    window.jQuery('#loginModal').modal('hide');
-  } else {
-    modal.classList.remove('show');
-    modal.style.display = 'none';
+
+// ========= FORMULARIO =========
+form?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const id = $("prodId").value;
+  const name = $("name").value.trim();
+  const price = parseFloat($("price").value) || 0;
+  const stock = parseInt($("stock").value) || 0;
+  const category = $("category").value;
+  const description = $("description").value.trim();
+  const file = $("imageFile").files[0];
+
+  if (!name || !category) {
+    showToast("Completá todos los campos obligatorios", "error");
+    return;
   }
+
+  let image_url = null;
+
+  try {
+    // Subir imagen si se seleccionó
+    if (file) {
+      const filePath = `products/${Date.now()}_${file.name}`;
+      const { data, error: uploadError } = await supabase.storage
+        .from("images")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrl } = supabase.storage
+        .from("images")
+        .getPublicUrl(filePath);
+
+      image_url = publicUrl?.publicUrl;
+    }
+
+    if (id) {
+      // Editar producto
+      const { error } = await supabase
+        .from("products")
+        .update({
+          name,
+          price,
+          stock,
+          category,
+          description,
+          ...(image_url ? { image_url } : {}),
+          updated_at: new Date(),
+        })
+        .eq("id", id);
+
+      if (error) throw error;
+      showToast("Producto actualizado correctamente");
+    } else {
+      // Nuevo producto
+      const { error } = await supabase.from("products").insert([
+        {
+          name,
+          price,
+          stock,
+          category,
+          description,
+          image_url,
+        },
+      ]);
+
+      if (error) throw error;
+      showToast("Producto agregado correctamente");
+    }
+
+    form.reset();
+    $("prodId").value = "";
+    await loadProducts();
+  } catch (err) {
+    console.error(err);
+    showToast("Error al guardar el producto", "error");
+  }
+});
+
+// ========= BOTÓN NUEVO =========
+btnReset?.addEventListener("click", () => {
+  form.reset();
+  $("prodId").value = "";
+});
+
+// ========= RENDER PRODUCTOS =========
+function productCard(p) {
+  const article = document.createElement("article");
+  article.className = "product-card";
+  article.innerHTML = `
+    <img src="${p.image_url || "/img/coming-soon.png"}" alt="${p.name}">
+    <div class="product-body">
+      <h3 class="product-title">${p.name}</h3>
+      <div class="product-price">$${p.price}</div>
+      <div class="product-meta">Stock: ${p.stock} · Cat: ${p.category || "-"}</div>
+      <div class="card-actions">
+        <button class="btn btn-ghost btn-sm" data-edit="${p.id}">Editar</button>
+        <button class="btn btn-danger btn-sm" data-delete="${p.id}">Eliminar</button>
+      </div>
+    </div>
+  `;
+  return article;
 }
 
-async function isAdmin(userId) {
+function renderProducts(products = []) {
+  list.replaceChildren(...products.map(productCard));
+}
+
+// ========= CARGAR PRODUCTOS =========
+async function loadProducts() {
   try {
     const { data, error } = await supabase
-      .from('admins')
-      .select('user_id')
-      .eq('user_id', userId)
-      .maybeSingle();
+      .from("products")
+      .select("*")
+      .order("id", { ascending: false });
+
     if (error) throw error;
-    return !!data;
-  } catch {
-    return false;
+    renderProducts(data || []);
+  } catch (err) {
+    console.error(err);
+    showToast("Error al cargar productos", "error");
   }
 }
 
-form?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  showMsg('');
-  busy(true);
+// ========= EDITAR / ELIMINAR =========
+list?.addEventListener("click", async (e) => {
+  const editId = e.target.dataset.edit;
+  const deleteId = e.target.dataset.delete;
 
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: (email?.value || '').trim(),
-      password: pass?.value || ''
-    });
+  // Editar
+  if (editId) {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", editId)
+        .single();
 
-    if (error) throw error;
-    const user = data?.user;
-    if (!user) throw new Error('No se pudo abrir sesión.');
+      if (error) throw error;
 
-    closeModal();
+      $("prodId").value = data.id;
+      $("name").value = data.name;
+      $("price").value = data.price;
+      $("stock").value = data.stock;
+      $("category").value = data.category;
+      $("description").value = data.description || "";
 
-    const admin = await isAdmin(user.id);
-    if (admin) {
-      location.href = '/admin.html';
-    } else {
-      location.reload();   // repinta navbar
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      console.error(err);
+      showToast("Error al cargar producto para editar", "error");
     }
-  } catch (err) {
-    showMsg(err?.message || 'No se pudo iniciar sesión.');
-    busy(false);
+  }
+
+  // Eliminar
+  if (deleteId) {
+    if (!confirm("¿Eliminar este producto?")) return;
+    try {
+      const { error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", deleteId);
+      if (error) throw error;
+
+      showToast("Producto eliminado");
+      await loadProducts();
+    } catch (err) {
+      console.error(err);
+      showToast("Error al eliminar producto", "error");
+    }
   }
 });
 
-linkReset?.addEventListener('click', async (e) => {
-  e.preventDefault();
-  const addr = (email?.value || '').trim();
-  if (!addr) return showMsg('Ingresá tu email para recuperar.');
-  const { error } = await supabase.auth.resetPasswordForEmail(addr, {
-    redirectTo: location.origin + '/reset.html'
-  });
-  if (error) showMsg(error.message);
-  else showMsg('Listo. Revisá tu correo y abrí el enlace.', 'green');
+// ========= LOGOUT =========
+const btnLogout = document.getElementById("btnLogout");
+btnLogout?.addEventListener("click", async () => {
+  await supabase.auth.signOut();
+  location.href = "/index.html";
 });
+
+// ========= INICIO =========
+loadProducts();
