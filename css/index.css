@@ -1,182 +1,156 @@
 /* ==========================================
-   CODENT - INICIO (versión original restaurada)
+   CODENT - INICIO (restaurado y clics arreglados)
    ========================================== */
 
-.hero {
-  position: relative;
-  overflow: hidden;
-  background: transparent;
-  padding: 120px 0 80px;
-  text-align: center;
-  color: #fff;
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:120px 0 80px;
+  color:#fff;
 }
 
-/* Imagen de fondo nítida (sin filtro gris) */
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: url('/img/hero/TU-IMAGEN-AQUI.jpg') center/cover no-repeat; /* ← CAMBIÁ ESTA RUTA */
-  z-index: 0;
-  opacity: 1;
+/* Fondo del hero: visible, no intercepta clics */
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  z-index:0;                 /* detrás del contenido */
+  pointer-events:none;       /* NO tapa los clics */
+  background:
+    url('/img/hero/SillonPortada1.jpg') center/cover no-repeat; /* ← CAMBIÁ ESTA RUTA */
+  opacity:1;
 }
 
-/* Fondo suave translúcido detrás de los textos */
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.15) 100%);
-  z-index: 0;
+/* Velo muy suave (también sin eventos) */
+.hero::after{
+  content:"";
+  position:absolute; inset:0;
+  z-index:0;
+  pointer-events:none;       /* NO tapa los clics */
+  background:linear-gradient(to bottom, rgba(0,0,0,.18) 0%, rgba(0,0,0,.10) 100%);
 }
 
-/* Contenedor */
-.hero .container {
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto;
+/* Contenido por encima del fondo */
+.hero .container{
+  position:relative;
+  z-index:2;
+  max-width:1200px;
+  margin:0 auto;
 }
 
-/* Palabra grande CODENT */
-.hero-wordmark {
-  display: inline-block;
-  background: rgba(255,255,255,0.85);
-  color: #0f172a;
-  font-weight: 800;
-  letter-spacing: 0.25rem;
-  font-size: 1.4rem;
-  border-radius: 50px;
-  padding: 0.5rem 1.4rem;
-  margin-bottom: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+/* ===== Encabezado del hero ===== */
+
+/* CODENT centrado (wordmark) */
+.hero-wordmark{
+  display:block;                 /* permite centrar con margin:auto */
+  margin:0 auto 20px;            /* CENTRADO */
+  padding:.5rem 1.4rem;
+  border-radius:50px;
+  background:rgba(255,255,255,.85);
+  border:1px solid rgba(255,255,255,.6);
+  color:#0f172a;
+  font-weight:800;
+  letter-spacing:.25rem;
+  font-size:1.4rem;
+  box-shadow:0 10px 30px rgba(0,0,0,.1);
 }
 
-/* Subtexto superior */
-.hero p.mb-2 {
-  color: rgba(255,255,255,0.9);
-  font-size: 0.95rem;
-  margin-bottom: 0.8rem !important;
+/* Eyebrow encima del título */
+.hero p.mb-2{
+  color:rgba(255,255,255,.9);
+  font-size:.95rem;
+  margin-bottom:.8rem !important;
+  text-align:left;               /* IZQUIERDA */
 }
 
-/* Título principal */
-.hero-title {
-  font-family: 'Sulphur Point', sans-serif;
-  font-weight: 700;
-  font-size: clamp(2.2rem, 4.8vw, 3.8rem);
-  line-height: 1.1;
-  color: #fff;
-  text-shadow: 0 3px 14px rgba(0,0,0,0.35);
-  margin-bottom: 1rem;
+/* Título (slogan) alineado a la izquierda */
+.hero-title{
+  font-family:'Sulphur Point', sans-serif;
+  font-weight:700;
+  font-size:clamp(2.2rem,4.8vw,3.8rem);
+  line-height:1.1;
+  color:#fff;
+  text-shadow:0 3px 14px rgba(0,0,0,.35);
+  margin:0 0 1rem;
+  text-align:left;               /* IZQUIERDA */
 }
 
-/* Descripción */
-.hero .mb-3 {
-  color: rgba(255,255,255,0.92);
-  font-size: 1rem;
-  margin-bottom: 1.5rem !important;
+/* Descripción bajo el título */
+.hero .mb-3{
+  color:rgba(255,255,255,.92);
+  font-size:1rem;
+  margin-bottom:1.5rem !important;
+  text-align:left;               /* IZQUIERDA */
 }
 
-/* Botones */
-.inline {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 50px;
+/* Botones: alineados a la izquierda y clickeables sí o sí */
+.inline{
+  display:flex; gap:12px; flex-wrap:wrap;
+  justify-content:flex-start;    /* IZQUIERDA */
+}
+.inline .btn{
+  position:relative; z-index:3;  /* por encima de cualquier capa */
+  font-weight:700;
+  border-radius:14px;
+  padding:.8rem 1.4rem;
+  transition:all .2s ease-in-out;
 }
 
-.inline .btn {
-  font-weight: 700;
-  border-radius: 14px;
-  padding: 0.8rem 1.4rem;
-  transition: all 0.2s ease-in-out;
+/* Primario (azul) con hover mocha */
+.inline .btn-primary{
+  background:var(--sky);
+  border-color:var(--sky);
+  color:var(--ink);
+}
+.inline .btn-primary:hover,
+.inline .btn-primary:focus{
+  background:var(--mocha);
+  border-color:var(--mocha);
+  color:#fff;
 }
 
-.inline .btn-primary {
-  background: var(--sky);
-  border-color: var(--sky);
-  color: var(--ink);
+/* Secundario (beige/mocha invertido como en tu captura) */
+.inline .btn-ghost{
+  background:var(--mocha);
+  border:1px solid var(--mocha);
+  color:#fff;
+}
+.inline .btn-ghost:hover,
+.inline .btn-ghost:focus{
+  background:var(--sky);
+  border-color:var(--sky);
+  color:var(--ink);
 }
 
-.inline .btn-primary:hover {
-  background: var(--mocha);
-  border-color: var(--mocha);
-  color: #fff;
+/* ===== Cuadros de info (los 4) ===== */
+.hero-feats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  margin-top:40px;
+  text-align:left;
 }
-
-.inline .btn-ghost {
-  background: var(--mocha);
-  color: #fff;
-  border: 1px solid var(--mocha);
+.feat{
+  display:flex; gap:14px; align-items:flex-start;
+  background:rgba(255,255,255,.9);
+  border:1px solid #e2e8f0;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  backdrop-filter:blur(10px);
 }
-
-.inline .btn-ghost:hover {
-  background: var(--sky);
-  color: var(--ink);
+.feat__icon{
+  width:42px; height:42px; display:grid; place-items:center;
+  background:var(--sky);
+  border:1px solid var(--line);
+  border-radius:12px; flex-shrink:0;
 }
+.feat__icon img{ width:22px; height:22px; }
+.feat b{ color:var(--ink); margin-bottom:2px; font-weight:800; display:block; }
+.feat small{ color:var(--muted); line-height:1.5; display:block; }
 
-/* Bloques de información (los 4 cuadros) */
-.hero-feats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  margin-top: 40px;
-  text-align: left;
-}
-
-.feat {
-  display: flex;
-  align-items: flex-start;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  padding: 18px;
-  gap: 14px;
-  backdrop-filter: blur(10px);
-}
-
-.feat__icon {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  background: var(--sky);
-  border-radius: 12px;
-  flex-shrink: 0;
-}
-
-.feat__icon img {
-  width: 22px;
-  height: 22px;
-}
-
-.feat b {
-  color: var(--ink);
-  display: block;
-  margin-bottom: 2px;
-  font-weight: 800;
-}
-
-.feat small {
-  color: var(--muted);
-  line-height: 1.5;
-  display: block;
-}
-
-/* Responsivo */
-@media (max-width: 768px) {
-  .hero {
-    padding: 100px 0 60px;
-  }
-
-  .hero-title {
-    font-size: clamp(1.9rem, 6vw, 2.8rem);
-  }
-
-  .hero-feats {
-    margin-top: 30px;
-    gap: 14px;
-  }
+/* ===== Responsivo ===== */
+@media (max-width:768px){
+  .hero{ padding:100px 0 60px; }
+  .hero-title{ font-size:clamp(1.9rem,6vw,2.8rem); }
+  .hero-feats{ margin-top:30px; gap:14px; }
 }
