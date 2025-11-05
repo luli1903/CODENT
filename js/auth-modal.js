@@ -47,26 +47,62 @@ const TEMPLATE = `
 `;
 
 const STYLES = `
+/* ===== AUTH MODAL FIX ===== */
 .auth-modal[hidden]{display:none}
-.auth-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:saturate(80%) blur(3px)}
-.auth-card{position:fixed;inset:auto auto 0 0;right:0;left:0;margin:0 auto 8vh auto;width:min(420px,92%);
-  background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.18);padding:16px 16px 18px}
-@media(min-width:640px){.auth-card{inset:0;margin:auto}}
+
+/* Crea un stacking context por encima de todo */
+.auth-modal{position:fixed; inset:0; z-index:9999}
+
+/* Fondo */
+.auth-backdrop{
+  position:fixed; inset:0;
+  z-index:0;                                  /* debajo de la card */
+  background:rgba(15,23,42,.45);
+  backdrop-filter:saturate(80%) blur(3px);
+  -webkit-backdrop-filter:saturate(80%) blur(3px);
+}
+
+/* Card centrada, con altura acotada y scroll interno */
+.auth-card{
+  position:fixed; inset:0; margin:auto;       /* centrada siempre */
+  width:min(520px,92vw);
+  max-height:86vh;                            /* evita “larguísimo” */
+  overflow:auto; overscroll-behavior:contain;
+  background:#fff; border:1px solid #e2e8f0;
+  border-radius:16px; box-shadow:0 16px 40px rgba(0,0,0,.25);
+  padding:16px 16px 18px; z-index:1; box-sizing:border-box;
+}
+
+/* En pantallas muy bajas, dejá un poquito de aire */
+@media (max-height: 560px){
+  .auth-card{ max-height: 92vh; }
+}
+
 .auth-title{font:800 1.25rem/1.2 system-ui;margin:0 28px 10px 0;color:#0f172a}
-.auth-close{position:absolute;top:10px;right:12px;border:1px solid #e2e8f0;background:#fff;border-radius:10px;cursor:pointer;width:32px;height:32px}
+.auth-close{
+  position:absolute; top:10px; right:12px;
+  border:1px solid #e2e8f0; background:#fff;
+  border-radius:10px; cursor:pointer; width:32px; height:32px;
+}
+.auth-close:hover{background:#f8fafc}
+
 .auth-tabs{display:flex;gap:6px;margin:6px 0 12px}
 .auth-tab{flex:1;border:1px solid #e2e8f0;background:#fff;border-radius:12px;padding:.5rem .6rem;cursor:pointer}
 .auth-tab.is-active{border-color:#0ea5e9;box-shadow:0 0 0 2px color-mix(in srgb,#0ea5e9 28%,transparent)}
+
 .auth-panel{display:none}
 .auth-panel.is-active{display:block}
+
 .auth-form{display:grid;gap:.7rem}
 .auth-form label{display:grid;gap:.3rem;font:600 .95rem/1.2 system-ui;color:#0f172a}
 .auth-form input{border:1px solid #e2e8f0;border-radius:12px;padding:.55rem .7rem;font:500 .95rem system-ui}
+
 .btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid #e2e8f0;border-radius:12px;padding:.55rem .85rem;background:#fff;cursor:pointer}
 .btn.primary{background:#0ea5e9;border-color:#0ea5e9;color:#fff}
 .auth-msg{color:#64748b}
 .auth-help{display:flex;align-items:center;gap:.6rem;margin-top:.6rem}
 `;
+
 
 function ensureMounted(){
   if (document.getElementById("authModal")) return;
