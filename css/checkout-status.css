@@ -1,0 +1,57 @@
+/* ===== CODENT · Páginas de estado de pago ===== */
+:root{
+  --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
+  --bg:#f8fafc; --card:#fff;
+  --mocha:#7B5E57; --sky:#D1E5FF;
+  --success:#16a34a; --pending:#f59e0b; --danger:#ef4444;
+  --r-lg:16px; --elev-1:0 10px 28px rgba(0,0,0,.09);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; color:var(--ink);
+  font-family:"Raleway",-apple-system,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.4) 70%, rgba(255,255,255,.35)),
+    linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.55)),
+    url("/img/fondo.jpg") center/cover no-repeat fixed;
+}
+
+.status-wrap{ min-height:100%; display:grid; place-items:center; padding:32px 16px }
+.status-card{
+  width:min(760px,94vw);
+  background:rgba(255,255,255,.92);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  box-shadow:var(--elev-1);
+  backdrop-filter:saturate(1.1) blur(2px);
+  padding:24px clamp(18px,3vw,28px);
+}
+
+.status-head{ display:flex; gap:16px; align-items:center; margin-bottom:12px }
+.status-icon{ width:52px; height:52px; border-radius:14px; display:grid; place-items:center; color:#fff }
+.status-title{ margin:0; font-size:1.5rem; font-weight:800; letter-spacing:.2px }
+.status-sub{ margin:6px 0 0; color:var(--muted) }
+
+.is-success .status-icon{ background:var(--success) }
+.is-pending .status-icon{ background:var(--pending) }
+.is-error   .status-icon{ background:var(--danger) }
+
+.details{ margin:16px 0 0; display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)) }
+.kv{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 12px }
+.kv small{ display:block; color:var(--muted); margin-bottom:4px; font-weight:700 }
+.kv strong{ font-weight:800 }
+
+.actions{ margin-top:18px; display:flex; gap:10px; flex-wrap:wrap }
+.btn{
+  border-radius:12px; padding:.65rem 1.1rem; font-weight:800; letter-spacing:.2px;
+  cursor:pointer; border:1px solid var(--line); transition:transform .08s, background .2s, color .2s
+}
+.btn:hover{ transform:translateY(-1px) }
+.btn-primary{ background:var(--sky); color:var(--ink) }
+.btn-primary:hover{ background:var(--mocha); color:#fff; border-color:var(--mocha) }
+.btn-outline{ background:#fff; color:var(--ink) }
+.btn-outline:hover{ background:#f1f5f9 }
+
+.note{ color:var(--muted); font-size:.92rem; margin-top:10px }

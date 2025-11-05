@@ -1,24 +1,45 @@
-<!doctype html><meta charset="utf-8">
-<title>Pago aprobado | CODENT</title>
-<link rel="stylesheet" href="/css/style.css">
-<main class="container" style="max-width:680px">
-  <h1>Pago pendiente </h1>
-  <p>Te enviamos el detalle por email.</p>
-  <div id="info" class="card" style="padding:12px"></div>
-  <p><a href="/index.html" class="btn">Volver a la tienda</a></p>
-</main>
-<script>
-  const q=new URLSearchParams(location.search);
-  const data={
-    payment_id:q.get("payment_id"),
-    status:q.get("status"),
-    preference_id:q.get("preference_id"),
-    external_reference:q.get("external_reference"),
-    collection_id:q.get("collection_id")
-  };
-  document.getElementById('info').innerHTML =
-    `<b>Pago:</b> ${data.payment_id || "-"}<br>
-     <b>Estado:</b> ${data.status || "-"}<br>
-     <b>Preferencia:</b> ${data.preference_id || "-"}<br>
-     <b>Ref:</b> ${data.external_reference || "-"}`
-</script>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pago pendiente | CODENT</title>
+  <link rel="stylesheet" href="/css/checkout-status.css">
+</head>
+<body>
+  <main class="status-wrap is-pending">
+    <section class="status-card">
+      <header class="status-head">
+        <div class="status-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 1a11 11 0 1011 11A11 11 0 0012 1zm1 11h5v2h-7V6h2z"/></svg>
+        </div>
+        <div>
+          <h1 class="status-title">Pago pendiente</h1>
+          <p class="status-sub">Tu pago está en verificación. Te avisamos por email cuando se acredite.</p>
+        </div>
+      </header>
+
+      <div id="details" class="details"></div>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="/tienda.html">Volver a la tienda</a>
+        <a class="btn btn-outline" href="/contacto.html">Necesito ayuda</a>
+      </div>
+      <p class="note">Te redirigimos en <span id="sec">10</span> s…</p>
+    </section>
+  </main>
+
+  <script>
+    const q = new URLSearchParams(location.search);
+    const kv = (k, label) => q.get(k) ? `<div class="kv"><small>${label}</small><strong>${q.get(k)}</strong></div>` : "";
+    details.innerHTML = [
+      kv("payment_id","ID de pago"),
+      kv("status","Estado"),
+      kv("preference_id","Preferencia"),
+      kv("external_reference","Referencia")
+    ].join("");
+
+    let s=10; const t=setInterval(()=>{ sec.textContent=--s; if(s<=0){clearInterval(t); location.href="/tienda.html";}},1000);
+  </script>
+</body>
+</html>

@@ -1,24 +1,45 @@
-<!doctype html><meta charset="utf-8">
-<title>Pago aprobado | CODENT</title>
-<link rel="stylesheet" href="/css/style.css">
-<main class="container" style="max-width:680px">
-  <h1>Pago rechazado</h1>
-  <p>Revisá tu medio de pago o intentá nuevamente.</p>
-  <div id="info" class="card" style="padding:12px"></div>
-  <p><a href="/index.html" class="btn">Volver a la tienda</a></p>
-</main>
-<script>
-  const q=new URLSearchParams(location.search);
-  const data={
-    payment_id:q.get("payment_id"),
-    status:q.get("status"),
-    preference_id:q.get("preference_id"),
-    external_reference:q.get("external_reference"),
-    collection_id:q.get("collection_id")
-  };
-  document.getElementById('info').innerHTML =
-    `<b>Pago:</b> ${data.payment_id || "-"}<br>
-     <b>Estado:</b> ${data.status || "-"}<br>
-     <b>Preferencia:</b> ${data.preference_id || "-"}<br>
-     <b>Ref:</b> ${data.external_reference || "-"}`
-</script>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pago rechazado | CODENT</title>
+  <link rel="stylesheet" href="/css/checkout-status.css">
+</head>
+<body>
+  <main class="status-wrap is-error">
+    <section class="status-card">
+      <header class="status-head">
+        <div class="status-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.29 19.71 2.88 18.3 9.17 12 2.88 5.71 4.29 4.29 10.59 10.6l6.29-6.31z"/></svg>
+        </div>
+        <div>
+          <h1 class="status-title">Pago rechazado</h1>
+          <p class="status-sub">No pudimos procesar el pago. Revisá tu medio o intentá nuevamente.</p>
+        </div>
+      </header>
+
+      <div id="details" class="details"></div>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="/tienda.html">Volver a la tienda</a>
+        <a class="btn btn-outline" href="/carrito.html">Intentar de nuevo</a>
+      </div>
+      <p class="note">Si el monto fue debitado, se reversará automáticamente por tu banco.</p>
+    </section>
+  </main>
+
+  <script>
+    const q = new URLSearchParams(location.search);
+    const kv = (k, label) => q.get(k) ? `<div class="kv"><small>${label}</small><strong>${q.get(k)}</strong></div>` : "";
+    details.innerHTML = [
+      kv("payment_id","ID de pago"),
+      kv("status","Estado"),
+      kv("preference_id","Preferencia"),
+      kv("external_reference","Referencia"),
+      kv("collection_id","Colección"),
+      kv("error","Error")
+    ].join("");
+  </script>
+</body>
+</html>
