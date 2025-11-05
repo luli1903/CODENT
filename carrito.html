@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carrito - CODENT</title>
 
-  <!-- Bootstrap + base -->
+  <!-- Bootstrap + estilos base -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="icon" href="/img/favicon.ico">
   <link rel="stylesheet" href="/css/style.css">
@@ -13,6 +13,7 @@
 </head>
 
 <body class="page--cart">
+
   <!-- NAVBAR -->
   <nav class="navbar navbar-light coden-nav sticky-top">
     <a class="navbar-brand font-weight-bold" href="index.html">
@@ -67,7 +68,7 @@
         </div>
       </div>
 
-      <!-- Dirección de envío (oculta hasta elegir envío a domicilio) -->
+      <!-- Dirección de envío -->
       <div id="shippingAddress" class="card p-3 mb-3" style="display:none">
         <h5 class="mb-2">Dirección de envío</h5>
         <div class="form-row">
@@ -147,10 +148,10 @@
     </div>
   </div>
 
-  <!-- Scripts principales -->
+  <!-- JS principal -->
   <script type="module" src="/js/cart.js"></script>
 
-  <!-- Limpia query mp=success y vacía carrito -->
+  <!-- Limpieza de URL tras pago -->
   <script>
     (function(){
       const mp = new URL(location.href).searchParams.get('mp');
@@ -169,7 +170,7 @@
     })();
   </script>
 
-  <!-- Fallback por si cart.js no inicializa -->
+  <!-- Fallback para mostrar envío si el módulo no cargó -->
   <script>
     (function () {
       function toggleShip() {
