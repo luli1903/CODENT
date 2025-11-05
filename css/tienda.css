@@ -1,24 +1,152 @@
+/* ================================
+   Página Tienda - CODENT
+   ================================ */
+.page-tienda {
+  padding: 3rem 0 5rem;
+  font-family: 'Poppins', system-ui, sans-serif;
+}
+
+/* --- Encabezado --- */
 .tienda-header {
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(12px);
-  padding: 1rem 2rem;
-  border-radius: var(--radius);
-  margin: 2rem auto;
   width: min(1200px, 94%);
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 14px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.tienda-header h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+/* --- Breadcrumb --- */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.breadcrumb a {
+  color: var(--mocha);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* --- Barra de controles --- */
+.controls {
   display: flex;
   align-items: center;
   gap: 1rem;
-  justify-content: space-between;
+  flex-wrap: wrap;
 }
-.tienda-header input {
-  border-radius: var(--radius);
-  border: 1px solid #ccc;
-  padding: 0.5em 1em;
-  width: 250px;
+
+.controls input {
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  padding: 0.6rem 1rem;
+  width: 240px;
+  background: rgba(255, 255, 255, 0.85);
 }
+
+.controls select {
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--ink);
+}
+
+/* --- Botón carrito --- */
+.btn-cart {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  border-radius: 14px;
+  background: var(--sky);
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-cart:hover {
+  background: var(--mocha);
+  color: #fff;
+}
+
+/* --- Grid de productos --- */
 .productos-grid {
   display: grid;
+  width: min(1200px, 94%);
+  margin-inline: auto;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
-  padding: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 2rem;
+}
+
+.product-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.product-card img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+}
+
+.product-card .info {
+  padding: 1rem;
+}
+
+.product-card .title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+
+.product-card .price {
+  color: var(--mocha);
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+/* --- Estado: sin productos --- */
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 4rem 1rem;
+}
+
+.empty img {
+  width: 150px;
+  opacity: 0.85;
+  margin-bottom: 1rem;
 }
