@@ -148,24 +148,3 @@ section#servicios,
     margin-top: clamp(40px, 6vw, 80px) !important;
   }
 }
-/* ===== FIX: bajar el 2x2 del hero sin romper nada ===== */
-:where(section.hero) .hero-feats {
-  position: relative !important;
-  top: 72px !important;                /* ⬅️ mueve todo el bloque hacia abajo */
-  margin-top: 0 !important;            /* por si había márgenes previos */
-  z-index: 1;                          /* que no se meta debajo del wordmark */
-}
-
-/* En pantallas grandes, un poquito más si lo querés todavía más abajo */
-@media (min-width: 1200px) {
-  :where(section.hero) .hero-feats {
-    top: 88px !important;
-  }
-}
-
-/* En mobile no exageramos el desplazamiento */
-@media (max-width: 768px) {
-  :where(section.hero) .hero-feats {
-    top: 48px !important;
-  }
-}
