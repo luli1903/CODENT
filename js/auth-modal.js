@@ -1,4 +1,3 @@
-// /js/auth-modal.js
 import { signIn, signUp, resendVerificationEmail, onAuthStateChange } from "/auth.js";
 
 const TEMPLATE = `
@@ -114,7 +113,6 @@ function ensureMounted(){
   wrap.innerHTML = TEMPLATE;
   document.body.appendChild(wrap.firstElementChild);
 
-  // Tabs
   const tabs = [...document.querySelectorAll(".auth-tab")];
   const panels = [...document.querySelectorAll(".auth-panel")];
   tabs.forEach(t=>{
@@ -125,12 +123,10 @@ function ensureMounted(){
     });
   });
 
-  // Close
   document.getElementById("authModal").addEventListener("click", (e)=>{
     if (e.target.closest("[data-close]")) closeAuthModal();
   });
 
-  // Forms
   const loginForm = document.getElementById("authLoginForm");
   const signForm  = document.getElementById("authSignForm");
   const resendBtn = document.getElementById("authResend");
@@ -175,7 +171,6 @@ function ensureMounted(){
     }
   });
 
-  // Cerrar modal automáticamente cuando haya sesión
   onAuthStateChange((user)=>{
     if (user) closeAuthModal();
   });
@@ -186,7 +181,6 @@ export function openAuthModal(tab="login"){
   const modal = document.getElementById("authModal");
   modal.hidden = false;
   document.body.style.overflow = "hidden";
-  // activar tab
   document.querySelectorAll(".auth-tab").forEach(b=>{
     const active = b.dataset.tab === tab;
     b.classList.toggle("is-active", active);
@@ -202,7 +196,6 @@ export function closeAuthModal(){
   document.body.style.overflow = "";
 }
 
-// Auto-bind: cualquier elemento con data-open-auth abre el modal
 document.addEventListener("click", (e)=>{
   const btn = e.target.closest("[data-open-auth]");
   if (!btn) return;

@@ -1,4 +1,3 @@
-/* ===== FIX FONDO (NO ADMIN) ===== */
 html body:not(.admin) {
   background-image:
     radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.45) 70%, rgba(255,255,255,.35)),
@@ -11,7 +10,6 @@ html body:not(.admin) {
 }
 body:not(.admin)::before { content:none !important; background:none !important; }
 
-/* ===== HERO GLOW (cartel luminoso) ===== */
 .hero .hero-title,
 h1.hero-title,
 .glow-slogan {
@@ -33,7 +31,6 @@ h1.hero-title,
   100% { text-shadow: 0 0 10px rgba(255,255,255,.36), 0 0 26px rgba(127,179,255,.28), 0 0 60px rgba(127,179,255,.22); }
 }
 
-/* ===== FORM ROUND FIX ===== */
 form.contact-card,
 .contact-card {
   border-radius: 18px !important;
@@ -48,27 +45,25 @@ form .form-control {
   border: 1px solid var(--line, #e2e8f0) !important;
 }
 
-/* ===== HERO POSITION FIX ===== */
 .hero {
   position: relative;
   z-index: 1;
-  padding-top: clamp(90px, 10vw, 120px); /* 🔹 da aire arriba */
-  padding-bottom: 100px; /* 🔹 aire abajo para evitar que se pegue a las tarjetas */
+  padding-top: clamp(90px, 10vw, 120px); 
+  padding-bottom: 100px; 
 }
 
 .hero .hero-title {
-  margin-bottom: 1.4rem; /* espacio natural */
+  margin-bottom: 1.4rem; 
   line-height: 1.05;
   position: relative;
-  top: -6px; /* ajuste fino */
+  top: -6px; 
 }
 
-/* Evita que las tarjetas de servicios se encimen con el hero */
 section#servicios,
 .servicios-section {
   position: relative;
   z-index: 2;
-  margin-top: -40px; /* mantiene leve efecto flotante */
+  margin-top: -40px; 
 }
 
 @media (max-width: 768px) {
@@ -81,28 +76,23 @@ section#servicios,
     margin-top: 0;
   }
 }
-/* ===== Separación segura Hero ↔ Servicios (anti-solapamiento) ===== */
 
-/* 1) Asegura altura superior del hero (sube un poco todo el texto) */
 .hero{
-  /* podés subir/bajar estos límites si querés */
   --hero-safe-top: clamp(120px, 12vw, 160px);
   padding-top: var(--hero-safe-top) !important;
-  padding-bottom: clamp(32px, 5vw, 72px) !important; /* agrega aire abajo */
+  padding-bottom: clamp(32px, 5vw, 72px) !important; 
   position: relative;
-  z-index: 2; /* por si hay overlays cercanos */
+  z-index: 2; 
 }
 
-/* 2) Si tenés el badge/placa del logo dentro del hero, que quede encima */
 .hero .brand-badge,
 .hero .logo-badge,
 .hero .codent-badge{
   position: relative;
   z-index: 3;
-  pointer-events: none; /* que no “bloquee” el hover/click de abajo */
+  pointer-events: none;
 }
 
-/* 3) Empuja el primer bloque de “Servicios” hacia abajo sí o sí */
 .hero + section,
 .hero ~ section#servicios,
 section#servicios,
@@ -113,17 +103,15 @@ section#servicios,
   z-index: 1;
 }
 
-/* 4) Por si hay alguna grilla de servicios con márgenes negativos */
 .servicios .container,
 .servicios-section .container,
 #servicios .container{
   margin-top: 0 !important;
 }
-/* ===== AJUSTE FINO: bajar cuadrícula de servicios ===== */
 section#servicios,
 .servicios,
 .servicios-section {
-  margin-top: clamp(80px, 10vw, 140px) !important; /* 🔹 más espacio entre hero y cards */
+  margin-top: clamp(80px, 10vw, 140px) !important; 
   position: relative;
   z-index: 1;
 }
@@ -132,17 +120,15 @@ section#servicios,
   section#servicios,
   .servicios,
   .servicios-section {
-    margin-top: clamp(60px, 8vw, 100px) !important; /* 🔹 un poco menos en mobile */
+    margin-top: clamp(60px, 8vw, 100px) !important; 
   }
 }
-/* ===== AJUSTE HERO FEATS (evita que se tape con el logo) ===== */
 .hero-feats {
-  margin-top: clamp(60px, 8vw, 110px) !important; /* 🔹 separa el 2x2 del logo */
+  margin-top: clamp(60px, 8vw, 110px) !important; 
   position: relative;
   z-index: 1;
 }
 
-/* 🔹 En pantallas chicas, un poco menos */
 @media (max-width: 768px) {
   .hero-feats {
     margin-top: clamp(40px, 6vw, 80px) !important;

@@ -9,7 +9,6 @@
   color:var(--ink);
 }
 
-/* Helpers */
 #coden-v1 .coden-container{ width:min(1200px,92%); margin-inline:auto }
 #coden-v1 .coden-grid{ display:grid; gap:22px }
 #coden-v1 .coden-inline{ display:flex; gap:12px; flex-wrap:wrap }
@@ -21,7 +20,6 @@
 #coden-v1 .coden-badge{ display:inline-block; padding:.2rem .5rem; border-radius:999px; background:#eefcf2; color:#18794e; font-weight:700; font-size:.78rem; border:1px solid #daf5e4 }
 #coden-v1 .coden-badge--ok{ background:#e6f6ff; color:#0369a1; border-color:#dbeafe }
 
-/* Nav */
 #coden-v1 .coden-nav{ position:sticky; top:0; z-index:20; backdrop-filter:saturate(180%) blur(8px); background:rgba(255,255,255,.9); border-bottom:1px solid var(--line) }
 #coden-v1 .coden-nav__wrap{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px; padding:10px 0 }
 #coden-v1 .coden-brand{ display:flex; align-items:center; gap:.6rem; font-weight:800; justify-self:center; font-family:'Cormorant',serif }
@@ -36,7 +34,6 @@
 #coden-v1 .coden-drawer{ position:fixed; inset:60px 0 auto 0; background:#fff; border-top:1px solid var(--line); box-shadow:var(--shadow-1); padding:10px 16px; display:grid; gap:12px }
 #coden-v1 .coden-drawer a{ padding:10px 2px; border-bottom:1px dashed var(--line); color:#0f172a; text-decoration:none; font-weight:600 }
 
-/* Hero */
 #coden-v1 .coden-hero{ padding:52px 0 24px }
 #coden-v1 .coden-hero__grid{ grid-template-columns:1.2fr .8fr; align-items:center }
 #coden-v1 .coden-hero h1{ font-family:'Cormorant',serif; font-size:clamp(32px,4vw,48px); line-height:1.05; margin:.4rem 0 }
@@ -46,7 +43,6 @@
 #coden-v1 .coden-card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow:var(--shadow-0) }
 #coden-v1 .coden-card__icon{ width:42px; height:42px; border-radius:10px; display:grid; place-items:center; background:#f8fafc; border:1px solid var(--line); margin-bottom:8px }
 
-/* Productos */
 #coden-v1 .coden-product{ background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow-0); display:flex; flex-direction:column }
 #coden-v1 .coden-product__img{ aspect-ratio:4/3; background:#f3f5fa; display:grid; place-items:center }
 #coden-v1 .coden-product__img img{ max-width:90%; max-height:90%; object-fit:contain }
@@ -54,15 +50,12 @@
 #coden-v1 .coden-product__title{ font-weight:800; margin:.2rem 0 }
 #coden-v1 .coden-price{ font-weight:800; color:var(--primary-700) }
 
-/* Responsive */
 @media (max-width: 900px){
   #coden-v1 .coden-hero__grid{ grid-template-columns:1fr }
   #coden-v1 .coden-only-mobile{ display:inline-grid }
-  #coden-v1 .coden-nav__links{ display:none } /* en mobile usamos drawer */
+  #coden-v1 .coden-nav__links{ display:none } 
 }
-/* Failsafe: si hay sesión, forzamos visibilidad del botón en navbar */
 #coden-v1 #btnLogout:not(.d-none){ display:inline-block !important; visibility:visible !important; }
-/* Failsafe para los 3 botones (si no tienen .d-none, que se vean) */
 #btnOpenLogin:not(.d-none),
 #btnLogout:not(.d-none),
 #btnAdmin:not(.d-none) {
@@ -72,14 +65,12 @@
   pointer-events: auto !important;
 }
 
-/* Asegurar que .d-none siempre oculte */
 #btnOpenLogin.d-none,
 #btnLogout.d-none,
 #btnAdmin.d-none {
   display: none !important;
 }
 
-/* Por si los tenés en un contenedor de acciones */
 .coden-nav__actions, #navAuthZone {
   display: flex !important;
   gap: .5rem;

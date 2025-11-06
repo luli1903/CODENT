@@ -1,6 +1,3 @@
-/* ================================
-   Admin Panel - CODENT (v4)
-================================ */
 
 :root{
   --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
@@ -12,7 +9,6 @@
   --elev-1:0 10px 28px rgba(0,0,0,.09);
 }
 
-/* Page + fuente + fondo con imagen */
 body.admin{
   font-family:"Raleway", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
   color:var(--ink);
@@ -40,7 +36,6 @@ body.admin::before{
   background:linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,.15));
 }
 
-/* Header */
 .admin-header{
   display:flex; align-items:center; justify-content:space-between;
   background:rgba(255,255,255,.92); border:1px solid var(--line);
@@ -50,11 +45,9 @@ body.admin::before{
 }
 .admin-header h1{ margin:0; font-weight:800; letter-spacing:.2px; font-size:1.35rem }
 
-/* Section title */
 #crudTitle{ font-size:1.35rem; font-weight:800; margin:16px 0 14px; }
 hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
 
-/* FORM */
 .admin-form{
   background:rgba(255,255,255,.92); border:1px solid var(--line); border-radius:16px;
   box-shadow:0 8px 28px rgba(15,23,42,.08);
@@ -70,7 +63,6 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
   font-weight:600; color:var(--muted); font-size:.9rem;
 }
 
-/* Layout de campos (desktop) */
 .admin-form > label:first-of-type{ grid-column:span 6; }          /* Nombre */
 .grid-2{ grid-column:span 6; display:grid; gap:14px; grid-template-columns:1fr 1fr; } /* Precio/Stock */
 #category{ grid-column:span 6; }
@@ -78,7 +70,6 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
 #imageFile{ grid-column:span 6; padding:.52rem .75rem; }
 .form-actions{ grid-column:1 / -1; display:flex; gap:10px; flex-wrap:wrap; margin-top:4px }
 
-/* Inputs */
 .admin-form input, .admin-form textarea, .admin-form select{
   border:1px solid var(--line); border-radius:10px;
   padding:.65rem .8rem; background:#fff; color:var(--ink);
@@ -87,14 +78,12 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
 .admin-form input:focus, .admin-form textarea:focus, .admin-form select:focus{
   border-color:var(--primary); box-shadow:0 0 0 3px rgba(14,165,233,.15); outline:none;
 }
-/* File button */
 #imageFile::-webkit-file-upload-button{
   border:1px solid var(--line); border-radius:8px; padding:.45rem .7rem; margin-right:.6rem;
   background:var(--sky); cursor:pointer; transition:filter .2s;
 }
 #imageFile::-webkit-file-upload-button:hover{ filter:brightness(.95) }
 
-/* Buttons */
 .btn{ border-radius:10px; padding:.58rem 1rem; font-weight:800; letter-spacing:.2px;
       cursor:pointer; transition:transform .08s ease, filter .2s ease, background .2s; }
 .btn:hover{ transform:translateY(-1px) } .btn:active{ transform:translateY(0) scale(.98) }
@@ -102,13 +91,11 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
 .btn-primary:hover{ background:var(--primary-700) }
 .btn-secondary{ background:#f1f5f9; border:1px solid var(--line); color:var(--ink) }
 .btn-secondary:hover{ background:#e2e8f0 }
-/* Celeste + hover mocha */
 .btn-ghost{ background:var(--sky); border:1px solid var(--line); color:var(--ink) }
 .btn-ghost:hover{ background:var(--mocha); color:#fff; border-color:var(--mocha) }
 .btn-danger{ background:#ef4444; border:1px solid #dc2626; color:#fff }
 .btn-danger:hover{ background:#dc2626 }
 
-/* PRODUCT GRID */
 .product-grid{ display:grid; gap:18px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)) }
 .product-card{
   background:rgba(255,255,255,.92); border:1px solid var(--line);
@@ -124,11 +111,9 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
 .product-meta{ font-size:.86rem; color:var(--muted); margin-top:6px }
 .card-actions{ display:flex; gap:8px; margin-top:12px }
 
-/* Chips (si las usás) */
 .chip{ display:inline-block; background:#e0f2fe; color:var(--primary-700);
        font-weight:700; font-size:.75rem; padding:4px 8px; border-radius:999px; }
 
-/* Toasts */
 .toast{
   position:fixed; bottom:20px; right:20px;
   background:#fff; border:1px solid var(--line); border-left:5px solid var(--primary);
@@ -138,7 +123,6 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
 .toast.error{ border-left-color:#ef4444 } .toast.success{ border-left-color:#22c55e }
 @keyframes fadeIn{ from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
 
-/* Responsive */
 @media (max-width:820px){ .admin-form{ grid-template-columns:1fr } .grid-2{ grid-template-columns:1fr } }
 @media (max-width:640px){
   body.admin::before{
@@ -148,25 +132,23 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
       url("/img/fondo.jpg") center/cover no-repeat fixed;
   }
 }
-/* ===== Ajuste del select de categoría ===== */
 .admin-form select#category {
-  padding: 0.45rem 0.75rem;   /* antes era .65rem .8rem → más chico */
-  line-height: 1.2;           /* achica la altura interior */
-  font-size: 0.95rem;         /* opcional: letra más proporcionada */
-  min-height: unset;          /* evita que herede altura fija */
+  padding: 0.45rem 0.75rem;   
+  line-height: 1.2;           
+  font-size: 0.95rem;         
+  min-height: unset;          
 }
-/* === Compactar select (categoría) === */
 .admin-form select {
-  appearance: none;            /* quita estilo nativo del sistema */
+  appearance: none;            
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: #fff;
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 0.45rem 2rem 0.45rem 0.75rem; /* más compacto y deja espacio para la flecha */
+  padding: 0.45rem 2rem 0.45rem 0.75rem; 
   line-height: 1.2;
   font-size: 0.95rem;
-  height: 42px;                /* fija la altura visual */
+  height: 42px;                
   background-image: url("data:image/svg+xml;utf8,<svg fill='%230f172a' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
@@ -179,7 +161,6 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
   box-shadow: 0 0 0 3px rgba(14,165,233,.15);
   outline: none;
 }
-/* ===== Botones CODENT reforzados ===== */
 .btn-primary {
   background: var(--sky);
   border: 1px solid var(--line);
@@ -214,9 +195,7 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
 .btn-danger:hover {
   background: #dc2626;
 }
-/* ============================
-   Header Buttons (Inicio / Salir)
-============================ */
+
 .btn-group {
   display: flex;
   align-items: center;
@@ -237,7 +216,6 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
   border: 1px solid var(--line);
 }
 
-/* ====== “Inicio” celestito ====== */
 .btn-group a {
   background: var(--sky);
   color: var(--ink);
@@ -249,7 +227,6 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
   transform: translateY(-1px);
 }
 
-/* ====== “Salir” neutro con hover mocha ====== */
 .btn-group button {
   background: #f1f5f9;
   color: var(--ink);
@@ -260,12 +237,10 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
   transform: translateY(-1px);
 }
 
-/* Opcional: efecto glass para integrarlo al header */
 .admin-header .btn-group a,
 .admin-header .btn-group button {
   backdrop-filter: saturate(1.2) blur(2px);
 }
-/* Fondo aplicado directo al body (capas + fixed) */
 body.admin{
   background-image:
     radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.4) 70%, rgba(255,255,255,.35)),
@@ -278,7 +253,6 @@ body.admin{
 }
 
 body.admin {
-  /* NO otro background arriba */
   background-image:
     radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.4) 70%, rgba(255,255,255,.35)),
     linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.55)),
@@ -289,9 +263,7 @@ body.admin {
   background-attachment: fixed, fixed, fixed !important;
 }
 
-/* IMPORTANTE: nada debe cubrir todo el viewport en blanco */
-.container.admin-max::before { content: none !important; }    /* quita el velo blanco extra */
-/* === FIX FINAL: elimina cualquier velo que tape el fondo === */
+.container.admin-max::before { content: none !important; }    
 body.admin::before {
   content: none !important;
   background: none !important;
@@ -302,7 +274,6 @@ body.admin::before {
   background: none !important;
 }
 
-/* Asegura que el fondo se vea sí o sí */
 html, body {
   background: transparent !important;
   height: 100%;
@@ -316,7 +287,7 @@ body.admin::before,
   content: none !important;
   background: none !important;
 }
-/* ===== FIX FONDO ADMIN — pegar AL FINAL de admin.css ===== */
+
 html body.admin{
   background-image:
     radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.35) 70%),

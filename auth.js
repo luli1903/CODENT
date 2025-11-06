@@ -1,7 +1,5 @@
-// auth.js
 import { supabase } from "./js/supabaseClient.js";
 
-/* ========== Session helpers ========== */
 export async function getSession() {
   const { data, error } = await supabase.auth.getSession();
   if (error) {
@@ -30,9 +28,6 @@ export async function getUserId() {
   return u?.id ?? null;
 }
 
-/* ========== Sign Up / Sign In / Out ========== */
-// Registro con verificación por email.
-// IMPORTANT: cambiá el redirect si preferís otra página distinta a /recovery.html
 export async function signUp(email, password) {
   console.info("[auth] signUp start", email);
   const { data, error } = await supabase.auth.signUp({
@@ -70,16 +65,13 @@ export async function signOut() {
   }
 }
 
-/* ========== Email verification helpers ========== */
 export async function isEmailVerified() {
   const user = await getUser();
-  // v2: email_confirmed_at se setea cuando el usuario verifica el correo
   const ok = !!user?.email_confirmed_at;
   console.info("[auth] isEmailVerified =", ok);
   return ok;
 }
 
-// Reenviar correo de verificación (usa el correo actual o el que pases por parámetro)
 export async function resendVerificationEmail(email) {
   const target = email || (await getUser())?.email;
   if (!target) {
@@ -100,7 +92,6 @@ export async function resendVerificationEmail(email) {
   return data;
 }
 
-/* ========== Guards (útiles en páginas protegidas) ========== */
 export async function requireAuth(redirectTo = "/index.html") {
   const session = await getSession();
   if (!session?.user) {
@@ -110,18 +101,15 @@ export async function requireAuth(redirectTo = "/index.html") {
   return session.user;
 }
 
-// Útil para pantallas de datos de envío / checkout
 export async function requireEmailVerified(redirectIfFail = "") {
   const ok = await isEmailVerified();
   if (!ok) {
-    // Podés mostrar un banner en la UI en vez de redirigir
     if (redirectIfFail) location.href = redirectIfFail;
     throw new Error("Necesitás verificar tu email para continuar.");
   }
   return true;
 }
 
-/* ========== Admin check ========== */
 export async function isAdmin(userId) {
   console.info("[auth] isAdmin for", userId);
   const { data, error } = await supabase
@@ -139,7 +127,6 @@ export async function isAdmin(userId) {
   return ok;
 }
 
-/* ========== Auth state subscription ========== */
 export function onAuthStateChange(callback) {
   console.info("[auth] subscribe onAuthStateChange");
   supabase.auth.getSession().then(({ data }) => {

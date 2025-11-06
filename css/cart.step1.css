@@ -1,15 +1,9 @@
-/* /css/cart.step1.css
-   Patch mínimo y encapsulado a la página del carrito
-   (sólo aplica cuando <body class="page--cart">) */
-
 :root {
-  /* fallbacks si no existen en tu theme */
   --sky:   var(--accent, #D1E5FF);
   --mocha: #7B5E57;
   --ink:   #0f172a;
 }
 
-/* ============ Botones principales ============ */
 .page--cart .btn-primary {
   background-color: var(--sky) !important;
   border-color: var(--sky) !important;
@@ -24,7 +18,6 @@
   color: #fff !important;
 }
 
-/* ============ Botón “ghost” (outline) del carrito ============ */
 .page--cart .btn-outline-primary {
   color: var(--ink) !important;
   background-color: #fff !important;
@@ -39,13 +32,11 @@
   color: #fff !important;
 }
 
-/* ============ Badge del carrito (navbar) ============ */
 .page--cart .badge-primary {
   background-color: var(--sky) !important;
   color: #0b2239 !important;
 }
 
-/* Opcional: estados deshabilitados coherentes (e.g., “Pagar” deshabilitado) */
 .page--cart .btn-primary.disabled,
 .page--cart .btn-primary:disabled {
   background-color: color-mix(in srgb, var(--sky) 60%, #fff) !important;
@@ -54,12 +45,10 @@
   opacity: 1 !important; /* evita gris de Bootstrap */
   cursor: not-allowed;
 }
-/* Paso 2 – Visibilidad del botón de pago */
 .page--cart #btn-pagar {
   transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-/* Habilitado */
 .page--cart #btn-pagar:not(:disabled) {
   background-color: var(--sky) !important;
   border-color: var(--sky) !important;
@@ -67,14 +56,12 @@
   font-weight: 900;
 }
 
-/* Hover habilitado */
 .page--cart #btn-pagar:not(:disabled):hover {
   background-color: var(--mocha) !important;
   border-color: var(--mocha) !important;
   color: #fff !important;
 }
 
-/* Deshabilitado */
 .page--cart #btn-pagar:disabled {
   background-color: #e9ecef !important;
   border-color: #e9ecef !important;
@@ -82,11 +69,10 @@
   font-weight: 800;
   cursor: not-allowed;
 }
-/* Paso 3 – Contener y espaciar los items del carrito */
 .page--cart #cartItems{
   display: grid;
-  gap: 12px;            /* separa los items entre sí */
-  margin-bottom: 16px;  /* deja aire antes del siguiente card */
+  gap: 12px;            
+  margin-bottom: 16px;  
 }
 
 .page--cart .coden-product{
@@ -98,7 +84,6 @@
   background: #fff;
   border: 1px solid var(--line, #e2e8f0);
   border-radius: 12px;
-  /* asegura que nada “flote” fuera y evita superposiciones */
   overflow: hidden;
 }
 
@@ -116,25 +101,21 @@
   object-fit: cover;   /* evita que la imagen “desborde” */
 }
 
-/* Alineación del input cantidad + botón eliminar */
 .page--cart .coden-product > div:last-child{
   display: flex;
   align-items: center;
   gap: 8px;
 }
-/* Navbar blanca + sombra (solo en carrito) */
 .page--cart .navbar.coden-nav{
   background:#fff !important;
   border-bottom:1px solid var(--line, #e2e8f0);
   box-shadow: 0 6px 18px rgba(0,0,0,.05);
 }
 
-/* Botones del navbar coherentes (ya venimos usando sky/mocha) */
 .page--cart .navbar .btn{
   border-radius: 999px;
   font-weight: 800;
 }
-/* Título estilo home */
 .page--cart .page-title{
   text-align:center;
   font-weight: 900;
@@ -143,13 +124,11 @@
   color: var(--ink, #0f172a);
   margin: 26px 0 10px;
 }
-/* Cards redondeadas */
 .page--cart .card{
   border-radius: 14px;
   border-color: var(--line, #e2e8f0);
 }
 
-/* Resumen con esquinas suaves */
 .page--cart .list-group{
   border-radius: 14px;
 }
@@ -162,10 +141,8 @@
 .page--cart .list-group-item:last-child{
   border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;
 }
-/* Fondo del carrito con la misma estética del inicio */
 .page--cart {
   background: url("/img/fondo.jpg") center/cover no-repeat fixed;
-  /* Si querés que quede más suave o con un filtro blanco translúcido: */
   background-attachment: fixed;
 }
 
@@ -173,6 +150,6 @@
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(255,255,255,0.8); /* capa suave para legibilidad */
+  background: rgba(255,255,255,0.8); 
   z-index: -1;
 }

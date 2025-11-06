@@ -1,4 +1,3 @@
-// js/featured.js
 import { supabase } from "./supabaseClient.js";
 
 (async function loadFeatured() {

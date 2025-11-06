@@ -1,4 +1,3 @@
-// /js/producto.js
 import { getProduct } from "/db.js";
 import { addToCart, updateCartBadge } from "/js/cart.js";
 
@@ -26,13 +25,11 @@ async function init() {
       root.innerHTML = '<p class="text-muted">Producto no disponible.</p>';
       return;
     }
-
     const price = Number(p.price || 0).toLocaleString("es-AR");
     const name = esc(p.name || "");
     const desc = esc(p.description || "");
     const img = p.image_url || "";
 
-    // Grid + imagen con glass + info dentro de tarjeta blanca adaptativa
     root.innerHTML = `
       <div class="product-grid">
         <div class="coden-product__img">
@@ -64,7 +61,6 @@ async function init() {
       </div>
     `;
 
-    // Eventos
     $("#addBtn")?.addEventListener("click", async () => {
       const q = Math.max(1, parseInt($("#qty").value) || 1);
       try {

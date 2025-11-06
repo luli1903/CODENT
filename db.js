@@ -1,12 +1,7 @@
-// /db.js
-// Importá UNA sola vez el cliente ya creado
 import { supabase } from "/js/supabaseClient.js";
 
 const PRODUCT_COLS = "id,name,description,category,price,stock,image_url,created_at";
 
-/* =========================
-   Productos (tienda/admin)
-========================= */
 export async function listProducts({ category } = {}) {
   let q = supabase.from("products").select(PRODUCT_COLS).order("created_at", { ascending: false });
   if (category) q = q.eq("category", category);
@@ -53,9 +48,6 @@ export async function removeProduct(id) {
   if (error) throw error;
 }
 
-/* =========================
-   Storage (imágenes)
-========================= */
 export async function uploadProductImage(file) {
   if (!file) return null;
 
@@ -79,16 +71,11 @@ export async function uploadProductImage(file) {
   return data?.publicUrl || null;
 }
 
-/* =========================
-   Carritos (para el merge)
-========================= */
 export async function getOrCreateActiveCart() {
-  // Tabla sugerida: carts (id, user_id, status='active', created_at)
   const { data: me } = await supabase.auth.getUser();
   const uid = me?.user?.id;
   if (!uid) throw new Error("No user");
 
-  // Busco activo
   let { data: cart, error } = await supabase
     .from("carts")
     .select("id,status")
@@ -97,7 +84,6 @@ export async function getOrCreateActiveCart() {
     .maybeSingle();
   if (error && error.code !== "PGRST116") throw error;
 
-  // Creo si no hay
   if (!cart) {
     const ins = await supabase
       .from("carts")
@@ -111,7 +97,6 @@ export async function getOrCreateActiveCart() {
 }
 
 export async function addItemToCart(cartId, productId, qty = 1, unitPrice = 0) {
-  // Tabla sugerida: cart_items (id, cart_id, product_id, qty, unit_price)
   const { data, error } = await supabase
     .from("cart_items")
     .insert({ cart_id: cartId, product_id: productId, qty, unit_price: unitPrice })
@@ -121,9 +106,6 @@ export async function addItemToCart(cartId, productId, qty = 1, unitPrice = 0) {
   return data;
 }
 
-/* =========================
-   Utils
-========================= */
 function normalize(v, partial = false) {
   const num = (x) => (x === undefined || x === null || x === "" ? undefined : Number(x));
   const obj = {

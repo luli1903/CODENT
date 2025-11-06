@@ -1,8 +1,3 @@
-/* ================================================
-   CODENT | Estilos Tienda
-   ================================================ */
-
-/* ====== VARIABLES Y FUENTES ====== */
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap');
 
 :root {
@@ -19,7 +14,6 @@
   --shadow: 0 8px 22px rgba(0,0,0,.06);
 }
 
-/* ====== BASE ====== */
 body {
   font-family: "Raleway", system-ui, sans-serif;
   color: var(--ink);
@@ -31,13 +25,11 @@ body {
   line-height: 1.6;
 }
 
-/* ====== CONTENEDOR ====== */
 .container {
   width: min(1200px, 92%);
   margin-inline: auto;
 }
 
-/* ====== ENCABEZADO ====== */
 .shop-header {
   padding: 28px 0 10px;
   border-bottom: 1px solid var(--line);
@@ -58,7 +50,6 @@ body {
   font-weight: 400;
 }
 
-/* ====== SUBNAV ====== */
 .shop-subnav {
   position: sticky;
   top: 56px;
@@ -76,7 +67,6 @@ body {
   padding: .6rem 0;
 }
 
-/* ====== BOTONES CON ÍCONOS ====== */
 .nav-btn {
   display: inline-flex;
   align-items: center;
@@ -108,7 +98,6 @@ body {
           saturate(900%) hue-rotate(180deg);
 }
 
-/* ====== BURBUJA DEL CARRITO ====== */
 .badge {
   display: inline-block;
   min-width: 1.25rem;
@@ -121,7 +110,6 @@ body {
   margin-left: .35rem;
 }
 
-/* ====== FILTROS ====== */
 .shop-filters {
   position: sticky;
   top: 96px;
@@ -156,7 +144,6 @@ body {
   outline: 2px solid color-mix(in srgb, var(--sky) 30%, transparent);
 }
 
-/* ====== GRID DE PRODUCTOS ====== */
 .shop-main { padding: 1.2rem 0 3rem; }
 
 .grid {
@@ -211,7 +198,6 @@ body {
 
 .card .price { font-weight: 800; }
 
-/* CTA dentro de cada producto */
 .card .cta {
   display: flex;
   gap: .5rem;
@@ -250,7 +236,6 @@ body {
 
 .btn:disabled { opacity: .6; cursor: not-allowed; }
 
-/* ====== ESTADO VACÍO ====== */
 .empty {
   text-align: center;
   color: var(--muted);
@@ -263,13 +248,11 @@ body {
 .empty img { width: 90px; opacity: .8; }
 .empty[hidden]{ display: none !important; }
 
-/* ====== RESPONSIVE ====== */
 @media (max-width: 768px) {
   .subnav-row { justify-content: center; flex-wrap: wrap; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
   .card .body { padding: .7rem; }
 }
-/* --- Subnav enriquecido --- */
 .subnav-bar{
   display:flex; align-items:center; justify-content:space-between;
   gap:1rem; padding:.7rem 0;
@@ -279,7 +262,6 @@ body {
 
 .subnav-right{display:flex; align-items:center; gap:.7rem}
 
-/* buscador pill */
 .input-wrap{
   display:flex; align-items:center; gap:.45rem;
   background:#fff; border:1px solid var(--line);
@@ -291,7 +273,6 @@ body {
   font:inherit; color:var(--ink);
 }
 
-/* select pill */
 .select{
   appearance:none; -webkit-appearance:none; -moz-appearance:none;
   padding:.55rem .9rem; border-radius:999px; border:1px solid var(--line);

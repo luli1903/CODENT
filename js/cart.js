@@ -1,12 +1,8 @@
-// CODENT — carrito + Mercado Pago + helpers
 import { supabase } from "/js/supabaseClient.js";
 
 const CART_KEY = "coden_cart";
 const CHECKOUT_KEY = "coden_checkout";
 
-/* =======================
-   Utils
-======================= */
 const $ = (q, c=document) => c.querySelector(q);
 const $$ = (q, c=document) => Array.from(c.querySelectorAll(q));
 const debounce = (fn, ms=250) => {
@@ -14,9 +10,6 @@ const debounce = (fn, ms=250) => {
 };
 const emailOk = (s="") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s).trim());
 
-/* =======================
-   Storage simple
-======================= */
 export function getCart(){
   try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
   catch { return []; }
@@ -33,9 +26,6 @@ export function updateCartBadge(){
   badge.setAttribute('aria-label', `Carrito: ${count} producto${count===1?'':'s'}`);
 }
 
-/* =======================
-   Supabase helpers
-======================= */
 async function fetchByIds(ids){
   if(!ids?.length) return [];
   const {data,error}=await supabase.from("products").select("*").in("id",ids);
@@ -48,9 +38,6 @@ async function fetchOne(id){
   return data;
 }
 
-/* =======================
-   API carrito
-======================= */
 export async function addToCart(productId, qty = 1){
   const cart = getCart();
   const idx  = cart.findIndex(x => String(x.id) === String(productId));
@@ -93,9 +80,6 @@ export async function cartTotal(){
   return cart.reduce((s,i)=> s + Number(map.get(String(i.id))?.price||0)*Number(i.qty||0), 0);
 }
 
-/* =======================
-   Persistencia de checkout
-======================= */
 function loadCheckout(){
   try{ return JSON.parse(localStorage.getItem(CHECKOUT_KEY)) || {}; }
   catch{ return {}; }
@@ -157,9 +141,6 @@ function storeCheckout(){
   saveCheckout(obj);
 }
 
-/* =======================
-   Envío
-======================= */
 function isHome(){ return document.querySelector('input[name="shipping_method"]:checked')?.value === 'home'; }
 
 function calculateShipping(cart, addr){
@@ -192,9 +173,6 @@ function calculateShipping(cart, addr){
   return { method:'home', label:`${zone}`, cost };
 }
 
-/* =======================
-   Totales
-======================= */
 async function computeTotals() {
   const cart = getCart();
   const ids = cart.map(i => i.id);
@@ -234,9 +212,6 @@ export async function renderTotalsBox() {
   togglePayButton();
 }
 
-/* =======================
-   Render carrito.html
-======================= */
 export async function renderCartPage(){
   const list = $('#cartItems');
   const totalEl = $('#cartTotal');
@@ -315,9 +290,6 @@ export async function renderCartPage(){
   togglePayButton();
 }
 
-/* =======================
-   Toast global (opcional)
-======================= */
 window.toastCoden = (msg)=>{
   let t = $("#toast");
   if(!t){
@@ -331,9 +303,6 @@ window.toastCoden = (msg)=>{
   setTimeout(()=>t.style.opacity="0", 1400);
 };
 
-/* =======================
-   Pago MP (redirect)
-======================= */
 function getCustomerFromForm() {
   const email =
     $('#ship_email')?.value?.trim() ||
@@ -412,11 +381,7 @@ export async function payWithMercadoPago() {
   }
 }
 
-/* =======================
-   Wire + init
-======================= */
 function wireCartEvents() {
-  // radios de envío (pickup/home)
   $$('input[name="shipping_method"]').forEach(el => {
     el.addEventListener('change', () => { 
       const box = $('#shippingAddress');
@@ -426,7 +391,6 @@ function wireCartEvents() {
     });
   });
 
-  // inputs que recalculan + guardan
   const watchIds = [
     'nombre','apellido','email',
     'ship_zip','ship_state','ship_city','ship_street','ship_number','ship_floor',
@@ -453,6 +417,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// API global (opcional)
 window.Cart = { getCart,setCart,updateCartBadge, addToCart,removeFromCart,setQty, cartTotal,renderCartPage };
 window.Pay  = { payWithMercadoPago, renderTotalsBox };

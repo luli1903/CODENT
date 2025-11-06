@@ -27,7 +27,6 @@
   <div id="recMsg"></div>
   <button id="setNew">Guardar nueva contraseña</button>
 <script>
-  // ⚠️ REEMPLAZÁ por los valores de tu proyecto
   window.VITE_SUPABASE_URL = "https://chzofyepqjomxfekvoux.supabase.co";
   window.VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoem9meWVwcWpvbXhmZWt2b3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MjQ2MjMsImV4cCI6MjA3MzAwMDYyM30.gldAo40K-YCPNdzgvDsqDpDtvYCTPn7KnVsww_RYFUw";
 </script>
@@ -37,15 +36,12 @@
     const btn = document.getElementById("setNew");
     const busy = (b)=>{ btn.disabled=!!b; btn.dataset.t ||= btn.textContent; btn.textContent=b?"Procesando...":btn.dataset.t; };
 
-    // ---- Cargar/crear cliente Supabase de forma robusta ----
     let supabase;
     try{
-      // Intenta usar tu cliente del proyecto
       const m = await import("/js/supabaseClient.js");
       supabase = m.supabase;
       if(!supabase) throw new Error("No exportó supabase");
     }catch{
-      // Fallback: crear cliente directo (requiere que tengas definidas las vars globales)
       const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
       const url = window.VITE_SUPABASE_URL;
       const key = window.VITE_SUPABASE_ANON_KEY;
@@ -73,7 +69,6 @@
           return;
         }
 
-        // hash flow (#access_token=…)
         for (let i=0;i<20;i++){ // ~3s
           const { data:{ session } } = await supabase.auth.getSession();
           if (session){ recoveryReady = true; break; }
@@ -84,7 +79,6 @@
       }
     }
 
-    // Por si el SDK notifica explícitamente
     supabase?.auth.onAuthStateChange((event)=>{ if(event==="PASSWORD_RECOVERY") recoveryReady = true; });
 
     async function paintStatus(){
@@ -134,7 +128,6 @@
       }
     }
 
-    // Debug visible si algo rompe antes
     window.onerror = (m, src, ln, col, err)=>{
       msg.textContent = "Error: " + (m || (err && err.message) || "desconocido");
     };

@@ -1,23 +1,19 @@
-// /admin.js (versión saneada)
 import { onAuthStateChange, signOut, isAdmin } from "/auth.js";
 import {
   listProducts, getProduct, createProduct, updateProduct,
   removeProduct, uploadProductImage
 } from "/db.js";
 
-// ---------- Helpers DOM ----------
 const $  = (id) => document.getElementById(id);
 
-// Refs
+
 const btnLogout   = $("btnLogout");
 const crudSection = $("crudSection");
 const adminList   = $("adminList");
 const formEl      = $("productForm");
 
-// Airbag: evitar submit nativo pase lo que pase
 formEl?.addEventListener("submit", (e) => e.preventDefault(), { capture: true });
 
-// ---------- Sesión + guardia de admin ----------
 onAuthStateChange(async (user) => {
   try {
     if (!user || !(await isAdmin(user.id))) {
@@ -33,13 +29,11 @@ onAuthStateChange(async (user) => {
   }
 });
 
-// ---------- Logout ----------
 btnLogout?.addEventListener("click", async () => {
   await signOut();
   location.href = "/index.html";
 });
 
-// ---------- UI helpers ----------
 function toast(msg, type="success"){
   const el = document.createElement("div");
   el.className = `toast ${type}`;
@@ -91,7 +85,6 @@ function clearInvalid(input){
   if (small && small.classList?.contains("help-text")) small.remove();
 }
 
-// ---------- Preview imagen ----------
 const imageInput = $("imageFile");
 if (imageInput){
   imageInput.addEventListener("change", () => {
@@ -108,7 +101,6 @@ if (imageInput){
   });
 }
 
-// ---------- Listado ----------
 async function renderList() {
   if (!adminList) return;
   adminList.innerHTML = "Cargando…";
@@ -175,7 +167,6 @@ async function renderList() {
   }
 }
 
-// ---------- Guardar ----------
 formEl?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -190,13 +181,11 @@ formEl?.addEventListener("submit", async (e) => {
     description: $("description")?.value?.trim(),
   };
 
-  // Validaciones mínimas
   let hasError = false;
   if (!data.name)         { markInvalid($("name"), "El nombre es obligatorio"); hasError = true; }
   if (!(data.price >= 0)) { markInvalid($("price"), "Precio inválido");        hasError = true; }
   if (!(data.stock >= 0)) { markInvalid($("stock"), "Stock inválido");         hasError = true; }
 
-  // Si tenés constraint CHECK en la DB, mantené este set en sync:
   const allowed = new Set(["equipos","insumos","repuestos","accesorios"]);
   if (!data.category || !allowed.has(data.category)) {
     markInvalid($("category"), "Elegí una categoría válida (equipos/insumos/repuestos/accesorios)");
@@ -232,7 +221,6 @@ formEl?.addEventListener("submit", async (e) => {
   }
 });
 
-// ---------- Reset ----------
 $("btnReset")?.addEventListener("click", () => {
   formEl?.reset();
   if ($("prodId")) $("prodId").value = "";

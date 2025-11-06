@@ -1,12 +1,9 @@
-/* ===== HOME (index) ===== */
-
 body {
     background-image: url("/img/fondo.jpg"); /* Reemplaza con la ruta de tu imagen */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
     background-size: cover; /* Asegura que la imagen cubra todo el fondo */
     background-position: center; /* Centra la imagen */
 }
-/* ---------- HERO con foto estética ---------- */
 .hero {
   position: relative;
   display: flex;
@@ -24,7 +21,6 @@ body {
   padding: clamp(60px, 8vw, 120px) 0;
 }
 
-/* Wordmark “CODENT” */
 .hero-wordmark {
   position: absolute;
   top: 56px;
@@ -44,7 +40,6 @@ body {
   box-shadow: 0 6px 18px rgba(0, 0, 0, .12) inset;
 }
 
-/* Título principal */
 .hero-title {
   font-family: "Sulphur Point", "Raleway", system-ui, sans-serif;
   font-weight: 700;
@@ -67,7 +62,6 @@ body {
   align-items: center;
 }
 
-/* ===== PALETA CELESTE SUAVE ===== */
 :root {
   --sky: #D1E5FF;
   --sky-600: #96B1D9;
@@ -78,9 +72,7 @@ body {
   --muted: #475569;
 }
 
-/* ===== BOTONES UNIFICADOS ===== */
-/* ===== BOTONES UNIFICADOS (CELESTES con hover MARRÓN MOCHA) ===== */
-/* === BOTONES UNIFICADOS (CELESTE → HOVER MOCHA) === */
+
 :root{
   --sky:   #D1E5FF;   /* celeste suave */
   --sky-600:#96B1D9;  /* celeste más fuerte */
@@ -121,7 +113,6 @@ body {
 }
 
 
-/* ===== CUADRADOS (4 ítems informativos) ===== */
 .hero-feats {
   position: absolute;
   right: clamp(16px, 4vw, 48px);
@@ -186,7 +177,6 @@ body {
   line-height: 1.48;
 }
 
-/* ---------- Cuadrícula de “highlights” del inicio (4 tarjetas debajo del hero) ---------- */
 .home-highlights { row-gap: 14px; }
 .home-highlights .card {
   border: 1px solid var(--line);
@@ -204,7 +194,6 @@ body {
 .home-highlights b { display: block; font-weight: 800; margin-bottom: 2px; }
 .home-highlights small { color: var(--muted); display: block; line-height: 1.55; }
 
-/* ---------- SERVICIOS ---------- */
 #servicios .container { max-width: 1200px; }
 
 .service-card {
@@ -236,7 +225,6 @@ body {
   filter: brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(800%) hue-rotate(160deg);
 }
 
-/* Imagen decorativa más visible */
 .service-ill {
   position: absolute;
   right: 8px;
@@ -255,11 +243,9 @@ body {
 .service-list { margin: 0; padding-left: 1.2rem; color: var(--muted); }
 .service-list li { margin-bottom: .35rem; }
 
-/* ---------- CONTACTO ---------- */
 .contact-card .form-group label { font-weight: 600; }
 .contact-card .btn { border-radius: 999px; padding: .6rem 1.2rem; }
 
-/* ---------- RESPONSIVE ---------- */
 @media (max-width: 768px) {
   .hero-feats {
     grid-template-columns: 1fr;

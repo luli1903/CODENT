@@ -1,13 +1,9 @@
-/* ====== HOTFIX DE ESPECIFICIDAD (carga último) ====== */
-
-/* --- TIENDA --- */
 body#shop .shop-main .grid {
   display: grid !important;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
   gap: 1rem !important;
 }
 
-/* Bootstrap redefine .card; reescribimos con más peso */
 body#shop .shop-main .card {
   background: #fff !important;
   border: 1px solid var(--line, #e2e8f0) !important;
@@ -52,11 +48,9 @@ body#shop .shop-main .card .price {
   color: var(--ink, #0f172a);
 }
 
-/* navbar/subnav que podían quedar debajo por z-index */
 .shop-subnav { position: sticky; top: 56px; z-index: 30 !important; }
 .shop-filters { position: sticky; top: 96px; z-index: 20 !important; }
 
-/* --- BOTONES coherentes con tu paleta (celeste -> hover mocha) --- */
 body#shop .btn,
 body#shop .card .cta .btn {
   display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
@@ -75,7 +69,6 @@ body#shop .card .cta .btn:hover {
   transform: translateY(-1px);
 }
 
-/* --- PRODUCTO (detalle) --- */
 body.product-page .product-grid,
 body.product-page #coden-main .product-grid {
   display: grid !important;
@@ -106,6 +99,5 @@ body.product-page .info-card {
 
 body.product-page h2 { font-family: "Cormorant", serif !important; font-weight: 700 !important; color: var(--ink,#0f172a) !important; }
 
-/* --- CONTENEDORES --- */
 .container,
 .coden-container { width: min(1200px, 92%) !important; margin-inline: auto !important; }

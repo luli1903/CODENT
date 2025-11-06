@@ -1,7 +1,4 @@
 /* Archivo legacy.
-   Todos los estilos se migraron a:
-   - /css/coden.main.css  → base global
-   - /css/home.css        → inicio
-   - /css/admin.css       → panel de administración
+   
    Este archivo se conserva solo por compatibilidad de rutas antiguas.
 */

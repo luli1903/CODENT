@@ -1,4 +1,3 @@
-// /netlify/functions/create-preference.js
 import { MercadoPagoConfig, Preference } from "mercadopago";
 
 const cors = {
@@ -14,19 +13,14 @@ const json = (code, data) => ({
 
 export const handler = async (event) => {
   try {
-    // CORS preflight
     if (event.httpMethod === "OPTIONS") return json(200, {});
     if (event.httpMethod !== "POST")   return json(405, { error: "Method Not Allowed" });
 
     const body = JSON.parse(event.body || "{}");
 
-    // ==============================
-    //   USAR TOKEN REAL (LIVE)
-    // ==============================
     const ACCESS = process.env.MP_ACCESS_TOKEN_LIVE || "";
     if (!ACCESS) return json(500, { error: "Falta MP_ACCESS_TOKEN_LIVE en Netlify" });
 
-    // Adaptar items desde tu payload (cart[])
     let items = body.items;
     if (!items && Array.isArray(body.cart)) {
       items = body.cart.map(it => ({
@@ -42,7 +36,6 @@ export const handler = async (event) => {
       .filter(i => i.quantity > 0 && i.unit_price > 0);
     if (!items.length) return json(400, { error: "items have non-positive price/qty" });
 
-    // URLs absolutas para volver al sitio
     const proto = event.headers["x-forwarded-proto"] || "https";
     const host  = event.headers["x-forwarded-host"] || event.headers["host"] || "";
     const base  =
@@ -57,11 +50,9 @@ export const handler = async (event) => {
       failure: `${base}/checkout/failure.html`
     };
 
-    // Cliente MP (LIVE)
     const client = new MercadoPagoConfig({ accessToken: ACCESS });
     const preference = new Preference(client);
 
-    // Preferencia mínima y limpia (sin restricciones de medios)
     const prefData = {
       items,
       back_urls,
@@ -74,7 +65,6 @@ export const handler = async (event) => {
     const pref = await preference.create({ body: prefData });
     const { id, init_point } = pref;
 
-    // En LIVE se usa init_point
     return json(200, { preferenceId: id, init_point });
   } catch (err) {
     console.error("create-preference error:", err);

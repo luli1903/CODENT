@@ -1,24 +1,23 @@
 <!doctype html>
+
 <html lang="es">
+
 <head>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="referrer" content="same-origin" />
+
   <title>Admin | CODENT</title>
 
   <link rel="icon" href="/img/favicon.ico" />
   <link rel="stylesheet" href="/css/legacy/legacy.bundle.css">
-  <!-- Fuente CODENT -->
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;800&display=swap" rel="stylesheet">
-
-  <!-- admin.css debe ir DESPUÉS del legacy -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/legacy/admin.css">
 
-  <!-- Evitar "flash": ocultar CRUD hasta validar sesión/rol -->
   <style>body.auth-wait #crudSection { display: none !important; }</style>
 
-  <!-- Guardia de acceso: solo admins -->
   <script type="module">
     import { getSession, isAdmin } from "/auth.js";
     (async function guardAdmin() {
@@ -43,7 +42,6 @@
     </div>
   </header>
 
-  <!-- usar admin-max para que apliquen los estilos del contenedor -->
   <main class="container admin-max">
     <section id="crudSection" aria-labelledby="crudTitle">
       <h2 id="crudTitle">Productos</h2>
@@ -89,5 +87,6 @@
   </main>
 
   <script type="module" src="/admin.js"></script>
+  
 </body>
 </html>

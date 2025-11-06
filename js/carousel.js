@@ -1,4 +1,3 @@
-// Carrusel de imágenes
 document.addEventListener("DOMContentLoaded", () => {
   let index = 0;
   const slides = document.querySelectorAll(".slide");

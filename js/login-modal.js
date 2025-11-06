@@ -1,4 +1,3 @@
-// /js/login-modal.js
 import { signIn } from '/auth.js';
 
 const $ = (s) => document.querySelector(s);
@@ -26,7 +25,6 @@ function uiBusy(busy, label = 'Ingresar') {
   els.btn.textContent = busy ? 'Ingresando...' : label;
 }
 
-// Cierra el modal con o sin jQuery/Bootstrap
 function closeModal() {
   const m = els.modal;
   if (!m) return;
@@ -63,7 +61,7 @@ async function handleSubmit(e) {
     uiMsg('¡Listo! Iniciaste sesión.');
     setTimeout(() => {
       closeModal();
-      location.reload(); // simple: repinta navbar y todo
+      location.reload(); 
     }, 200);
   } catch (err) {
     const msg = err?.message || err?.error_description || 'No pudimos iniciar sesión.';
@@ -76,7 +74,6 @@ async function handleSubmit(e) {
 
 els.form?.addEventListener('submit', handleSubmit);
 
-// Link “Recuperar”
 document.getElementById('linkReset')?.addEventListener('click', (e) => {
   e.preventDefault();
   const email = encodeURIComponent(els.email?.value || '');

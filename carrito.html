@@ -5,48 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carrito - CODENT</title>
 
-  <!-- Bootstrap + base -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="icon" href="img/favicon.ico">
   <link rel="stylesheet" href="/css/legacy/legacy.bundle.css">
-<link rel="stylesheet" href="/css/cart.step1.css">
-
-
+  <link rel="stylesheet" href="/css/cart.step1.css">
 </head>
 
-<!-- NOTA: solo esta página usa page--cart para aislar estilos -->
 <body class="page--cart">
 
-  <!-- NAVBAR (blanco, igual al resto del sitio) -->
   <nav class="navbar navbar-light coden-nav sticky-top">
     <a class="navbar-brand font-weight-bold" href="index.html">
       <span class="brand-dot"></span> CODENT
     </a>
 
     <div class="ml-auto d-flex align-items-center">
-      <!-- Botón Carrito (ghost sky) -->
-      <a href="carrito.html" class="btn btn-outline-primary btn-sm mr-2" aria-label="Carrito">
-        🛒 <span id="cartBadge" class="badge badge-primary ml-1">0</span>
-      </a>
-      <!-- Botón Seguir comprando (mocha sólido) -->
+      <div class="service-head position-relative">
+        <img class="service-icon" src="/img/icon/shopping-cart.svg" alt="Icono de carrito">
+        <h4 class="mb-1">Carrito</h4>
+        <span id="cartBadge" class="badge">0</span>
+      </div>
+    </div>
+
+
       <a href="tienda.html" class="btn btn-primary btn-sm">Seguir comprando</a>
     </div>
   </nav>
 
-  <!-- CONTENIDO -->
   <div id="coden-main">
     <div class="container py-4">
 
-      <!-- Título (centrado, estética inicio) -->
       <h1 class="page-title mb-3">Tu carrito</h1>
       <p class="text-muted text-center mb-4" style="font-weight:600">
         Total productos: <strong id="cartTotal">$0</strong>
       </p>
 
-      <!-- Items renderizados por JS (si querés los mantenemos invisibles cuando no haya items) -->
       <div id="cartItems" class="mb-3"></div>
 
-      <!-- Datos de contacto -->
       <div class="card p-3 mb-3">
         <h5 class="mb-2">Datos de contacto</h5>
         <div class="form-row">
@@ -65,7 +59,6 @@
         </div>
       </div>
 
-      <!-- Método de entrega -->
       <div class="card p-3 mb-3">
         <h5 class="mb-2">Método de entrega</h5>
         <div class="custom-control custom-radio">
@@ -78,7 +71,6 @@
         </div>
       </div>
 
-      <!-- Dirección de envío (solo si envío a domicilio) -->
       <div id="shippingAddress" class="card p-3 mb-3" style="display:none">
         <h5 class="mb-2">Dirección de envío</h5>
         <div class="form-row">
@@ -139,7 +131,6 @@
         </div>
       </div>
 
-      <!-- Resumen -->
       <ul class="list-group my-3">
         <li class="list-group-item d-flex justify-content-between">
           <span>Subtotal</span> <strong id="subtotal">$ 0</strong>
@@ -153,15 +144,12 @@
       </ul>
       <div id="ship_calc_msg" class="ship-note"></div>
 
-      <!-- CTA pago (mocha sólido) -->
       <button id="btn-pagar" class="btn btn-primary btn-lg btn-block">Pagar con Mercado Pago</button>
     </div>
   </div>
 
-  <!-- Scripts -->
   <script type="module" src="/js/cart.js"></script>
 
-  <!-- Limpia query mp=success y vacía carrito -->
   <script>
     (function(){
       const mp = new URL(location.href).searchParams.get('mp');

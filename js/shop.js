@@ -1,4 +1,3 @@
-// /js/shop.hotfix.js  ← si preferís, guardalo con este nombre y cambiá el src del script
 import { listProducts } from "/db.js";
 import { addToCart, updateCartBadge } from "/js/cart.js";
 
@@ -126,11 +125,9 @@ async function boot() {
     });
   }
 
-  // ---------- Events (buscar/ordenar)
   qInput?.addEventListener("input",  () => renderGrid(applyClientFilters(lastItems)));
   orderSel?.addEventListener("change", () => renderGrid(applyClientFilters(lastItems)));
 
-  // ---------- Delegación de clicks en tarjetas
   productGrid.addEventListener("click", async (e) => {
     const btn = e.target.closest("button, a");
     if (!btn) return;
@@ -149,10 +146,8 @@ async function boot() {
     }
   });
 
-  // ---------- Arranque
   renderChips();
   await loadProducts(currentCat);
 
-  // Refrescar badge al entrar
   try { window.Cart?.updateCartBadge?.(); } catch {}
 }

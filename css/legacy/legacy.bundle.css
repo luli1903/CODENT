@@ -1,17 +1,11 @@
-/* ======================================================
-   CODENT · LEGACY BUNDLE (no tocar lo que ya funciona)
-   ====================================================== */
-
 @layer legacy-base, legacy-components, legacy-pages;
 
-/* ---------- BASE Y VARIABLES ---------- */
 @layer legacy-base {
   @import url("./style.css");
   @import url("./coden.v1.css");
   @import url("./coden.main.css");
 }
 
-/* ---------- COMPONENTES Y PÁGINAS ---------- */
 @layer legacy-pages {
   @import url("./home.css");
   @import url("./shop.css");

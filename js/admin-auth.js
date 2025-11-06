@@ -1,7 +1,5 @@
-// /js/admin.js
 import { supabase } from "/js/supabaseClient.js";
 
-// ========= HELPERS =========
 const $ = (id) => document.getElementById(id);
 const form = $("productForm");
 const list = $("adminList");
@@ -36,7 +34,6 @@ function sanitizeFilename(name = "") {
   return name.replace(/[^\w.\-]+/g, "_").slice(0, 120);
 }
 
-// ========= FORMULARIO =========
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -57,7 +54,6 @@ form?.addEventListener("submit", async (e) => {
   busy(true);
 
   try {
-    // Subir imagen si se seleccionó
     if (file) {
       const safeName = sanitizeFilename(file.name);
       const filePath = `products/${Date.now()}_${safeName}`;
@@ -71,7 +67,6 @@ form?.addEventListener("submit", async (e) => {
     }
 
     if (id) {
-      // Editar producto
       const payload = { name, price, stock, category, description, updated_at: new Date() };
       if (image_url) payload.image_url = image_url;
 
@@ -80,7 +75,6 @@ form?.addEventListener("submit", async (e) => {
 
       showToast("Producto actualizado correctamente");
     } else {
-      // Nuevo producto
       const { error } = await supabase.from("products").insert([
         { name, price, stock, category, description, image_url },
       ]);
@@ -91,7 +85,6 @@ form?.addEventListener("submit", async (e) => {
 
     form.reset();
     $("prodId").value = "";
-    // limpiar input file (algunos navegadores no lo limpian con reset)
     if ($("imageFile")) $("imageFile").value = "";
 
     await loadProducts();
@@ -104,14 +97,12 @@ form?.addEventListener("submit", async (e) => {
   }
 });
 
-// ========= BOTÓN NUEVO =========
 btnReset?.addEventListener("click", () => {
   form.reset();
   $("prodId").value = "";
   if ($("imageFile")) $("imageFile").value = "";
 });
 
-// ========= RENDER PRODUCTOS =========
 function productCard(p) {
   const article = document.createElement("article");
   article.className = "product-card";
@@ -138,7 +129,6 @@ function renderProducts(products = []) {
   list.replaceChildren(...products.map(productCard));
 }
 
-// ========= CARGAR PRODUCTOS =========
 async function loadProducts() {
   try {
     const { data, error } = await supabase
@@ -153,7 +143,6 @@ async function loadProducts() {
   }
 }
 
-// ========= EDITAR / ELIMINAR (delegación robusta) =========
 list?.addEventListener("click", async (e) => {
   const btn = e.target.closest("[data-edit],[data-delete]");
   if (!btn) return;
@@ -161,7 +150,6 @@ list?.addEventListener("click", async (e) => {
   const editId = btn.getAttribute("data-edit");
   const deleteId = btn.getAttribute("data-delete");
 
-  // Editar
   if (editId) {
     try {
       const { data, error } = await supabase
@@ -185,7 +173,6 @@ list?.addEventListener("click", async (e) => {
     }
   }
 
-  // Eliminar
   if (deleteId) {
     if (!confirm("¿Eliminar este producto?")) return;
     try {
@@ -201,11 +188,9 @@ list?.addEventListener("click", async (e) => {
   }
 });
 
-// ========= LOGOUT =========
 btnLogout?.addEventListener("click", async () => {
   await supabase.auth.signOut();
   location.href = "/index.html";
 });
 
-// ========= INICIO =========
 loadProducts();
