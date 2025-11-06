@@ -226,3 +226,19 @@ form .form-control {
   border-radius: 12px !important;
   border: 1px solid var(--line, #e2e8f0) !important;
 }
+/* ===== FIX SUPERPOSICIÓN HERO / SERVICIOS ===== */
+.hero {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 100px;   /* da aire debajo del hero */
+}
+
+/* asegura que la sección de servicios quede sobre el fondo, no sobre el hero */
+section#servicios,
+.servicios-section {
+  position: relative;
+  z-index: 2;
+  margin-top: -40px;       /* mantiene el efecto de "flotante", podés ajustar */
+}
+
+/* si querés más separación visual, aumentá margin-top o bajá padding-bottom */
