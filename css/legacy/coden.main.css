@@ -202,3 +202,25 @@ section#servicios,
   font-size: .92rem;
   line-height: 1.35;
 }
+/* === Ajuste preciso del bloque 2x2 del hero === */
+.hero-feats {
+  max-width: 780px !important;  /* 🔹 antes era muy ancho, bajamos ~10% */
+  margin-inline: auto !important; /* centrado perfecto */
+  gap: 18px !important;          /* mantiene buena separación */
+  margin-top: 60px !important;   /* separa del logo, sin mover el hero */
+}
+
+/* Cartas más proporcionadas */
+.hero-feats .feat {
+  padding: 18px 20px !important;
+  border-radius: 14px !important;
+}
+
+/* Texto apenas más compacto */
+.hero-feats b {
+  font-size: clamp(17px, 1.5vw, 19px) !important;
+}
+.hero-feats small {
+  font-size: 0.9rem !important;
+  line-height: 1.35 !important;
+}
