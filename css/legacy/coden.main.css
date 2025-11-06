@@ -217,3 +217,42 @@ section.hero .hero-feats small {
     transform: translateY(36px) scale(.97) !important;
   }
 }
+/* ===== AJUSTE FINAL — HERO 2x2 (reducido y más aire) ===== */
+section.hero .hero-feats {
+  position: relative !important;
+  transform: translateY(60px) scale(0.82) !important; /* 🔹 achicado visible */
+  transform-origin: top center !important;
+  margin-bottom: 70px !important; /* más aire con el fondo */
+  max-width: min(880px, 90vw) !important;
+  z-index: 1 !important;
+}
+
+/* Ajuste interno de cada tarjeta */
+section.hero .hero-feats .feat {
+  padding: 16px 18px !important;
+  border-radius: 16px !important;
+  gap: 10px !important;
+}
+
+section.hero .hero-feats .feat__icon {
+  width: 56px !important;
+  height: 56px !important;
+}
+
+section.hero .hero-feats b {
+  font-size: clamp(16px, 1.8vw, 20px) !important;
+  line-height: 1.25 !important;
+}
+
+section.hero .hero-feats small {
+  font-size: 0.9rem !important;
+  line-height: 1.35 !important;
+  display: block !important;
+}
+
+/* En desktop grande, aún más compacto */
+@media (min-width: 1200px) {
+  section.hero .hero-feats {
+    transform: translateY(65px) scale(0.8) !important;
+  }
+}
