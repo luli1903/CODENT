@@ -148,3 +148,57 @@ section#servicios,
     margin-top: clamp(40px, 6vw, 80px) !important;
   }
 }
+/* ==== HERO: separación justa arriba/abajo (aire pero sin exagerar) ==== */
+.hero{
+  /* subí/bajá si querés; antes 90–120 + 100 abajo era mucho */
+  padding-top: clamp(80px, 8vw, 110px) !important;
+  padding-bottom: clamp(36px, 5vw, 64px) !important;
+  z-index: 2;
+}
+
+/* ==== SERVICIOS: bajamos un poco el bloque, pero no tanto ==== */
+section#servicios,
+.servicios,
+.servicios-section {
+  /* antes: clamp(80px, 10vw, 140px) → quedaba muy lejos */
+  margin-top: clamp(40px, 6vw, 84px) !important;
+  position: relative;
+  z-index: 1;
+}
+@media (max-width: 768px) {
+  section#servicios,
+  .servicios,
+  .servicios-section {
+    margin-top: clamp(28px, 6vw, 64px) !important;
+  }
+}
+
+/* ==== 2×2 (hero-feats) — ACHICADO sin mover la grilla ==== */
+.hero-feats{
+  /* reduce el ancho total del bloque para que “entre” mejor */
+  max-width: min(860px, 92vw);
+  gap: 14px;                   /* antes solía estar >=20px */
+  margin-top: clamp(42px, 6vw, 72px) !important; /* separa del logo sin invadir */
+}
+
+/* tarjeta individual más compacta */
+.hero-feats .feat{
+  padding: 14px 16px;          /* antes ~22–24px */
+  border-radius: 16px;
+}
+
+/* icono más chico */
+.hero-feats .feat__icon{
+  width: 56px;
+  height: 56px;
+}
+
+/* tipografías un toque más pequeñas dentro de cada tarjeta */
+.hero-feats b{
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.25;
+}
+.hero-feats small{
+  font-size: .92rem;
+  line-height: 1.35;
+}
