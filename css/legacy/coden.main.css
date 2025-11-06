@@ -135,3 +135,16 @@ section#servicios,
     margin-top: clamp(60px, 8vw, 100px) !important; /* 🔹 un poco menos en mobile */
   }
 }
+/* ===== AJUSTE HERO FEATS (evita que se tape con el logo) ===== */
+.hero-feats {
+  margin-top: clamp(60px, 8vw, 110px) !important; /* 🔹 separa el 2x2 del logo */
+  position: relative;
+  z-index: 1;
+}
+
+/* 🔹 En pantallas chicas, un poco menos */
+@media (max-width: 768px) {
+  .hero-feats {
+    margin-top: clamp(40px, 6vw, 80px) !important;
+  }
+}
