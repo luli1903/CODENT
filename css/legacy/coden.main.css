@@ -148,3 +148,72 @@ section#servicios,
     margin-top: clamp(40px, 6vw, 80px) !important;
   }
 }
+/* ===== AJUSTE FINAL HERO FEATS (tamaño + separación óptimos) ===== */
+.hero-feats {
+  position: relative !important;
+  top: 52px !important;              /* 🔹 un poco más arriba que antes (72→52) */
+  scale: 0.94 !important;            /* 🔹 achica suavemente todo el bloque */
+  transform-origin: top center;      /* mantiene centrado al escalar */
+  margin-bottom: 40px !important;    /* da aire al fondo */
+  z-index: 1;
+}
+
+/* En pantallas grandes (desktop) */
+@media (min-width: 1200px) {
+  .hero-feats {
+    top: 60px !important;
+    scale: 0.92 !important;
+  }
+}
+
+/* En mobile no lo escalamos tanto */
+@media (max-width: 768px) {
+  .hero-feats {
+    top: 38px !important;
+    scale: 0.98 !important;
+  }
+}
+/* ===== AJUSTE FUERTE DEL 2×2 DEL HERO (tamaño + separación) ===== */
+section.hero .hero-feats {
+  position: relative !important;
+  transform: translateY(48px) scale(.90) !important; /* 🔹 sube un poco y achica todo */
+  transform-origin: top center !important;
+  margin-bottom: 44px !important;                    /* aire con el sillón */
+  max-width: min(980px, 92vw) !important;            /* contenedor un toque más angosto */
+  z-index: 1 !important;
+}
+
+/* Reducimos densidad interna para que visualmente “encogan” sin perder legibilidad */
+section.hero .hero-feats .feat {
+  padding: 18px 20px !important;     /* antes más grande */
+  border-radius: 18px !important;
+  gap: 12px !important;
+}
+
+section.hero .hero-feats .feat__icon {
+  width: 64px !important;
+  height: 64px !important;
+}
+
+section.hero .hero-feats b {
+  font-size: clamp(18px, 2vw, 22px) !important;
+  line-height: 1.25 !important;
+}
+
+section.hero .hero-feats small {
+  font-size: 0.95rem !important;
+  line-height: 1.35 !important;
+  display: block !important;
+}
+
+/* Desktop un poquito más chico; mobile casi sin escala */
+@media (min-width: 1200px) {
+  section.hero .hero-feats {
+    transform: translateY(52px) scale(.88) !important;
+  }
+}
+@media (max-width: 768px) {
+  section.hero .hero-feats {
+    transform: translateY(36px) scale(.97) !important;
+  }
+}
