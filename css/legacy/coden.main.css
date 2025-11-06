@@ -226,19 +226,20 @@ form .form-control {
   border-radius: 12px !important;
   border: 1px solid var(--line, #e2e8f0) !important;
 }
-/* ===== FIX SUPERPOSICIÓN HERO / SERVICIOS ===== */
+/* ===== AJUSTE HERO TITLE (separación con el logo) ===== */
 .hero {
   position: relative;
-  z-index: 1;
-  padding-bottom: 100px;   /* da aire debajo del hero */
+  padding-top: 80px;   /* 🔹 aumenta o reduce según necesites (antes 40-60px aprox.) */
 }
 
-/* asegura que la sección de servicios quede sobre el fondo, no sobre el hero */
-section#servicios,
-.servicios-section {
+.hero .hero-title {
   position: relative;
-  z-index: 2;
-  margin-top: -40px;       /* mantiene el efecto de "flotante", podés ajustar */
+  top: -12px;          /* 🔹 sube un poquito el texto */
 }
 
-/* si querés más separación visual, aumentá margin-top o bajá padding-bottom */
+/* Si querés que TODO el contenido del hero (texto + botones) suba parejo: */
+.hero .container,
+.hero-content {
+  position: relative;
+  top: -20px;          /* 🔹 ajustá entre -10 y -30px según se vea mejor */
+}
