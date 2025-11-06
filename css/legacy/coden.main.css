@@ -119,3 +119,19 @@ section#servicios,
 #servicios .container{
   margin-top: 0 !important;
 }
+/* ===== AJUSTE FINO: bajar cuadrícula de servicios ===== */
+section#servicios,
+.servicios,
+.servicios-section {
+  margin-top: clamp(80px, 10vw, 140px) !important; /* 🔹 más espacio entre hero y cards */
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  section#servicios,
+  .servicios,
+  .servicios-section {
+    margin-top: clamp(60px, 8vw, 100px) !important; /* 🔹 un poco menos en mobile */
+  }
+}
