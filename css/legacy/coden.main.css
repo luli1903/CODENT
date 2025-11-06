@@ -148,28 +148,3 @@ section#servicios,
     margin-top: clamp(40px, 6vw, 80px) !important;
   }
 }
-/* ===== AJUSTE FINAL HERO FEATS (tamaño + separación óptimos) ===== */
-.hero-feats {
-  position: relative !important;
-  top: 52px !important;              /* 🔹 un poco más arriba que antes (72→52) */
-  scale: 0.94 !important;            /* 🔹 achica suavemente todo el bloque */
-  transform-origin: top center;      /* mantiene centrado al escalar */
-  margin-bottom: 40px !important;    /* da aire al fondo */
-  z-index: 1;
-}
-
-/* En pantallas grandes (desktop) */
-@media (min-width: 1200px) {
-  .hero-feats {
-    top: 60px !important;
-    scale: 0.92 !important;
-  }
-}
-
-/* En mobile no lo escalamos tanto */
-@media (max-width: 768px) {
-  .hero-feats {
-    top: 38px !important;
-    scale: 0.98 !important;
-  }
-}
