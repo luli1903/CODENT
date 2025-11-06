@@ -81,3 +81,41 @@ section#servicios,
     margin-top: 0;
   }
 }
+/* ===== Separación segura Hero ↔ Servicios (anti-solapamiento) ===== */
+
+/* 1) Asegura altura superior del hero (sube un poco todo el texto) */
+.hero{
+  /* podés subir/bajar estos límites si querés */
+  --hero-safe-top: clamp(120px, 12vw, 160px);
+  padding-top: var(--hero-safe-top) !important;
+  padding-bottom: clamp(32px, 5vw, 72px) !important; /* agrega aire abajo */
+  position: relative;
+  z-index: 2; /* por si hay overlays cercanos */
+}
+
+/* 2) Si tenés el badge/placa del logo dentro del hero, que quede encima */
+.hero .brand-badge,
+.hero .logo-badge,
+.hero .codent-badge{
+  position: relative;
+  z-index: 3;
+  pointer-events: none; /* que no “bloquee” el hover/click de abajo */
+}
+
+/* 3) Empuja el primer bloque de “Servicios” hacia abajo sí o sí */
+.hero + section,
+.hero ~ section#servicios,
+section#servicios,
+.servicios,
+.servicios-section{
+  margin-top: clamp(32px, 6vw, 96px) !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* 4) Por si hay alguna grilla de servicios con márgenes negativos */
+.servicios .container,
+.servicios-section .container,
+#servicios .container{
+  margin-top: 0 !important;
+}
