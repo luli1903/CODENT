@@ -18,7 +18,7 @@ html body:not(.admin) {
       rgba(255,255,255,.05),
       rgba(255,255,255,.12)
     ),
-    url("/img/fondo4.jpeg") !important;
+    url("/img/fondo3.jpeg") !important;
   background-position: center !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
