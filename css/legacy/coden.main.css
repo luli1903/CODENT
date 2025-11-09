@@ -158,19 +158,3 @@ section#servicios,
     margin-top: clamp(40px, 6vw, 80px) !important;
   }
 }
-
-/* ===== IMÁGENES DE SERVICIOS ===== */
-.servicio-img,
-.service-icon,
-.servicios-section img {
-  opacity: 0.35;              /* antes probablemente estaba en 0.1 o 0.15 */
-  filter: brightness(0.9);    /* mejora el contraste sin perder suavidad */
-  transition: opacity .3s ease, filter .3s ease;
-}
-
-.servicio-img:hover,
-.service-icon:hover,
-.servicios-section img:hover {
-  opacity: 0.55;              /* leve realce al pasar el mouse */
-  filter: brightness(1);
-}
