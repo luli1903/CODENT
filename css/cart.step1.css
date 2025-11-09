@@ -141,15 +141,25 @@
 .page--cart .list-group-item:last-child{
   border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;
 }
+/* ===== PAGE CART: usar fondo global, no taparlo ===== */
 .page--cart {
-  background: url("/img/fondo.jpg") center/cover no-repeat fixed;
-  background-attachment: fixed;
+  background: transparent !important; /* deja ver el fondo de body:not(.admin) */
 }
 
+/* Sin overlay blanco gigante */
 .page--cart::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,0.8); 
-  z-index: -1;
+  content: none !important;
 }
+
+/* Tarjetas y paneles del carrito en blanco, prolijos */
+.page--cart .card,
+.page--cart .list-group,
+.page--cart .coden-product,
+.page--cart .cart-summary,
+.page--cart .checkout-box {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid var(--line, #e2e8f0);
+  box-shadow: 0 8px 18px rgba(15,23,42,.06);
+}
+
