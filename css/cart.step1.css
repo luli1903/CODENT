@@ -163,3 +163,22 @@
   box-shadow: 0 8px 18px rgba(15,23,42,.06);
 }
 
+/* ===== FIX FINAL CARRITO ===== */
+.page--cart main,
+.page--cart section,
+.page--cart .cart-wrapper,
+.page--cart .cart-container {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* mantenemos solo las tarjetas blancas */
+.page--cart .card,
+.page--cart form,
+.page--cart .coden-product,
+.page--cart .list-group,
+.page--cart .cart-summary {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 18px rgba(15,23,42,.06);
+}
