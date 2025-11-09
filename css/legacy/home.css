@@ -231,14 +231,18 @@ body {
   bottom: 8px;
   width: 120px;
   height: auto;
-  opacity: .18;
+  opacity: .32;              /* antes .18 */
   pointer-events: none;
   user-select: none;
   border-radius: 8px;
   transform: rotate(-2deg);
   transition: opacity .25s, transform .25s;
 }
-.service-card:hover .service-ill { opacity: .26; transform: rotate(-1deg) scale(1.02); }
+
+.service-card:hover .service-ill {
+  opacity: .5;               /* antes .26 */
+  transform: rotate(-1deg) scale(1.02);
+}
 
 .service-list { margin: 0; padding-left: 1.2rem; color: var(--muted); }
 .service-list li { margin-bottom: .35rem; }
