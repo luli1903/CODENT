@@ -231,7 +231,7 @@ body {
   bottom: 8px;
   width: 120px;
   height: auto;
-  opacity: .32;              /* antes .18 */
+  opacity: .40;              /* antes .18 */
   pointer-events: none;
   user-select: none;
   border-radius: 8px;
@@ -240,7 +240,7 @@ body {
 }
 
 .service-card:hover .service-ill {
-  opacity: .5;               /* antes .26 */
+  opacity: .8;               /* antes .26 */
   transform: rotate(-1deg) scale(1.02);
 }
 
