@@ -129,7 +129,7 @@ hr{ border:none; height:1px; background:var(--line); margin:18px 0; }
     background:
       radial-gradient(900px 500px at 10% -10%, rgba(255,255,255,.9), rgba(255,255,255,.65) 40%, rgba(255,255,255,.45) 70%, rgba(255,255,255,.4)),
       linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.6)),
-      url("/img/fondo.jpg") center/cover no-repeat fixed;
+      url("/img/fondo3.jpeg") center/cover no-repeat fixed;
   }
 }
 .admin-form select#category {
@@ -245,7 +245,7 @@ body.admin{
   background-image:
     radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.4) 70%, rgba(255,255,255,.35)),
     linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.55)),
-    url("/img/fondo.jpg") !important;
+    url("/img/fondo3.jpeg") !important;
   background-position: center, center, center !important;
   background-size: cover, cover, cover !important;
   background-repeat: no-repeat, no-repeat, no-repeat !important;
@@ -256,7 +256,7 @@ body.admin {
   background-image:
     radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.4) 70%, rgba(255,255,255,.35)),
     linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.55)),
-    url("/img/fondo.jpg") !important;     /* <= tu ruta */
+    url("/img/fondo3.jpeg") !important;     /* <= tu ruta */
   background-position: center, center, center !important;
   background-size: cover, cover, cover !important;
   background-repeat: no-repeat, no-repeat, no-repeat !important;
@@ -280,7 +280,7 @@ html, body {
 }
 
 body.admin {
-  background: url("/img/fondo.jpg") center/cover no-repeat fixed !important;
+  background: url("/img/fondo3.jpeg") center/cover no-repeat fixed !important;
 }
 body.admin::before,
 .container.admin-max::before {
@@ -292,7 +292,7 @@ html body.admin{
   background-image:
     radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.35) 70%),
     linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.55)),
-    url("/img/fondo.jpg") !important;
+    url("/img/fondo3.jpeg") !important;
   background-position: center, center, center !important;
   background-size: cover, cover, cover !important;
   background-repeat: no-repeat, no-repeat, no-repeat !important;

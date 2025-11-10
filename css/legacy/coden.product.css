@@ -2,8 +2,8 @@ body.product-page,
 .product-page #coden-main {
   min-height: 100vh;
   background: 
-    url("/img/fondo.jpg") center center / cover no-repeat fixed;
-  background-color: #f8fafc; /* fallback */
+    url("/img/fondo3.jpeg") center center / cover no-repeat fixed;
+  background-color: #f8fafc; 
 }
 
 .product-page .product-grid {

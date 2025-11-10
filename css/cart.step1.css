@@ -42,7 +42,7 @@
   background-color: color-mix(in srgb, var(--sky) 60%, #fff) !important;
   border-color:    color-mix(in srgb, var(--sky) 60%, #fff) !important;
   color: #7b8a9a !important;
-  opacity: 1 !important; /* evita gris de Bootstrap */
+  opacity: 1 !important; 
   cursor: not-allowed;
 }
 .page--cart #btn-pagar {
@@ -98,7 +98,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;   /* evita que la imagen “desborde” */
+  object-fit: cover;   
 }
 
 .page--cart .coden-product > div:last-child{
@@ -141,9 +141,8 @@
 .page--cart .list-group-item:last-child{
   border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;
 }
-/* ===== PAGE CART: usar fondo global, no taparlo ===== */
 .page--cart {
-  background: transparent !important; /* deja ver el fondo de body:not(.admin) */
+  background: transparent !important; 
 }
 
 /* Sin overlay blanco gigante */
@@ -151,7 +150,6 @@
   content: none !important;
 }
 
-/* Tarjetas y paneles del carrito en blanco, prolijos */
 .page--cart .card,
 .page--cart .list-group,
 .page--cart .coden-product,
@@ -163,7 +161,6 @@
   box-shadow: 0 8px 18px rgba(15,23,42,.06);
 }
 
-/* ===== FIX FINAL CARRITO ===== */
 .page--cart main,
 .page--cart section,
 .page--cart .cart-wrapper,
@@ -172,7 +169,6 @@
   box-shadow: none !important;
 }
 
-/* mantenemos solo las tarjetas blancas */
 .page--cart .card,
 .page--cart form,
 .page--cart .coden-product,
@@ -182,7 +178,6 @@
   border-radius: 14px;
   box-shadow: 0 8px 18px rgba(15,23,42,.06);
 }
-/* ========== CARRITO: MISMO FONDO QUE EL SITIO ========== */
 body.page--cart:not(.admin) {
   background-image:
     radial-gradient(
@@ -197,7 +192,7 @@ body.page--cart:not(.admin) {
       rgba(255,255,255,.05),
       rgba(255,255,255,.12)
     ),
-    url("/img/fondo.jpg") !important;
+    url("/img/fondo3.jpeg") !important;
   background-position: center !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;

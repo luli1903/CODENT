@@ -1,4 +1,3 @@
-/*  Páginas de estado de pago */
 :root{
   --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
   --bg:#f8fafc; --card:#fff;
@@ -15,7 +14,7 @@ body{
   background:
     radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.85), rgba(255,255,255,.6) 40%, rgba(255,255,255,.4) 70%, rgba(255,255,255,.35)),
     linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.55)),
-    url("/img/fondo.jpg") center/cover no-repeat fixed;
+    url("/img/fondo3.jpeg") center/cover no-repeat fixed;
 }
 
 .status-wrap{ min-height:100%; display:grid; place-items:center; padding:32px 16px }
